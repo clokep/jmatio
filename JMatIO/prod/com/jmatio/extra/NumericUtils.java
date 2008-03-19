@@ -127,7 +127,7 @@ public final class NumericUtils {
 	 * @return
 	 */
 	public static <T extends Number, M extends MLNumericArray<T>> T get(M a,
-			int[] sub) {
+			int... sub) {
 		return getReal(a, sub);
 	}
 
@@ -147,7 +147,7 @@ public final class NumericUtils {
 	 * @param sub
 	 * @return
 	 */
-	public static <T extends Number, M extends MLNumericArray<T>> T getReal(M a, int[] sub){
+	public static <T extends Number, M extends MLNumericArray<T>> T getReal(M a, int... sub){
 		return a.getReal(sub2idx(a.getDimensions(),sub));
 	}
 
@@ -178,7 +178,7 @@ public final class NumericUtils {
 	 * @param sub
 	 * @return
 	 */
-	public static <T extends Number, M extends MLNumericArray<T>> T getImaginary(M a, int[] sub) {
+	public static <T extends Number, M extends MLNumericArray<T>> T getImaginary(M a, int... sub) {
 		return a.getImaginary(sub2idx(a.getDimensions(), sub));
 	}
 
@@ -209,7 +209,7 @@ public final class NumericUtils {
 	 * @param value
 	 * @param sub
 	 */
-	public static <T extends Number, M extends MLNumericArray<T>> void set(M a, T value, int[] sub) {
+	public static <T extends Number, M extends MLNumericArray<T>> void set(M a, T value, int... sub) {
 		a.set(value, sub2idx(a.getDimensions(),sub));
 	}
 
@@ -218,7 +218,7 @@ public final class NumericUtils {
 	 * @param value
 	 * @param sub
 	 */
-	public static <T extends Number, M extends MLNumericArray<T>> void setReal(M a , T value, int[] sub) {
+	public static <T extends Number, M extends MLNumericArray<T>> void setReal(M a , T value, int... sub) {
 		a.setReal(value, sub2idx(a.getDimensions(),sub));
 	}
 
@@ -227,7 +227,7 @@ public final class NumericUtils {
 	 * @param value
 	 * @param sub
 	 */
-	public static <T extends Number, M extends MLNumericArray<T>> void setImaginary(M a, T value, int[] sub) {
+	public static <T extends Number, M extends MLNumericArray<T>> void setImaginary(M a, T value, int... sub) {
 		a.setImaginary(value, sub2idx(a.getDimensions(),sub));
 	}
 

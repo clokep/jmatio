@@ -51,8 +51,8 @@ public class NumericUtilsTest {
 				mlDouble, mlArrayRetrived);
 
 		Double[][][] dest3D = (Double[][][]) NumericUtils.get((MLDouble)mlArrayRetrived);
-		System.out.println(ArrayUtils.deepToString(src3D));
-		System.out.println(ArrayUtils.deepToString(dest3D));
+		//System.out.println(ArrayUtils.deepToString(src3D));
+		//System.out.println(ArrayUtils.deepToString(dest3D));
 
 		assertTrue(ArrayUtils.equals(src3D, dest3D));
 
@@ -80,7 +80,7 @@ public class NumericUtilsTest {
 			for (int i=0; i<dest3D.length; i++) {
 				for (int j=0; j<dest3D[0].length; j++){
 					for (int k=0; k< dest3D[0][0].length; k++){
-						dest3D[i][j][k]= NumericUtils.get(mlDouble, new int[]{i,j,k});
+						dest3D[i][j][k]= NumericUtils.get(mlDouble, i,j,k);
 					}
 				}
 			}
@@ -162,8 +162,8 @@ public class NumericUtilsTest {
 		for (int i=0; i<dest3D.length; i++) {
 			for (int j=0; j<dest3D[0].length; j++){
 				for (int k=0; k< dest3D[0][0].length; k++){
-					NumericUtils.set(mlDouble, src3D[i][j][k], new int[]{i,j,k});
-					dest3D[i][j][k]= NumericUtils.get(mlDouble, new int[]{i,j,k});
+					NumericUtils.set(mlDouble, src3D[i][j][k], i,j,k);
+					dest3D[i][j][k]= NumericUtils.get(mlDouble, i,j,k);
 				}
 			}
 		}
