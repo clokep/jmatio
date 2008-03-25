@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/ 2001/XMLSchema-instance"
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma ven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>net.sf.jmatio</groupId>
+  <artifactId>jmatio</artifactId>
+  <version>0.2.2</version>
+  <description>JMatIO - Matlab's MAT-file I/O in JAVA</description>
+  <url>http://sourceforge.net/projects/jmatio/</url>
+  <scm>
+    <connection>scm:svn:https://jmatio.svn.sourceforge.net/svnroot/jmatio/trunk/JMatIO/</connection>
+    <url>https://jmatio.svn.sourceforge.net/svnroot/jmatio/trunk/JMatIO/</url>
+  </scm>
+  <licenses>
+    <license>
+      <name>BSD License</name>
+      <url>http://www.opensource.org/licenses/bsd-license.php</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>cbwatcham</id>
+      <name>Craig Watcham</name>
+      <email>cbwatcham@users.sourceforge.net</email>
+    </developer>
+    <developer>
+      <id>kundeng06</id>
+      <name>kun deng</name>
+      <email>kundeng06@users.sourceforge.net</email>
+    </developer>
+    <developer>
+      <id>phreed</id>
+      <name>Fredrick Paul Eisele</name>
+      <email>phreed@users.sourceforge.net</email>
+    </developer>
+    <developer>
+      <id>thinkinfinity</id>
+      <name>Imran</name>
+      <email>thinkinfinity@users.sourceforge.net</email>
+    </developer>
+    <developer>
+      <id>tkutz</id>
+      <name>Tim Kutz</name>
+      <email>tkutz@users.sourceforge.net</email>
+    </developer>
+    <developer>
+      <id>wgradkowski</id>
+      <name>Wojciech Gradkowski</name>
+      <email>wgradkowski@users.sourceforge.net</email>
+    </developer>
+  </developers>
+  <build>
+    <sourceDirectory>prod</sourceDirectory>
+    <testSourceDirectory>test</testSourceDirectory>
+    <testResources>
+      <testResource>
+        <directory>test</directory>
+      </testResource>
+    </testResources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <argLine>-Xmx128M</argLine>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
