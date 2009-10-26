@@ -254,7 +254,7 @@ public class MatFileReader
                     buf.rewind();
                     break;
                 case HEAP_BYTE_BUFFER:
-                    int filesize = (int)roChannel.size();
+                    final int filesize = (int)roChannel.size();
                     System.gc();
                     buf = ByteBuffer.allocate( filesize );
 
@@ -265,7 +265,7 @@ public class MatFileReader
                     // only afterwards moves data into the buffer passed as parameter.
                     // roChannel.read(buf, 0);        // ends up in outOfMemory
                     // raFile.readFully(buf.array()); // ends up in outOfMemory
-                    int numberOfBlocks = filesize / DIRECT_BUFFER_LIMIT + ((filesize % DIRECT_BUFFER_LIMIT) > 0 ? 1 : 0);
+                    final int numberOfBlocks = filesize / DIRECT_BUFFER_LIMIT + ((filesize % DIRECT_BUFFER_LIMIT) > 0 ? 1 : 0);
                     if (numberOfBlocks > 1) {
                         ByteBuffer tempByteBuffer = ByteBuffer.allocateDirect(DIRECT_BUFFER_LIMIT);
                         for (int block=0; block<numberOfBlocks; block++) {
@@ -305,11 +305,19 @@ public class MatFileReader
         {
             if ( roChannel != null )
             {
-                roChannel.close();
+                try {
+                    roChannel.close();
+                } catch (Throwable ioe){
+                    
+                }
             }
             if ( raFile != null )
             {
-                raFile.close();
+                try {
+                    raFile.close();
+                } catch (Throwable ioe){
+                    
+                }
             }
             if ( buf != null && bufferWeakRef != null && policy == MEMORY_MAPPED_FILE )
             {
