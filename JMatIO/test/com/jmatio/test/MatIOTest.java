@@ -62,26 +62,25 @@ public class MatIOTest
     {
         final String fileName = "bb.mat";
         final String name = "bigdouble";
-//        final int SIZE = 1000;    
+        final int SIZE = 1000;    
         //System.out.println(14e6);
-//        ByteBuffer.allocateDirect(1000000000);
+        ByteBuffer.allocateDirect(1000000000);
+        
+        MLDouble mlDouble = new MLDouble( name, new int[] {SIZE, SIZE} );
+        
+        for ( int i = 0; i < SIZE*SIZE; i++ )
+        {
+            mlDouble.set((double)i, i);
+        }
         
         
-//        MLDouble mlDouble = new MLDouble( name, new int[] {SIZE, SIZE} );
-//        
-//        for ( int i = 0; i < SIZE*SIZE; i++ )
-//        {
-//            mlDouble.set((double)i, i);
-//        }
-//        
-//        
-//        //write array to file
-//        ArrayList<MLArray> list = new ArrayList<MLArray>();
-//        list.add( mlDouble );
-//        
-//        //write arrays to file
-//        new MatFileWriter( fileName, list );
-//        
+        //write array to file
+        ArrayList<MLArray> list = new ArrayList<MLArray>();
+        list.add( mlDouble );
+        
+        //write arrays to file
+        new MatFileWriter( fileName, list );
+        
         //read array form file
         MatFileReader mfr = new MatFileReader( fileName );
         MLArray mlArrayRetrived = mfr.getMLArray( name );
@@ -90,7 +89,7 @@ public class MatIOTest
 //        System.out.println( mlArrayRetrived.contentToString() );
         
         //test if MLArray objects are equal
-//        assertEquals("Test if value red from file equals value stored", mlDouble, mlArrayRetrived);
+        assertEquals("Test if value red from file equals value stored", mlDouble, mlArrayRetrived);
     }
     
     
@@ -998,11 +997,12 @@ public class MatIOTest
     @Test
     public void testBigSparseFile() throws IOException
     {
-        //read array form file
-        MatFileReader mfr = new MatFileReader();
-        //reader crashes on reading this file
-        //bug caused by sparse array allocation
-        mfr.read( new File("test/bigsparse.mat"), MatFileReader.DIRECT_BYTE_BUFFER );
+//        final File file = TestData.file(this,"bigsparse.mat");
+//        //read array form file
+//        MatFileReader mfr = new MatFileReader();
+//        //reader crashes on reading this file
+//        //bug caused by sparse array allocation
+//        mfr.read( file, MatFileReader.DIRECT_BYTE_BUFFER );
         
     }    
     /**
