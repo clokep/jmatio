@@ -91,13 +91,15 @@ public class MLUInt64 extends MLNumericArray<Long>
      */
     public long[][] getArray()
     {
-        long[][] result = new long[getM()][];
+        final int M = getM();
+        final int N = getN();
+        long[][] result = new long[M][];
         
-        for ( int m = 0; m < getM(); m++ )
+        for ( int m = 0; m < M; m++ )
         {
-           result[m] = new long[ getN() ];
+           result[m] = new long[ N ];
 
-           for ( int n = 0; n < getN(); n++ )
+           for ( int n = 0; n < N; n++ )
            {               
                result[m][n] = getReal(m,n);
            }
