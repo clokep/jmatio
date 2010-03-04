@@ -1074,6 +1074,7 @@ public class MatFileReader
     {
         public ByteBuffer buf;
         private int padding;
+        private boolean compressed;
         
         public ISMatTag(ByteBuffer buf) throws IOException
         {
@@ -1082,7 +1083,6 @@ public class MatFileReader
             this.buf = buf;
             int tmp = buf.getInt();
             
-            boolean compressed;
             //data not packed in the tag
             if ( tmp >> 16 == 0 )
             {    
