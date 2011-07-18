@@ -15,7 +15,7 @@ public class MLUInt8 extends MLNumericArray<Byte>
      * 
      * @param name - array name
      * @param dims - array dimensions
-     * @param type - array type: here <code>mxDOUBLE_CLASS</code>
+     * @param type - array type: here <code>mxUINT8_CLASS</code>
      * @param attributes - array flags
      */
     public MLUInt8( String name, int[] dims, int type, int attributes )
@@ -69,6 +69,13 @@ public class MLUInt8 extends MLNumericArray<Byte>
     public MLUInt8(String name, byte[] vals, int m)
     {
         this(name, castToByte( vals ), m );
+    }
+    /**
+     * @param vector
+     */
+    public void set(byte[] vector)
+    {
+    	set(castToByte( vector ));
     }
     /* (non-Javadoc)
      * @see com.jmatio.types.GenericArrayCreator#createArray(int, int)

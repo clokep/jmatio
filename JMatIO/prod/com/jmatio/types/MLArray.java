@@ -33,10 +33,22 @@ public class MLArray
     protected int attributes;
     protected int type;
     
+    // This is true for elements of structs & cells where name does not matter.
+    public boolean isChild = false;
+    
     public MLArray(String name, int[] dims, int type, int attributes)
     {
-        this.dims = new int[dims.length];
-        System.arraycopy(dims, 0, this.dims, 0, dims.length);
+        // MATLAB arrays must always have two dimensions, if only one is given the other must be 1.
+        if (dims.length > 1) {
+            this.dims = new int[dims.length];
+            System.arraycopy(dims, 0, this.dims, 0, dims.length);
+        } else {
+            // Since we have a vector but don't know the real dimensions, just assume it's a row vector
+            this.dims = new int[2];
+            // If it's empty the size is 0 x 0, otherwise it's 1 x n.
+            this.dims[0] = (dims[0] == 0) ? 0 : 1;
+            this.dims[1] = dims[0];
+        }
         
         
         if ( name != null && !name.equals("") )

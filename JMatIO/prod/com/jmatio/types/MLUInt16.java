@@ -3,11 +3,11 @@ package com.jmatio.types;
 import java.nio.ByteBuffer;
 
 /**
- * Class represents Double array (matrix)
+ * Class represents UInt16 (short) array (matrix)
  * 
- * @author Wojciech Gradkowski <wgradkowski@gmail.com>
+ * @author Patrick Cloke <pcloke@mitre.org>
  */
-public class MLDouble extends MLNumericArray<Double>
+public class MLUInt16 extends MLNumericArray<Short>
 {
 
     /**
@@ -15,23 +15,23 @@ public class MLDouble extends MLNumericArray<Double>
      * 
      * @param name - array name
      * @param dims - array dimensions
-     * @param type - array type: here <code>mxDOUBLE_CLASS</code>
+     * @param type - array type: here <code>mxUINT16_CLASS</code>
      * @param attributes - array flags
      */
-    public MLDouble( String name, int[] dims, int type, int attributes )
+    public MLUInt16( String name, int[] dims, int type, int attributes )
     {
         super( name, dims, type, attributes );
     }
     /**
-     * Create a <code>MLDouble</code> array with given name,
+     * Create a <code>{@link MLUInt16}</code> array with given name,
      * and dimensions.
      * 
      * @param name - array name
      * @param dims - array dimensions
      */
-    public MLDouble(String name, int[] dims)
+    public MLUInt16(String name, int[] dims)
     {
-        super(name, dims, MLArray.mxDOUBLE_CLASS, 0);
+        super(name, dims, MLArray.mxUINT16_CLASS, 0);
     }
     /**
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
@@ -41,22 +41,22 @@ public class MLDouble extends MLNumericArray<Double>
      * @param vals - One-dimensional array of doubles, packed by columns (ala Fortran).
      * @param m - Number of rows
      */
-    public MLDouble(String name, Double[] vals, int m )
+    public MLUInt16(String name, Short[] vals, int m )
     {
-        super(name, MLArray.mxDOUBLE_CLASS, vals, m );
+        super(name, MLArray.mxUINT16_CLASS, vals, m );
     }
     /**
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
-     * construct a 2D real matrix from <code>double[][]</code>
+     * construct a 2D real matrix from <code>byte[][]</code>
      * 
-     * Note: array is converted to Double[]
+     * Note: array is converted to Byte[]
      * 
      * @param name - array name
      * @param vals - two-dimensional array of values
      */
-    public MLDouble( String name, double[][] vals )
+    public MLUInt16( String name, short[][] vals )
     {
-        this( name, double2DToDouble(vals), vals.length );
+        this( name, short2DToShort(vals), vals.length );
     }
     /**
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
@@ -66,36 +66,36 @@ public class MLDouble extends MLNumericArray<Double>
      * @param vals - One-dimensional array of doubles, packed by columns (ala Fortran).
      * @param m - Number of rows
      */
-    public MLDouble(String name, double[] vals, int m)
+    public MLUInt16(String name, short[] vals, int m)
     {
-        this(name, castToDouble( vals ), m );
+        this(name, castToShort( vals ), m );
     }
     /**
      * @param vector
      */
-    public void set(double[] vector)
+    public void set(short[] vector)
     {
-    	set(castToDouble( vector ));
+    	set(castToShort( vector ));
     }
     /* (non-Javadoc)
      * @see com.jmatio.types.GenericArrayCreator#createArray(int, int)
      */
-    public Double[] createArray(int m, int n)
+    public Short[] createArray(int m, int n)
     {
-        return new Double[m*n];
+        return new Short[m*n];
     }
     /**
      * Gets two-dimensional real array.
      * 
      * @return - 2D real array
      */
-    public double[][] getArray()
+    public int[][] getArray()
     {
-        double[][] result = new double[getM()][];
+    	int[][] result = new int[getM()][];
         
         for ( int m = 0; m < getM(); m++ )
         {
-           result[m] = new double[ getN() ];
+           result[m] = new int[ getN() ];
 
            for ( int n = 0; n < getN(); n++ )
            {               
@@ -105,29 +105,29 @@ public class MLDouble extends MLNumericArray<Double>
         return result;
     }
     /**
-     * Casts <code>double[]</code> to <code>Double[]</code>
+     * Casts <code>short[]</code> to <code>Short[]</code>
      * 
-     * @param - source <code>double[]</code>
-     * @return - result <code>Double[]</code>
+     * @param - source <code>short[]</code>
+     * @return - result <code>Short[]</code>
      */
-    private static Double[] castToDouble( double[] d )
+    protected static Short[] castToShort( short[] d )
     {
-        Double[] dest = new Double[d.length];
+    	Short[] dest = new Short[d.length];
         for ( int i = 0; i < d.length; i++ )
         {
-            dest[i] = (Double)d[i];
+            dest[i] = (Short)d[i];
         }
         return dest;
     }
     /**
-     * Converts double[][] to Double[]
+     * Converts <code>short[][]</code> to <code>Short[]</code>
      * 
      * @param dd
      * @return
      */
-    private static Double[] double2DToDouble ( double[][] dd )
+    protected static Short[] short2DToShort ( short[][] dd )
     {
-        Double[] d = new Double[ dd.length*dd[0].length ];
+    	Short[] d = new Short[ dd.length*dd[0].length ];
         for ( int n = 0; n < dd[0].length; n++ )
         {
             for ( int m = 0; m < dd.length; m++ )
@@ -137,11 +137,7 @@ public class MLDouble extends MLNumericArray<Double>
         }
         return d;
     }
-    public int getBytesAllocated()
-    {
-        return Double.SIZE >> 3;
-    }
-    public Double buldFromBytes(byte[] bytes)
+    public Short buldFromBytes(byte[] bytes)
     {
         if ( bytes.length != getBytesAllocated() )
         {
@@ -149,19 +145,24 @@ public class MLDouble extends MLNumericArray<Double>
                         "To build from byte array I need array of size: " 
                                 + getBytesAllocated() );
         }
-        return ByteBuffer.wrap( bytes ).getDouble();
-        
+        return ByteBuffer.wrap( bytes ).getShort();
     }
-    public byte[] getByteArray(Double value)
+    public int getBytesAllocated()
+    {
+        return Short.SIZE >> 3;
+    }
+    
+    public Class<Short> getStorageClazz()
+    {
+        return Short.class;
+    }
+    public byte[] getByteArray(Short value)
     {
         int byteAllocated = getBytesAllocated();
         ByteBuffer buff = ByteBuffer.allocate( byteAllocated );
-        buff.putDouble( value );
+        buff.putShort( value );
         return buff.array();
     }
     
-    public Class<Double> getStorageClazz()
-    {
-        return Double.class;
-    }
+
 }

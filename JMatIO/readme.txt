@@ -19,6 +19,12 @@ Have fun :)
 Wojciech Gradkowski
 
 CHANGE LOG:
+[07.14.2011]
++ Added support: Int16, UInt16, Int32, UInt32 array
++ Added a wrapper class for logical
++ Have MLInt8 and MLInt64 extend MLUInt8 and MLUInt64, respectively
++ Miscellaneous clean up and fixes
+
 [05.10.2007]
 + Sparse matrix bugfixes by Jonas Pettersson (LU/EAB)
 + MatFileReader performance enhancements by Eugene Rudoy
@@ -53,5 +59,5 @@ Currently supproted data types are:
 + Char array
 + Structure
 + Cell array
-+ Sparase array
++ Sparse array
 

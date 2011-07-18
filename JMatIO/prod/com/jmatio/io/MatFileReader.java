@@ -28,12 +28,16 @@ import com.jmatio.types.MLCell;
 import com.jmatio.types.MLChar;
 import com.jmatio.types.MLDouble;
 import com.jmatio.types.MLEmptyArray;
+import com.jmatio.types.MLInt16;
+import com.jmatio.types.MLInt32;
 import com.jmatio.types.MLInt64;
 import com.jmatio.types.MLInt8;
 import com.jmatio.types.MLNumericArray;
 import com.jmatio.types.MLSingle;
 import com.jmatio.types.MLSparse;
 import com.jmatio.types.MLStructure;
+import com.jmatio.types.MLUInt16;
+import com.jmatio.types.MLUInt32;
 import com.jmatio.types.MLUInt64;
 import com.jmatio.types.MLUInt8;
 
@@ -726,6 +730,62 @@ public class MatFileReader
                 break;
             case MLArray.mxINT8_CLASS:
                 mlArray = new MLInt8(name, dims, type, attributes);
+                //read real
+                tag = new ISMatTag(buf);
+                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
+                                            (MLNumericArray<?>) mlArray );
+                //read complex
+                if ( mlArray.isComplex() )
+                {
+                    tag = new ISMatTag(buf);
+                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
+                            (MLNumericArray<?>) mlArray );
+                }
+                break;
+            case MLArray.mxUINT16_CLASS:
+                mlArray = new MLUInt16(name, dims, type, attributes);
+                //read real
+                tag = new ISMatTag(buf);
+                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
+                                            (MLNumericArray<?>) mlArray );
+                //read complex
+                if ( mlArray.isComplex() )
+                {
+                    tag = new ISMatTag(buf);
+                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
+                            (MLNumericArray<?>) mlArray );
+                }
+                break;
+            case MLArray.mxINT16_CLASS:
+                mlArray = new MLInt16(name, dims, type, attributes);
+                //read real
+                tag = new ISMatTag(buf);
+                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
+                                            (MLNumericArray<?>) mlArray );
+                //read complex
+                if ( mlArray.isComplex() )
+                {
+                    tag = new ISMatTag(buf);
+                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
+                            (MLNumericArray<?>) mlArray );
+                }
+                break;
+            case MLArray.mxUINT32_CLASS:
+                mlArray = new MLUInt32(name, dims, type, attributes);
+                //read real
+                tag = new ISMatTag(buf);
+                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
+                                            (MLNumericArray<?>) mlArray );
+                //read complex
+                if ( mlArray.isComplex() )
+                {
+                    tag = new ISMatTag(buf);
+                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
+                            (MLNumericArray<?>) mlArray );
+                }
+                break;
+            case MLArray.mxINT32_CLASS:
+                mlArray = new MLInt32(name, dims, type, attributes);
                 //read real
                 tag = new ISMatTag(buf);
                 tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),

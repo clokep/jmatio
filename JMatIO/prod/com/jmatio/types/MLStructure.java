@@ -81,6 +81,7 @@ public class MLStructure extends MLArray
     {
         keys.add(name);
         currentIndex = index;
+        value.isChild = true;
         
         if ( mlStructArray.isEmpty() || mlStructArray.size() <= index )
         {

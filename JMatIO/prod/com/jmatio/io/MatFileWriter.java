@@ -14,6 +14,7 @@ import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 
 import com.jmatio.common.MatDataTypes;
+import com.jmatio.extra.VariableUtils;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.MLCell;
 import com.jmatio.types.MLChar;
@@ -335,6 +336,62 @@ public class MatFileWriter
                     tag.writeTo( dos );
                 }
                 break;
+            case MLArray.mxUINT16_CLASS:
+                
+                tag = new OSArrayTag(MatDataTypes.miUINT16, 
+                        ((MLNumericArray<?>)array).getRealByteBuffer() );
+                tag.writeTo( dos );
+                
+                //write real imaginary
+                if ( array.isComplex() )
+                {
+                    tag = new OSArrayTag(MatDataTypes.miUINT16, 
+                            ((MLNumericArray<?>)array).getImaginaryByteBuffer() );
+                    tag.writeTo( dos );
+                }
+                break;
+            case MLArray.mxINT16_CLASS:
+                
+                tag = new OSArrayTag(MatDataTypes.miINT16, 
+                        ((MLNumericArray<?>)array).getRealByteBuffer() );
+                tag.writeTo( dos );
+                
+                //write real imaginary
+                if ( array.isComplex() )
+                {
+                    tag = new OSArrayTag(MatDataTypes.miINT16, 
+                            ((MLNumericArray<?>)array).getImaginaryByteBuffer() );
+                    tag.writeTo( dos );
+                }
+                break;
+            case MLArray.mxUINT32_CLASS:
+                
+                tag = new OSArrayTag(MatDataTypes.miUINT32, 
+                        ((MLNumericArray<?>)array).getRealByteBuffer() );
+                tag.writeTo( dos );
+                
+                //write real imaginary
+                if ( array.isComplex() )
+                {
+                    tag = new OSArrayTag(MatDataTypes.miUINT32, 
+                            ((MLNumericArray<?>)array).getImaginaryByteBuffer() );
+                    tag.writeTo( dos );
+                }
+                break;
+            case MLArray.mxINT32_CLASS:
+                
+                tag = new OSArrayTag(MatDataTypes.miINT32, 
+                        ((MLNumericArray<?>)array).getRealByteBuffer() );
+                tag.writeTo( dos );
+                
+                //write real imaginary
+                if ( array.isComplex() )
+                {
+                    tag = new OSArrayTag(MatDataTypes.miINT32, 
+                            ((MLNumericArray<?>)array).getImaginaryByteBuffer() );
+                    tag.writeTo( dos );
+                }
+                break;
             case MLArray.mxINT64_CLASS:
                 
                 tag = new OSArrayTag(MatDataTypes.miINT64, 
@@ -373,6 +430,7 @@ public class MatFileWriter
                 tag = new OSArrayTag(MatDataTypes.miINT8, ((MLStructure)array).getKeySetToByteArray() );
                 tag.writeTo( dos );
 
+                // Don't check the name for fields
                 for ( MLArray a : ((MLStructure)array).getAllFields() )
                 {
                     writeMatrix(dos, a);
@@ -506,6 +564,9 @@ public class MatFileWriter
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         DataOutputStream bufferDOS = new DataOutputStream(buffer);
 
+        if (!array.isChild && !VariableUtils.IsVarName(array.name))
+            throw new MatlabIOException("Invalid variable name: " + array.name);
+        
         byte[] nameByteArray = array.getNameToByteArray();
         buffer = new ByteArrayOutputStream();
         bufferDOS = new DataOutputStream(buffer);

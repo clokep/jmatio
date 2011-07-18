@@ -24,10 +24,12 @@ public class MLCell extends MLArray
     }    
     public void set(MLArray value, int m, int n)
     {
+        value.isChild = true;
         cells.set( getIndex(m,n), value );
     }
     public void set(MLArray value, int index)
     {
+        value.isChild = true;
         cells.set( index, value );
     }
     public MLArray get(int m, int n)

@@ -15,7 +15,7 @@ public class MLUInt64 extends MLNumericArray<Long>
      * 
      * @param name - array name
      * @param dims - array dimensions
-     * @param type - array type: here <code>mxDOUBLE_CLASS</code>
+     * @param type - array type: here <code>mxUINT64_CLASS</code>
      * @param attributes - array flags
      */
     public MLUInt64( String name, int[] dims, int type, int attributes )
@@ -31,7 +31,7 @@ public class MLUInt64 extends MLNumericArray<Long>
      */
     public MLUInt64(String name, int[] dims)
     {
-        super(name, dims, MLArray.mxINT64_CLASS, 0);
+        super(name, dims, MLArray.mxUINT64_CLASS, 0);
     }
     /**
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
@@ -43,7 +43,7 @@ public class MLUInt64 extends MLNumericArray<Long>
      */
     public MLUInt64(String name, Long[] vals, int m )
     {
-        super(name, MLArray.mxINT64_CLASS, vals, m );
+        super(name, MLArray.mxUINT64_CLASS, vals, m );
     }
     /**
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
@@ -69,6 +69,13 @@ public class MLUInt64 extends MLNumericArray<Long>
     public MLUInt64(String name, long[] vals, int m)
     {
         this(name, castToLong( vals ), m );
+    }
+    /**
+     * @param vector
+     */
+    public void set(long[] vector)
+    {
+    	set(castToLong( vector ));
     }
     /* (non-Javadoc)
      * @see com.jmatio.types.GenericArrayCreator#createArray(int, int)
@@ -98,12 +105,12 @@ public class MLUInt64 extends MLNumericArray<Long>
         return result;
     }
     /**
-     * Casts <code>Double[]</code> to <code>byte[]</code>
+     * Casts <code>long[]</code> to <code>Long[]</code>
      * 
-     * @param - source <code>Long[]</code>
-     * @return - result <code>long[]</code>
+     * @param - source <code>long[]</code>
+     * @return - result <code>Long[]</code>
      */
-    private static Long[] castToLong( long[] d )
+    protected static Long[] castToLong( long[] d )
     {
         Long[] dest = new Long[d.length];
         for ( int i = 0; i < d.length; i++ )
@@ -118,7 +125,7 @@ public class MLUInt64 extends MLNumericArray<Long>
      * @param dd
      * @return
      */
-    private static Long[] long2DToLong ( long[][] dd )
+    protected static Long[] long2DToLong ( long[][] dd )
     {
         Long[] d = new Long[ dd.length*dd[0].length ];
         for ( int n = 0; n < dd[0].length; n++ )

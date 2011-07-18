@@ -1,13 +1,11 @@
 package com.jmatio.types;
 
-import java.nio.ByteBuffer;
-
 /**
  * Class represents Int64 (long) array (matrix)
  * 
  * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
-public class MLInt64 extends MLNumericArray<Long>
+public class MLInt64 extends MLUInt64
 {
 
     /**
@@ -15,7 +13,7 @@ public class MLInt64 extends MLNumericArray<Long>
      * 
      * @param name - array name
      * @param dims - array dimensions
-     * @param type - array type: here <code>mxDOUBLE_CLASS</code>
+     * @param type - array type: here <code>mxINT64_CLASS</code>
      * @param attributes - array flags
      */
     public MLInt64( String name, int[] dims, int type, int attributes )
@@ -43,7 +41,8 @@ public class MLInt64 extends MLNumericArray<Long>
      */
     public MLInt64(String name, Long[] vals, int m )
     {
-        super(name, MLArray.mxINT64_CLASS, vals, m );
+        super(name, vals, m );
+        this.type = MLArray.mxINT64_CLASS;
     }
     /**
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
@@ -70,92 +69,5 @@ public class MLInt64 extends MLNumericArray<Long>
     {
         this(name, castToLong( vals ), m );
     }
-    /* (non-Javadoc)
-     * @see com.jmatio.types.GenericArrayCreator#createArray(int, int)
-     */
-    public Long[] createArray(int m, int n)
-    {
-        return new Long[m*n];
-    }
-    /**
-     * Gets two-dimensional real array.
-     * 
-     * @return - 2D real array
-     */
-    public long[][] getArray()
-    {
-        long[][] result = new long[getM()][];
-        
-        for ( int m = 0; m < getM(); m++ )
-        {
-           result[m] = new long[ getN() ];
-
-           for ( int n = 0; n < getN(); n++ )
-           {               
-               result[m][n] = getReal(m,n);
-           }
-        }
-        return result;
-    }
-    /**
-     * Casts <code>Double[]</code> to <code>byte[]</code>
-     * 
-     * @param - source <code>Long[]</code>
-     * @return - result <code>long[]</code>
-     */
-    private static Long[] castToLong( long[] d )
-    {
-        Long[] dest = new Long[d.length];
-        for ( int i = 0; i < d.length; i++ )
-        {
-            dest[i] = (long)d[i];
-        }
-        return dest;
-    }
-    /**
-     * Converts byte[][] to Long[]
-     * 
-     * @param dd
-     * @return
-     */
-    private static Long[] long2DToLong ( long[][] dd )
-    {
-        Long[] d = new Long[ dd.length*dd[0].length ];
-        for ( int n = 0; n < dd[0].length; n++ )
-        {
-            for ( int m = 0; m < dd.length; m++ )
-            {
-                d[ m+n*dd.length ] = dd[m][n]; 
-            }
-        }
-        return d;
-    }
-    public Long buldFromBytes(byte[] bytes)
-    {
-        if ( bytes.length != getBytesAllocated() )
-        {
-            throw new IllegalArgumentException( 
-                        "To build from byte array I need array of size: " 
-                                + getBytesAllocated() );
-        }
-        return ByteBuffer.wrap( bytes ).getLong();
-    }
-    public int getBytesAllocated()
-    {
-        return Long.SIZE >> 3;
-    }
-    
-    public Class<Long> getStorageClazz()
-    {
-        return Long.class;
-    }
-    public byte[] getByteArray(Long value)
-    {
-        int byteAllocated = getBytesAllocated();
-        ByteBuffer buff = ByteBuffer.allocate( byteAllocated );
-        buff.putLong( value );
-        return buff.array();
-    }
-    
 
 }
