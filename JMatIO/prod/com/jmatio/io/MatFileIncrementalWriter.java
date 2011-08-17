@@ -73,7 +73,7 @@ public class MatFileIncrementalWriter
 	/**
      * Creates a writer to a file given the filename.
      * 
-     * @param fileName - name of ouput file
+     * @param fileName - name of output file
      * @throws IOException
      * @throws DataFormatException
      */
@@ -82,7 +82,7 @@ public class MatFileIncrementalWriter
         this( new File(fileName) );
     }
     /**
-     * Creats a writer to a file given the File object.
+     * Creates a writer to a file given the File object.
      * 
      * @param file - an output <code>File</code>
      * @throws IOException

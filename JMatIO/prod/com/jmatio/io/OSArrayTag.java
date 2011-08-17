@@ -13,7 +13,7 @@ class OSArrayTag extends MatTag
     private ByteBuffer data;
     private int padding;
     /**
-     * Creates TAG and stets its <code>size</code> as size of byte array
+     * Creates TAG and sets its <code>size</code> as size of byte array
      * 
      * @param type
      * @param data
@@ -23,7 +23,7 @@ class OSArrayTag extends MatTag
         this ( type, ByteBuffer.wrap( data ) );
     }
     /**
-     * Creates TAG and stets its <code>size</code> as size of byte array
+     * Creates TAG and sets its <code>size</code> as size of byte array
      * 
      * @param type
      * @param data
