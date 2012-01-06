@@ -565,7 +565,9 @@ public class MatFileWriter
         DataOutputStream bufferDOS = new DataOutputStream(buffer);
 
         if (!array.isChild && !VariableUtils.IsVarName(array.name))
+        {
             throw new MatlabIOException("Invalid variable name: " + array.name);
+        }
         
         byte[] nameByteArray = array.getNameToByteArray();
         buffer = new ByteArrayOutputStream();
