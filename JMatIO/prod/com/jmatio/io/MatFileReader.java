@@ -59,10 +59,6 @@ import com.jmatio.types.MLUInt8;
  * @see com.jmatio.io.MatFileFilter
  * @author Wojciech Gradkowski (<a href="mailto:wgradkowski@gmail.com">wgradkowski@gmail.com</a>)
  */
-/**
- * @author Wojciech Gradkowski (<a href="mailto:wgradkowski@gmail.com">wgradkowski@gmail.com</a>)
- *
- */
 public class MatFileReader
 {
     public static final int MEMORY_MAPPED_FILE = 1;
@@ -106,7 +102,7 @@ public class MatFileReader
      * filter match condition will not be available in results.
      * 
      * @param fileName the MAT-file path <code>String</code>
-     * @param MatFileFilter array name filter.
+     * @param filter array name filter.
      * @throws IOException when error occurred while processing the file.
      */
     public MatFileReader(String fileName, MatFileFilter filter ) throws IOException
@@ -135,11 +131,11 @@ public class MatFileReader
      * meet filter match condition will not be available in results.
      * <p>
      * <i>Note: this method reads file using the memory mapped file policy, see
-     * notes to </code>{@link #read(File, MatFileFilter, com.jmatio.io.MatFileReader.MallocPolicy)}</code>
+     * notes to </code>{@link #read(File, MatFileFilter, int)}</code>
      * 
      * @param file
      *            the MAT-file
-     * @param MatFileFilter
+     * @param filter
      *            array name filter.
      * @throws IOException
      *             when error occurred while processing the file.
@@ -404,7 +400,7 @@ public class MatFileReader
     /**
      * Returns list of <code>MLArray</code> objects that were inside MAT-file
      * 
-     * @return - a <code>ArrayList</code>
+     * @return a <code>ArrayList</code>
      * @deprecated use <code>getContent</code> which returns a Map to provide 
      *             easier access to <code>MLArray</code>s contained in MAT-file
      */
@@ -417,9 +413,9 @@ public class MatFileReader
      * 
      * Returns <code>null</code> if the file contains no content for this name.
      * 
-     * @param - array name
-     * @return - the <code>MLArray</code> to which this file maps the specified name, 
-     *           or null if the file contains no content for this name.
+     * @param name name
+     * @return the <code>MLArray</code> to which this file maps the specified name, 
+     *         or null if the file contains no content for this name.
      */
     public MLArray getMLArray( String name )
     {
@@ -430,7 +426,7 @@ public class MatFileReader
      * 
      * MLArrays are mapped with MLArrays' names
      *  
-     * @return - a <code>Map</code> of MLArrays mapped with their names.
+     * @return a <code>Map</code> of MLArrays mapped with their names.
      */
     public Map<String, MLArray> getContent()
     {
@@ -483,11 +479,11 @@ public class MatFileReader
      * Decompresses (inflates) bytes from input stream. Stream marker is being set at +<code>numOfBytes</code>
      * position of the stream.
      *
-     * @param is -
+     * @param is
      *            input byte buffer
-     * @param numOfBytes -
+     * @param numOfBytes
      *            number of bytes to be red
-     * @return - new <code>ByteBuffer</code> with inflated block of data
+     * @return new <code>ByteBuffer</code> with inflated block of data
      * @throws IOException
      *             when error occurs while reading or inflating the buffer .
      */
@@ -539,7 +535,7 @@ public class MatFileReader
      * 
      * Modifies <code>buf</code> position.
      * 
-     * @param buf -
+     * @param buf
      *            input byte buffer
      * @throws IOException when error occurs while reading the buffer.
      */
@@ -595,12 +591,12 @@ public class MatFileReader
      * 
      * Uses recursive processing for some ML**** data types.
      * 
-     * @param buf -
+     * @param buf
      *            input byte buffer
-     * @param isRoot -
+     * @param isRoot
      *            when <code>true</code> informs that if this is a top level
      *            matrix
-     * @return - <code>MLArray</code> or <code>null</code> if matrix does
+     * @return <code>MLArray</code> or <code>null</code> if matrix does
      *         not match <code>filter</code>
      * @throws IOException when error occurs while reading the buffer.
      */

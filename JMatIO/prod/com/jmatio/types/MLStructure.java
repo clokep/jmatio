@@ -93,7 +93,7 @@ public class MLStructure extends MLArray
     /**
      * Gets the maximum length of field descriptor
      * 
-     * @return
+     * @return the maximum field length
      */
     public int getMaxFieldLenth()
     {
@@ -110,7 +110,7 @@ public class MLStructure extends MLArray
     /**
      * Dumps field names to byte array. Field names are written as Zero End Strings
      * 
-     * @return
+     * @return field names as byte arrays
      */
     public byte[] getKeySetToByteArray() 
     {
@@ -137,9 +137,9 @@ public class MLStructure extends MLArray
         
     }
     /**
-     * Gets all field from sruct array as flat list of fields.
+     * Gets all field from struct array as flat list of fields.
      * 
-     * @return
+     * @return the fields of the struct
      */
     public Collection<MLArray> getAllFields()
     {
@@ -166,10 +166,10 @@ public class MLStructure extends MLArray
     }
     /**
      * Gets a value of the field described by name from current structe
-     * in struc array.
+     * in struct array.
      * 
      * @param name
-     * @return
+     * @return the value of a field
      */
     public MLArray getField(String name)
     {
@@ -177,12 +177,12 @@ public class MLStructure extends MLArray
     }
     /**
      * Gets a value of the field described by name from (m,n)'th structe
-     * in struc array.
+     * in struct array.
      * 
      * @param name
      * @param m
      * @param n
-     * @return
+     * @return the value of a field
      */
     public MLArray getField(String name, int m, int n)
     {
@@ -190,11 +190,11 @@ public class MLStructure extends MLArray
     }
     /**
      * Gets a value of the field described by name from index'th structe
-     * in struc array.
+     * in struct array.
      * 
      * @param name
      * @param index
-     * @return
+     * @return the value of the field
      */
     public MLArray getField(String name, int index)
     {

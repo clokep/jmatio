@@ -27,10 +27,10 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     /**
      * Normally this constructor is used only by MatFileReader and MatFileWriter
      * 
-     * @param name - array name
-     * @param dims - array dimensions
-     * @param type - array type
-     * @param attributes - array flags
+     * @param name array name
+     * @param dims array dimensions
+     * @param type array type
+     * @param attributes array flags
      */
     public MLNumericArray(String name, int[] dims, int type, int attributes)
     {
@@ -54,10 +54,10 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
      * construct a 2D real matrix from a one-dimensional packed array
      * 
-     * @param name - array name
-     * @param type - array type
-     * @param vals - One-dimensional array of doubles, packed by columns (ala Fortran).
-     * @param m - Number of rows
+     * @param name array name
+     * @param type array type
+     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param m Number of rows
      */
     public MLNumericArray(String name, int type, T[] vals, int m )
     {
@@ -71,9 +71,9 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     /**
      * Gets single real array element of A(m,n).
      * 
-     * @param m - row index
-     * @param n - column index
-     * @return - array element
+     * @param m row index
+     * @param n column index
+     * @return array element
      */
     public T getReal(int m, int n)
     {
@@ -82,7 +82,7 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     
     /**
      * @param index
-     * @return
+     * @return array element
      */
     public T getReal( int index )
     {
@@ -92,9 +92,9 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     /**
      * Sets single real array element.
      * 
-     * @param value - element value
-     * @param m - row index
-     * @param n - column index
+     * @param value element value
+     * @param m row index
+     * @param n column index
      */
     public void setReal(T value, int m, int n)
     {
@@ -103,8 +103,8 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     /**
      * Sets single real array element.
      * 
-     * @param value - element value
-     * @param index - column-packed vector index
+     * @param value element value
+     * @param index column-packed vector index
      */
     public void setReal(T value, int index)
     {
@@ -113,7 +113,7 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     /**
      * Sets real part of matrix
      * 
-     * @param vector - column-packed vector of elements
+     * @param vector column-packed vector of elements
      */
     public void setReal( T[] vector )
     {
@@ -126,9 +126,9 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     /**
      * Sets single imaginary array element.
      * 
-     * @param value - element value
-     * @param m - row index
-     * @param n - column index
+     * @param value element value
+     * @param m row index
+     * @param n column index
      */
     public void setImaginary(T value, int m, int n)
     {
@@ -137,8 +137,8 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     /**
      * Sets single real array element.
      * 
-     * @param value - element value
-     * @param index - column-packed vector index
+     * @param value element value
+     * @param index column-packed vector index
      */
     public void setImaginary(T value, int index)
     {
@@ -150,9 +150,9 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     /**
      * Gets single imaginary array element of A(m,n).
      * 
-     * @param m - row index
-     * @param n - column index
-     * @return - array element
+     * @param m row index
+     * @param n column index
+     * @return array element
      */
     public T getImaginary(int m, int n)
     {
@@ -160,7 +160,7 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     }
     /**
      * @param index
-     * @return
+     * @return array element
      */
     public T getImaginary( int index )
     {
@@ -170,7 +170,7 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     /**
      * Exports column-packed vector of real elements
      * 
-     * @return - column-packed vector of real elements
+     * @return column-packed vector of real elements
      */
 //    public T[] exportReal()
 //    {
@@ -179,7 +179,7 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     /**
      * Exports column-packed vector of imaginary elements
      * 
-     * @return - column-packed vector of imaginary elements
+     * @return column-packed vector of imaginary elements
      */
 //    public T[] exportImaginary()
 //    {
@@ -188,9 +188,9 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     /**
      * Does the same as <code>setReal</code>.
      * 
-     * @param value - element value
-     * @param m - row index
-     * @param n - column index
+     * @param value element value
+     * @param m row index
+     * @param n column index
      */
     public void set(T value, int m, int n)
     {
@@ -203,8 +203,8 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     /**
      * Does the same as <code>setReal</code>.
      * 
-     * @param value - element value
-     * @param index - column-packed vector index
+     * @param value element value
+     * @param index column-packed vector index
      */
     public void set(T value, int index)
     {
@@ -217,9 +217,9 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     /**
      * Does the same as <code>getReal</code>.
      * 
-     * @param m - row index
-     * @param n - column index
-     * @return - array element
+     * @param m row index
+     * @param n column index
+     * @return array element
      */
     public T get( int m, int n )
     {
@@ -231,7 +231,7 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     }
     /**
      * @param index
-     * @return
+     * @return array element
      */
     public T get ( int index )
     {

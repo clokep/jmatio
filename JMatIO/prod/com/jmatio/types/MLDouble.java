@@ -13,10 +13,10 @@ public class MLDouble extends MLNumericArray<Double>
     /**
      * Normally this constructor is used only by MatFileReader and MatFileWriter
      * 
-     * @param name - array name
-     * @param dims - array dimensions
-     * @param type - array type: here <code>mxDOUBLE_CLASS</code>
-     * @param attributes - array flags
+     * @param name array name
+     * @param dims array dimensions
+     * @param type array type: here <code>mxDOUBLE_CLASS</code>
+     * @param attributes array flags
      */
     public MLDouble( String name, int[] dims, int type, int attributes )
     {
@@ -26,8 +26,8 @@ public class MLDouble extends MLNumericArray<Double>
      * Create a <code>MLDouble</code> array with given name,
      * and dimensions.
      * 
-     * @param name - array name
-     * @param dims - array dimensions
+     * @param name array name
+     * @param dims array dimensions
      */
     public MLDouble(String name, int[] dims)
     {
@@ -37,9 +37,9 @@ public class MLDouble extends MLNumericArray<Double>
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
      * construct a 2D real matrix from a one-dimensional packed array
      * 
-     * @param name - array name
-     * @param vals - One-dimensional array of doubles, packed by columns (ala Fortran).
-     * @param m - Number of rows
+     * @param name array name
+     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param m Number of rows
      */
     public MLDouble(String name, Double[] vals, int m )
     {
@@ -51,8 +51,8 @@ public class MLDouble extends MLNumericArray<Double>
      * 
      * Note: array is converted to Double[]
      * 
-     * @param name - array name
-     * @param vals - two-dimensional array of values
+     * @param name array name
+     * @param vals two-dimensional array of values
      */
     public MLDouble( String name, double[][] vals )
     {
@@ -62,9 +62,9 @@ public class MLDouble extends MLNumericArray<Double>
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
      * construct a matrix from a one-dimensional packed array
      * 
-     * @param name - array name
-     * @param vals - One-dimensional array of doubles, packed by columns (ala Fortran).
-     * @param m - Number of rows
+     * @param name array name
+     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param m Number of rows
      */
     public MLDouble(String name, double[] vals, int m)
     {
@@ -87,7 +87,7 @@ public class MLDouble extends MLNumericArray<Double>
     /**
      * Gets two-dimensional real array.
      * 
-     * @return - 2D real array
+     * @return 2D real array
      */
     public double[][] getArray()
     {
@@ -105,8 +105,8 @@ public class MLDouble extends MLNumericArray<Double>
     /**
      * Casts <code>double[]</code> to <code>Double[]</code>
      * 
-     * @param - source <code>double[]</code>
-     * @return - result <code>Double[]</code>
+     * @param source <code>double[]</code>
+     * @return result <code>Double[]</code>
      */
     private static Double[] castToDouble( double[] d )
     {

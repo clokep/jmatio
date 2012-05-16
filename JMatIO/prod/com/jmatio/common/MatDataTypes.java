@@ -37,8 +37,8 @@ public class MatDataTypes
     /**
      * Return number of bytes for given type.
      * 
-     * @param type - <code>MatDataTypes</code>
-     * @return
+     * @param type <code>MatDataTypes</code>
+     * @return the size of the type (in bytes)
      */
     public static int sizeOf(int type)
     {
@@ -65,8 +65,8 @@ public class MatDataTypes
     /**
      * Get String representation of a data type
      * 
-     * @param type - data type
-     * @return - String representation
+     * @param type data type
+     * @return String representation
      */
     public static String typeToString(int type)
     {

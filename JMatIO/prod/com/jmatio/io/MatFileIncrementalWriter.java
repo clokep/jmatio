@@ -60,7 +60,7 @@ import com.jmatio.types.MLStructure;
  * >> save('mat_file.mat', 'char_arr', '-append');
  * </pre></code>
  * 
- * @author 
+ * @author tkutz
  */
 public class MatFileIncrementalWriter
 {
@@ -73,7 +73,7 @@ public class MatFileIncrementalWriter
 	/**
      * Creates a writer to a file given the filename.
      * 
-     * @param fileName - name of output file
+     * @param fileName name of output file
      * @throws IOException
      * @throws DataFormatException
      */
@@ -84,7 +84,7 @@ public class MatFileIncrementalWriter
     /**
      * Creates a writer to a file given the File object.
      * 
-     * @param file - an output <code>File</code>
+     * @param file an output <code>File</code>
      * @throws IOException
      * @throws DataFormatException
      */
@@ -97,8 +97,7 @@ public class MatFileIncrementalWriter
      * 
      * Writes MAT-file header and compressed data (<code>miCOMPRESSED</code>).
      * 
-     * @param chan - <code>WritableByteChannel</code>
-     * @param data - <code>Collection</code> of <code>MLArray</code> elements
+     * @param chan <code>WritableByteChannel</code>
      * @throws IOException
      */
     public MatFileIncrementalWriter(WritableByteChannel chan) throws IOException
@@ -164,8 +163,6 @@ public class MatFileIncrementalWriter
     /**
      * Writes <code>MLArrays</code> into <code>WritableByteChannel</code>.
      * 
-     * @param channel
-     *            the channel to write to
      * @param data
      *            the collection of <code>{@link MLArray}</code> objects
      * @throws IOException
@@ -238,8 +235,8 @@ public class MatFileIncrementalWriter
     /**
      * Writes MATRIX into <code>OutputStream</code>.
      * 
-     * @param os - <code>OutputStream</code>
-     * @param array - a <code>MLArray</code>
+     * @param os <code>OutputStream</code>
+     * @param array a <code>MLArray</code>
      * @throws IOException
      */
     private void writeMatrix(DataOutputStream output, MLArray array) throws IOException
@@ -429,8 +426,8 @@ public class MatFileIncrementalWriter
     /**
      * Writes MATRIX flags into <code>OutputStream</code>.
      * 
-     * @param os - <code>OutputStream</code>
-     * @param array - a <code>MLArray</code>
+     * @param os <code>OutputStream</code>
+     * @param array a <code>MLArray</code>
      * @throws IOException
      */
     private void writeFlags(DataOutputStream os, MLArray array) throws IOException
@@ -456,8 +453,8 @@ public class MatFileIncrementalWriter
     /**
      * Writes MATRIX dimensions into <code>OutputStream</code>.
      * 
-     * @param os - <code>OutputStream</code>
-     * @param array - a <code>MLArray</code>
+     * @param os <code>OutputStream</code>
+     * @param array a <code>MLArray</code>
      * @throws IOException
      */
     private void writeDimensions(DataOutputStream os, MLArray array) throws IOException
@@ -478,8 +475,8 @@ public class MatFileIncrementalWriter
     /**
      * Writes MATRIX name into <code>OutputStream</code>.
      * 
-     * @param os - <code>OutputStream</code>
-     * @param array - a <code>MLArray</code>
+     * @param os <code>OutputStream</code>
+     * @param array a <code>MLArray</code>
      * @throws IOException
      */
     private void writeName(DataOutputStream os, MLArray array) throws IOException

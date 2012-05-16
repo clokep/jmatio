@@ -13,10 +13,10 @@ public class MLUInt8 extends MLNumericArray<Byte>
     /**
      * Normally this constructor is used only by MatFileReader and MatFileWriter
      * 
-     * @param name - array name
-     * @param dims - array dimensions
-     * @param type - array type: here <code>mxUINT8_CLASS</code>
-     * @param attributes - array flags
+     * @param name array name
+     * @param dims array dimensions
+     * @param type array type: here <code>mxUINT8_CLASS</code>
+     * @param attributes array flags
      */
     public MLUInt8( String name, int[] dims, int type, int attributes )
     {
@@ -26,8 +26,8 @@ public class MLUInt8 extends MLNumericArray<Byte>
      * Create a <code>{@link MLUInt8}</code> array with given name,
      * and dimensions.
      * 
-     * @param name - array name
-     * @param dims - array dimensions
+     * @param name array name
+     * @param dims array dimensions
      */
     public MLUInt8(String name, int[] dims)
     {
@@ -37,9 +37,9 @@ public class MLUInt8 extends MLNumericArray<Byte>
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
      * construct a 2D real matrix from a one-dimensional packed array
      * 
-     * @param name - array name
-     * @param vals - One-dimensional array of doubles, packed by columns (ala Fortran).
-     * @param m - Number of rows
+     * @param name array name
+     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param m Number of rows
      */
     public MLUInt8(String name, Byte[] vals, int m )
     {
@@ -51,8 +51,8 @@ public class MLUInt8 extends MLNumericArray<Byte>
      * 
      * Note: array is converted to Byte[]
      * 
-     * @param name - array name
-     * @param vals - two-dimensional array of values
+     * @param name array name
+     * @param vals two-dimensional array of values
      */
     public MLUInt8( String name, byte[][] vals )
     {
@@ -62,9 +62,9 @@ public class MLUInt8 extends MLNumericArray<Byte>
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
      * construct a matrix from a one-dimensional packed array
      * 
-     * @param name - array name
-     * @param vals - One-dimensional array of doubles, packed by columns (ala Fortran).
-     * @param m - Number of rows
+     * @param name array name
+     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param m Number of rows
      */
     public MLUInt8(String name, byte[] vals, int m)
     {
@@ -87,7 +87,7 @@ public class MLUInt8 extends MLNumericArray<Byte>
     /**
      * Gets two-dimensional real array.
      * 
-     * @return - 2D real array
+     * @return 2D real array
      */
     public byte[][] getArray()
     {
@@ -107,10 +107,10 @@ public class MLUInt8 extends MLNumericArray<Byte>
         return result;
     }
     /**
-     * Casts <code>Double[]</code> to <code>byte[]</code>
+     * Casts <code>byte[]</code> to <code>Byte[]</code>
      * 
-     * @param - source <code>Byte[]</code>
-     * @return - result <code>byte[]</code>
+     * @param d <code>byte[]</code>
+     * @return result <code>Byte[]</code>
      */
     protected static Byte[] castToByte( byte[] d )
     {
@@ -122,10 +122,10 @@ public class MLUInt8 extends MLNumericArray<Byte>
         return dest;
     }
     /**
-     * Converts byte[][] to Byte[]
+     * Converts <code>byte[][]</code> to <code>Byte[][]</code>
      * 
-     * @param dd
-     * @return
+     * @param dd <code>byte[][]</code>
+     * @return result <code>Byte[][]</code>
      */
     protected static Byte[] byte2DToByte ( byte[][] dd )
     {

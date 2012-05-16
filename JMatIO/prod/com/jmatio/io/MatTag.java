@@ -55,7 +55,7 @@ class MatTag
     /**
      * Get size of single data in this tag.
      * 
-     * @return - number of bytes for single data
+     * @return number of bytes for single data
      */
     public int sizeOf()
     {

@@ -14,9 +14,9 @@ public class MLSingle extends MLNumericArray<Float>
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
      * construct a 2D real matrix from a one-dimensional packed array
      * 
-     * @param name - array name
-     * @param vals - One-dimensional array of floats, packed by columns (ala Fortran).
-     * @param m - Number of rows
+     * @param name array name
+     * @param vals One-dimensional array of floats, packed by columns (ala Fortran).
+     * @param m Number of rows
      */
     public MLSingle(String name, Float[] vals, int m)
     {
@@ -26,10 +26,10 @@ public class MLSingle extends MLNumericArray<Float>
     /**
      * Normally this constructor is used only by MatFileReader and MatFileWriter
      * 
-     * @param name - array name
-     * @param dims - array dimensions
-     * @param type - array type: here <code>mxSINGLE_CLASS</code>
-     * @param attributes - array flags
+     * @param name array name
+     * @param dims array dimensions
+     * @param type array type: here <code>mxSINGLE_CLASS</code>
+     * @param attributes array flags
      */
     public MLSingle(String name, int[] dims, int type, int attributes)
     {
@@ -40,8 +40,8 @@ public class MLSingle extends MLNumericArray<Float>
      * Create a <code>MLSingle</code> array with given name,
      * and dimensions.
      * 
-     * @param name - array name
-     * @param dims - array dimensions
+     * @param name array name
+     * @param dims array dimensions
      */
     public MLSingle(String name, int[] dims)
     {
@@ -67,8 +67,8 @@ public class MLSingle extends MLNumericArray<Float>
     /**
      * Casts <code>float[]</code> to <code>Float[]</code>
      *
-     * @param - source <code>float[]</code>
-     * @return - result <code>Float[]</code>
+     * @param source <code>float[]</code>
+     * @return result <code>Float[]</code>
      */
     private static Float[] castToFloat( float[] f )
     {

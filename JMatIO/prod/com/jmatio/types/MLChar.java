@@ -144,8 +144,8 @@ public class MLChar extends MLArray implements GenericArrayCreator<Character>
     /**
      * Gets the m-th character matrix's row as <code>String</code>.
      * 
-     * @param m - row number
-     * @return - <code>String</code>
+     * @param m row number
+     * @return <code>String</code>
      */
     public String getString( int m )
     {

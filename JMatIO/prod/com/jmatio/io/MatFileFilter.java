@@ -40,7 +40,7 @@ public class MatFileFilter
     /**
      * Create filter intance and add array names.
      * 
-     * @param names - array of names (needles)
+     * @param names array of names (needles)
      */
     public MatFileFilter( String[] names )
     {
@@ -55,7 +55,7 @@ public class MatFileFilter
      * Add array name to the filter. This array will be processed
      * while crawling thourg the MAT-file
      * 
-     * @param name - array name (needle)
+     * @param name array name (needle)
      */
     public void addArrayName( String name )
     {
@@ -64,8 +64,8 @@ public class MatFileFilter
     /**
      * Test if given name matches the filter.
      * 
-     * @param name - array name to be tested
-     * @return - <code>true</code> if array (matrix) of this name should be processed
+     * @param name array name to be tested
+     * @return <code>true</code> if array (matrix) of this name should be processed
      */
     public boolean matches( String name )
     {

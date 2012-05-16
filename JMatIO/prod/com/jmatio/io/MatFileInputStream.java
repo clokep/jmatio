@@ -23,8 +23,8 @@ class MatFileInputStream
     /**
      * Attach MAT-file input stream to <code>InputStream</code>
      * 
-     * @param is - input stream
-     * @param type - type of data in the stream
+     * @param is input stream
+     * @param type type of data in the stream
      * @see com.jmatio.common.MatDataTypes
      */
     public MatFileInputStream( ByteBuffer buf, int type )
@@ -37,7 +37,7 @@ class MatFileInputStream
      * Reads data (number of bytes red is determined by <i>data type</i>)
      * from the stream to <code>int</code>.
      * 
-     * @return
+     * @return int
      * @throws IOException
      */
     public int readInt() throws IOException
@@ -70,7 +70,7 @@ class MatFileInputStream
      * Reads data (number of bytes red is determined by <i>data type</i>)
      * from the stream to <code>char</code>.
      * 
-     * @return - char
+     * @return char
      * @throws IOException
      */
     public char readChar() throws IOException
@@ -101,7 +101,7 @@ class MatFileInputStream
      * Reads data (number of bytes red is determined by <i>data type</i>)
      * from the stream to <code>double</code>.
      * 
-     * @return - double
+     * @return double
      * @throws IOException
      */
     public double readDouble() throws IOException

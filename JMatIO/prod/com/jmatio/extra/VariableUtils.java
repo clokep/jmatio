@@ -37,7 +37,7 @@ public class VariableUtils
      * underscores and beginning with a letter.
      * 
      * @param name
-     * @return
+     * @return <code>true</code> if the name is a valid MATLAB variable name
      * @throws MatlabException 
      */
     public static boolean IsVarName(String name) {
@@ -68,7 +68,7 @@ public class VariableUtils
      * Note that variable names are non-unique after <code>namelengthmax</code> characters (currently 63).
      * 
      * @param name
-     * @return
+     * @return <code>true</code> if the name is a unique MATLAB variable name
      * @throws MatlabException 
      */
     public static boolean IsUniqueVarName(String name) {

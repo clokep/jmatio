@@ -11,10 +11,10 @@ public class MLInt16 extends MLUInt16
     /**
      * Normally this constructor is used only by MatFileReader and MatFileWriter
      * 
-     * @param name - array name
-     * @param dims - array dimensions
-     * @param type - array type: here <code>mxINT16_CLASS</code>
-     * @param attributes - array flags
+     * @param name array name
+     * @param dims array dimensions
+     * @param type array type: here <code>mxINT16_CLASS</code>
+     * @param attributes array flags
      */
     public MLInt16( String name, int[] dims, int type, int attributes )
     {
@@ -24,8 +24,8 @@ public class MLInt16 extends MLUInt16
      * Create a <code>{@link MLInt16}</code> array with given name,
      * and dimensions.
      * 
-     * @param name - array name
-     * @param dims - array dimensions
+     * @param name array name
+     * @param dims array dimensions
      */
     public MLInt16(String name, int[] dims)
     {
@@ -35,9 +35,9 @@ public class MLInt16 extends MLUInt16
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
      * construct a 2D real matrix from a one-dimensional packed array
      * 
-     * @param name - array name
-     * @param vals - One-dimensional array of doubles, packed by columns (ala Fortran).
-     * @param m - Number of rows
+     * @param name array name
+     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param m Number of rows
      */
     public MLInt16(String name, Short[] vals, int m )
     {
@@ -50,8 +50,8 @@ public class MLInt16 extends MLUInt16
      * 
      * Note: array is converted to Byte[]
      * 
-     * @param name - array name
-     * @param vals - two-dimensional array of values
+     * @param name array name
+     * @param vals two-dimensional array of values
      */
     public MLInt16( String name, short[][] vals )
     {
@@ -61,9 +61,9 @@ public class MLInt16 extends MLUInt16
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
      * construct a matrix from a one-dimensional packed array
      * 
-     * @param name - array name
-     * @param vals - One-dimensional array of doubles, packed by columns (ala Fortran).
-     * @param m - Number of rows
+     * @param name array name
+     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param m Number of rows
      */
     public MLInt16(String name, short[] vals, int m)
     {

@@ -64,8 +64,8 @@ public class MatFileWriter
     /**
      * Writes MLArrays into file given by <code>fileName</code>.
      * 
-     * @param fileName - name of ouput file
-     * @param data - <code>Collection</code> of <code>MLArray</code> elements
+     * @param fileName name of ouput file
+     * @param data <code>Collection</code> of <code>MLArray</code> elements
      * @throws IOException
      * @throws DataFormatException
      */
@@ -76,8 +76,8 @@ public class MatFileWriter
     /**
      * Writes MLArrays into <code>File</code>.
      * 
-     * @param file - an output <code>File</code>
-     * @param data - <code>Collection</code> of <code>MLArray</code> elements
+     * @param file an output <code>File</code>
+     * @param data <code>Collection</code> of <code>MLArray</code> elements
      * @throws IOException
      * @throws DataFormatException
      */
@@ -90,8 +90,8 @@ public class MatFileWriter
      * 
      * Writes MAT-file header and compressed data (<code>miCOMPRESSED</code>).
      * 
-     * @param output - <code>OutputStream</code>
-     * @param data - <code>Collection</code> of <code>MLArray</code> elements
+     * @param channel <code>OutputStream</code>
+     * @param data <code>Collection</code> of <code>MLArray</code> elements
      * @throws IOException
      */
     public MatFileWriter(WritableByteChannel channel, Collection<MLArray> data) throws IOException
@@ -244,8 +244,8 @@ public class MatFileWriter
     /**
      * Writes MATRIX into <code>OutputStream</code>.
      * 
-     * @param os - <code>OutputStream</code>
-     * @param array - a <code>MLArray</code>
+     * @param os <code>OutputStream</code>
+     * @param array a <code>MLArray</code>
      * @throws IOException
      */
     private void writeMatrix(DataOutputStream output, MLArray array) throws IOException
@@ -506,8 +506,8 @@ public class MatFileWriter
     /**
      * Writes MATRIX flags into <code>OutputStream</code>.
      * 
-     * @param os - <code>OutputStream</code>
-     * @param array - a <code>MLArray</code>
+     * @param os <code>OutputStream</code>
+     * @param array a <code>MLArray</code>
      * @throws IOException
      */
     private void writeFlags(DataOutputStream os, MLArray array) throws IOException
@@ -533,8 +533,8 @@ public class MatFileWriter
     /**
      * Writes MATRIX dimensions into <code>OutputStream</code>.
      * 
-     * @param os - <code>OutputStream</code>
-     * @param array - a <code>MLArray</code>
+     * @param os <code>OutputStream</code>
+     * @param array a <code>MLArray</code>
      * @throws IOException
      */
     private void writeDimensions(DataOutputStream os, MLArray array) throws IOException
@@ -555,8 +555,8 @@ public class MatFileWriter
     /**
      * Writes MATRIX name into <code>OutputStream</code>.
      * 
-     * @param os - <code>OutputStream</code>
-     * @param array - a <code>MLArray</code>
+     * @param os <code>OutputStream</code>
+     * @param array a <code>MLArray</code>
      * @throws IOException
      */
     private void writeName(DataOutputStream os, MLArray array) throws IOException

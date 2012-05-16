@@ -38,7 +38,7 @@ public class MLSparse extends MLNumericArray<Double>
     /**
      * Gets maximum number of non-zero values
      * 
-     * @return
+     * @return maximum number of non-zero values
      */
     public int getMaxNZ()
     {
@@ -70,7 +70,7 @@ public class MLSparse extends MLNumericArray<Double>
      * of nonzero entries in the matrix. If nnz is less than nzmax, then more nonzero
      * entries can be inserted in the array without allocating additional storage
      * 
-     * @return
+     * @return column indices
      */
     public int[] getJC()
     {
@@ -198,7 +198,7 @@ public class MLSparse extends MLNumericArray<Double>
     /**
      * Returns the imaginary part (PI) array. PI has length number-of-nonzero-values.
      *
-     * @return
+     * @return imaginary array
      */
     public Double[] exportImaginary()
     {

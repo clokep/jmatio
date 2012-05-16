@@ -13,10 +13,10 @@ public class MLUInt32 extends MLNumericArray<Integer>
     /**
      * Normally this constructor is used only by MatFileReader and MatFileWriter
      * 
-     * @param name - array name
-     * @param dims - array dimensions
-     * @param type - array type: here <code>mxUINT32_CLASS</code>
-     * @param attributes - array flags
+     * @param name array name
+     * @param dims array dimensions
+     * @param type array type: here <code>mxUINT32_CLASS</code>
+     * @param attributes array flags
      */
     public MLUInt32( String name, int[] dims, int type, int attributes )
     {
@@ -26,8 +26,8 @@ public class MLUInt32 extends MLNumericArray<Integer>
      * Create a <code>{@link MLUInt32}</code> array with given name,
      * and dimensions.
      * 
-     * @param name - array name
-     * @param dims - array dimensions
+     * @param name array name
+     * @param dims array dimensions
      */
     public MLUInt32(String name, int[] dims)
     {
@@ -37,9 +37,9 @@ public class MLUInt32 extends MLNumericArray<Integer>
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
      * construct a 2D real matrix from a one-dimensional packed array
      * 
-     * @param name - array name
-     * @param vals - One-dimensional array of doubles, packed by columns (ala Fortran).
-     * @param m - Number of rows
+     * @param name array name
+     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param m Number of rows
      */
     public MLUInt32(String name, Integer[] vals, int m )
     {
@@ -51,8 +51,8 @@ public class MLUInt32 extends MLNumericArray<Integer>
      * 
      * Note: array is converted to Byte[]
      * 
-     * @param name - array name
-     * @param vals - two-dimensional array of values
+     * @param name array name
+     * @param vals two-dimensional array of values
      */
     public MLUInt32( String name, int[][] vals )
     {
@@ -62,9 +62,9 @@ public class MLUInt32 extends MLNumericArray<Integer>
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
      * construct a matrix from a one-dimensional packed array
      * 
-     * @param name - array name
-     * @param vals - One-dimensional array of doubles, packed by columns (ala Fortran).
-     * @param m - Number of rows
+     * @param name array name
+     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param m Number of rows
      */
     public MLUInt32(String name, int[] vals, int m)
     {
@@ -87,7 +87,7 @@ public class MLUInt32 extends MLNumericArray<Integer>
     /**
      * Gets two-dimensional real array.
      * 
-     * @return - 2D real array
+     * @return 2D real array
      */
     public int[][] getArray()
     {
@@ -109,8 +109,8 @@ public class MLUInt32 extends MLNumericArray<Integer>
     /**
      * Casts <code>int[]</code> to <code>Integer[]</code>
      * 
-     * @param - source <code>int[]</code>
-     * @return - result <code>Integer[]</code>
+     * @param d <code>int[]</code>
+     * @return result <code>Integer[]</code>
      */
     protected static Integer[] castToInteger( int[] d )
     {
@@ -122,10 +122,10 @@ public class MLUInt32 extends MLNumericArray<Integer>
         return dest;
     }
     /**
-     * Converts <code>int[][]</code> to <code>Integer[]</code>
+     * Converts <code>int[][]</code> to <code>Integer[][]</code>
      * 
-     * @param dd
-     * @return
+     * @param dd <code>int[][]</code>
+     * @return result <code>Integer[][]</code>
      */
     protected static Integer[] int2DToInteger ( int[][] dd )
     {

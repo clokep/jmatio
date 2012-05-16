@@ -70,7 +70,7 @@ public class MLArray
     /**
      * Gets array name
      * 
-     * @return - array name
+     * @return array name
      */
     public String getName()
     {

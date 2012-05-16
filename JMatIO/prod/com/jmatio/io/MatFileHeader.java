@@ -25,9 +25,9 @@ public class MatFileHeader
     /**
      * New MAT-file header
      * 
-     * @param description - descriptive text (no longer than 116 characters)
-     * @param version - by default is set to 0x0100
-     * @param endianIndicator - byte array size of 2 indicating byte-swapping requirement
+     * @param description descriptive text (no longer than 116 characters)
+     * @param version by default is set to 0x0100
+     * @param endianIndicator byte array size of 2 indicating byte-swapping requirement
      */
     public MatFileHeader(String description, int version, byte[] endianIndicator)
     {
@@ -39,7 +39,7 @@ public class MatFileHeader
     /**
      * Gets descriptive text
      * 
-     * @return
+     * @return the description
      */
     public String getDescription()
     {
@@ -49,7 +49,7 @@ public class MatFileHeader
      * Gets endian indicator. Bytes written as "MI" suggest that byte-swapping operation is required
      * in order to interpret data correctly. If value is set to "IM" byte-swapping is not needed.
      * 
-     * @return - a byte array size of 2
+     * @return a byte array size of 2
      */
     public byte[] getEndianIndicator()
     {
@@ -58,14 +58,14 @@ public class MatFileHeader
     /**
      * When creating a MAT-file, set version to 0x0100
      * 
-     * @return
+     * @return the version of the MAT-file
      */
     public int getVersion()
     {
         return version;
     }
     
-    //@facotry
+    //@factory
     /**
      * A factory. Creates new <code>MatFileHeader</code> instance with default header values:
      * <ul>

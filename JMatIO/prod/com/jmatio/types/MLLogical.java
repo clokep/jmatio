@@ -9,10 +9,10 @@ public class MLLogical extends MLUInt8
     /**
      * Normally this constructor is used only by MatFileReader and MatFileWriter
      * 
-     * @param name - array name
-     * @param dims - array dimensions
-     * @param type - array type: here <code>mxUINT8_CLASS</code>
-     * @param attributes - array flags: here <code>mtFLAG_LOGICAL</code>
+     * @param name array name
+     * @param dims array dimensions
+     * @param type array type: here <code>mxUINT8_CLASS</code>
+     * @param attributes array flags: here <code>mtFLAG_LOGICAL</code>
      */
     public MLLogical( String name, int[] dims, int type, int attributes )
     {
@@ -22,8 +22,8 @@ public class MLLogical extends MLUInt8
      * Create a <code>{@link MLLogical}</code> array with given name,
      * and dimensions.
      * 
-     * @param name - array name
-     * @param dims - array dimensions
+     * @param name array name
+     * @param dims array dimensions
      */
     public MLLogical(String name, int[] dims)
     {
@@ -33,9 +33,9 @@ public class MLLogical extends MLUInt8
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
      * construct a 2D real matrix from a one-dimensional packed array
      * 
-     * @param name - array name
-     * @param vals - One-dimensional array of doubles, packed by columns (ala Fortran).
-     * @param m - Number of rows
+     * @param name array name
+     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param m Number of rows
      */
     public MLLogical(String name, Byte[] vals, int m )
     {
@@ -53,8 +53,8 @@ public class MLLogical extends MLUInt8
     /**
      * Casts <code>Double[]</code> to <code>byte[]</code>
      * 
-     * @param - source <code>Long[]</code>
-     * @return - result <code>long[]</code>
+     * @param d <code>Long[]</code>
+     * @return result <code>long[]</code>
      */
     protected static Byte[] castToByte( boolean[] d )
     {
