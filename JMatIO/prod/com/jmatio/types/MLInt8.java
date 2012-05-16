@@ -38,4 +38,30 @@ public class MLInt8 extends MLUInt8
         super(name, vals, m );
         this.type = MLArray.mxINT8_CLASS;
     }
+    
+    /**
+     * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
+     * construct a 2D real matrix from <code>byte[][]</code>
+     * 
+     * Note: array is converted to Byte[]
+     * 
+     * @param name - array name
+     * @param vals - two-dimensional array of values
+     */
+    public MLInt8( String name, byte[][] vals )
+    {
+       this( name, byte2DToByte(vals), vals.length );
     }
+    /**
+     * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
+     * construct a matrix from a one-dimensional packed array
+     * 
+     * @param name - array name
+     * @param vals - One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param m - Number of rows
+     */
+    public MLInt8(String name, byte[] vals, int m)
+    {
+        this(name, castToByte( vals ), m );
+    }
+}

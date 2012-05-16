@@ -112,7 +112,7 @@ public class MLUInt8 extends MLNumericArray<Byte>
      * @param - source <code>Byte[]</code>
      * @return - result <code>byte[]</code>
      */
-    private static Byte[] castToByte( byte[] d )
+    protected static Byte[] castToByte( byte[] d )
     {
         Byte[] dest = new Byte[d.length];
         for ( int i = 0; i < d.length; i++ )
@@ -127,7 +127,7 @@ public class MLUInt8 extends MLNumericArray<Byte>
      * @param dd
      * @return
      */
-    private static Byte[] byte2DToByte ( byte[][] dd )
+    protected static Byte[] byte2DToByte ( byte[][] dd )
     {
         Byte[] d = new Byte[ dd.length*dd[0].length ];
         for ( int n = 0; n < dd[0].length; n++ )
