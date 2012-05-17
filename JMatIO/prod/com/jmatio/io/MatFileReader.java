@@ -459,7 +459,6 @@ public class MatFileReader
             @Override
             public synchronized int read() throws IOException
             {
-                // TODO Auto-generated method stub
                 throw new RuntimeException("Not yet implemented");
             } 
             public synchronized int read(byte[] bytes, int off, int len) throws IOException {
@@ -897,38 +896,6 @@ public class MatFileReader
 //                readData(buf);
 //                
 //                mlArray = null;
-//                break;
-//            case MLArray.mxUINT8_CLASS:
-//                tag = new ISMatTag(buf);
-//                //System.out.println( "Array name: " + name );
-//                System.out.println( "Array type: " + type);
-//                System.out.println( "Array size: " + tag);
-//                System.out.println( "Array flags: " + Arrays.toString(flags));
-//                System.out.println( "Array attributes: " + attributes);
-//                
-//                
-//                char[] chars = tag.readToCharArray();
-//                byte[] bytes = new byte[chars.length];
-//                for ( int i = 0; i < chars.length; i++ )
-//                {
-//                    bytes[i] = (byte)chars[i];
-//                }
-//                try
-//                {
-//                    ObjectInputStream ois = new ObjectInputStream( new ByteArrayInputStream(bytes) );
-//                    System.out.println( ois.readObject() );
-//                }
-//                catch (Exception e)
-//                {
-//                    System.out.println(chars);
-//                    //System.out.println(Arrays.toString(chars));
-//                    // TODO Auto-generated catch block
-//                    //e.printStackTrace();
-//                    
-//                }
-//                mlArray = null;
-//                
-//                
 //                break;
             default:
                 throw new MatlabIOException("Incorrect matlab array class: " + MLArray.typeToString(type) );
