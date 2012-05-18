@@ -65,4 +65,13 @@ public class MLLogical extends MLUInt8
         }
         return dest;
     }
+	
+    /**
+     * @param index
+     * @return array element
+     */
+    public boolean getBoolean ( int index )
+    {
+        return super.get( index ) != 0;
+    }
 }

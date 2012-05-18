@@ -32,6 +32,7 @@ import com.jmatio.types.MLInt16;
 import com.jmatio.types.MLInt32;
 import com.jmatio.types.MLInt64;
 import com.jmatio.types.MLInt8;
+import com.jmatio.types.MLLogical;
 import com.jmatio.types.MLNumericArray;
 import com.jmatio.types.MLSingle;
 import com.jmatio.types.MLSparse;
@@ -718,7 +719,14 @@ public class MatFileReader
                 }
                 break;
             case MLArray.mxUINT8_CLASS:
-                mlArray = new MLUInt8(name, dims, type, attributes);
+                if ((attributes & MLArray.mtFLAG_LOGICAL) != 0)
+                {
+                    mlArray = new MLLogical(name, dims, type, attributes);
+                }
+                else
+                {
+                    mlArray = new MLUInt8(name, dims, type, attributes);
+                }
                 //read real
                 tag = new ISMatTag(buf);
                 tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
