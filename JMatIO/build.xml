@@ -28,28 +28,15 @@
 		<property name="dev.native" location="${dev.dir}\native"/>
 		<property name="dev.test" location="${dev.dir}\test"/>
 
-		<property name="build.dir" location="${basedir}\build\JMatIO"/>
-		<property name="build.src" location="${build.dir}\src"/>
+		<property name="build.dir" location="${basedir}\build"/>
 		<property name="build.bin" location="${build.dir}\bin"/>
 		<property name="build.extern" location="${build.dir}\extern"/>
 		<property name="build.native" location="${build.dir}\native"/>
 		<property name="build.package" location="${build.dir}\lib"/>
-		<property name="build.test" location="${build.dir}\test"/>
+		<property name="build.test.bin" location="${build.dir}\test"/>
 		<property name="build.resource" location="${build.dir}\"/>
 		<property name="build.javadocs" location="${build.dir}\doc"/>
 		
-	</target>
-
-	<!-- ================================= 
-          target: prepare-src              
-         ================================= -->
-	<target name="prepare-src" depends="init" description="--> Copies source folder">
-		<mkdir dir="${build.src}"/>
-		<copy todir="${build.src}">
-			<fileset dir="${dev.src}">
-				<include name="**/*.java"/>
-			</fileset>
-		</copy>
 	</target>
 
 	<!-- ================================= 
@@ -58,20 +45,17 @@
 	<target name="copy-resources" depends="init" description="--> Copies resource files">
 		<copy todir="${build.resource}">
 			<fileset dir="${dev.dir}">
-				<include name="**/*.txt"/>
+				<include name="*.txt"/>
 			</fileset>
-		</copy>
-		<copy todir="${build.test}">
-			<fileset dir="${dev.test}"/>
 		</copy>
 	</target>
 
 	<!-- ================================= 
           target: compile              
          ================================= -->
-	<target name="compile" depends="prepare-src, copy-resources" description="--> Compiles source folder">
+	<target name="compile" depends="copy-resources" description="--> Compiles source folder">
 		<mkdir dir="${build.bin}"/>
-		<javac srcdir="${build.src}" 
+		<javac srcdir="${dev.src}" 
 			   destdir="${build.bin}" 
 			   classpath="" 
 			   debug="no"
@@ -81,7 +65,9 @@
 	</target>
 
 	<target name="compile-test" depends="compile" description="--> Compiles test folder">
-		<javac srcdir="${build.test}" destdir="${build.bin}">
+		<mkdir dir="${build.test.bin}"/>
+		
+		<javac srcdir="${dev.test}" destdir="${build.test.bin}">
             <classpath>
                 <pathelement path="${build.bin}"/>
                 <fileset dir="${basedir}/lib" includes="*.jar"/>
@@ -90,34 +76,38 @@
 	</target>
 	
     <target name="test" depends="compile-test" description="--> Run JUnit tests">
-		<mkdir dir="${build.bin}/reports"/>
+		<mkdir dir="${build.test.bin}/reports"/>
+		<copy todir="${build.test.bin}">
+			<fileset dir="${dev.test}">
+				<include name="*.mat"/>
+			</fileset>
+		</copy>
 		
-        <junit fork="true" forkmode="once" printsummary="on">
+        <junit fork="true" forkmode="once" printsummary="on" dir="${build.dir}">
             <classpath>
 				<pathelement path="${build.bin}"/>
+				<pathelement path="${build.test.bin}"/>
                 <fileset dir="${basedir}/lib" includes="*.jar"/>
             </classpath>
 			<formatter type="plain"/>
-            <batchtest todir="${build.bin}/reports">
-                <fileset dir="${build.bin}">
+            <batchtest todir="${build.test.bin}/reports">
+                <fileset dir="${build.test.bin}">
                     <include name="**/*Test.class"/>
                 </fileset>
             </batchtest>
         </junit>
 		
-		<delete dir="${basedir}" includes="*.mat"/>
+		<delete dir="${build.dir}" includes="*.mat"/>
     </target>
 
 	<!-- ================================= 
           target: package              
          ================================= -->
     <target name="package" depends="compile" description="--> Creates a .jar package">
-		
         <mkdir dir="${build.bin}/META-INF"/>
     	<manifest file="${build.bin}/META-INF/MANIFEST.MF">
             <attribute name="Built-By" value="${user.name}"/>
         </manifest>
-    	
     	
     	<mkdir dir="${build.package}"/>
         <jar destfile="${build.package}\${name}.jar" 
@@ -132,21 +122,16 @@
          ================================= -->
     <target name="clean" depends="init" description="--> Performs clean">
     	<delete includeEmptyDirs="true" quiet="true">
-        	<fileset dir="${build.bin}"/>
-	    	<fileset dir="${build.extern}"/>
-    		<fileset dir="${build.native}"/>
-    		<fileset dir="${build.package}"/>
-    		<fileset dir="${build.exec}"/>
+        	<fileset dir="${build.dir}"/>
     	</delete>
     </target>
 
     <!-- =================================================================== -->
     <!-- Creates the API documentation                                       -->
     <!-- =================================================================== -->
-    <target name="javadoc" depends="prepare-src"
-        description="Creates the API documentation">
+    <target name="javadoc" depends="init" description="Creates the API documentation">
         <mkdir dir="${build.javadocs}"/>
-        <javadoc packagenames="*" sourcepath="${build.src}"
+        <javadoc packagenames="*" sourcepath="${dev.src}"
             destdir="${build.javadocs}" author="true" version="true" use="true"
             splitindex="true" noindex="false" windowtitle="${ant.project.name} v${version}"
             doctitle="${ant.project.name} v${version}&lt;br&gt;API Specification"
