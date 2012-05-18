@@ -27,6 +27,7 @@ import com.jmatio.types.MLChar;
 import com.jmatio.types.MLDouble;
 import com.jmatio.types.MLInt64;
 import com.jmatio.types.MLInt8;
+import com.jmatio.types.MLLogical;
 import com.jmatio.types.MLNumericArray;
 import com.jmatio.types.MLSingle;
 import com.jmatio.types.MLSparse;
@@ -1051,4 +1052,49 @@ public class MatIOTest
         assertEquals( expected[2], mlchar.getString(2) );
         assertEquals( expected[3], mlchar.getString(3) );
     }
+	
+	@Test
+	public void testMLLogical() throws Exception
+	{
+		boolean[] expected = new boolean[] { true, false, true, true };
+		
+		MLLogical logical = new MLLogical( "arr", expected , 1 );
+		
+		logical.set(expected);
+		
+        assertEquals( expected[0], logical.get(0) );
+        assertEquals( expected[1], logical.get(1) );
+        assertEquals( expected[2], logical.get(2) );
+        assertEquals( expected[3], logical.get(3) );
+		
+        //Test writing the MLSingle
+        MatFileWriter writer = new MatFileWriter();
+        writer.write( "logicaltmp.mat", Arrays.asList( (MLArray)logical) );
+        
+        //Test reading the MLSingle
+        MatFileReader reader = new MatFileReader();
+        MLLogical readLogical = (MLLogical) reader.read( new File("logicaltmp.mat") ).get( "arr" );
+        
+        assertEquals( logical, readLogical );
+        
+        //Test reading the MLSingle generated natively by Matlab
+        MLLogical readLogicalMatlabGenerated = (MLLogical) reader.read( new File("test/logical.mat") ).get( "arr" );
+        
+        assertEquals( logical, readLogicalMatlabGenerated );
+	}
+	
+	@Test
+	public void testMLUInt8()
+	{
+		byte[] expected = new byte[] { 0, 1, 2, 3 };
+		
+		MLUInt8 mluint8 = new MLUInt8( "array", expected , 1 );
+		
+		mluint8.set(expected);
+		
+        assertEquals( expected[0], (byte)mluint8.get(0) );
+        assertEquals( expected[1], (byte)mluint8.get(1) );
+        assertEquals( expected[2], (byte)mluint8.get(2) );
+        assertEquals( expected[3], (byte)mluint8.get(3) );
+	}
 }

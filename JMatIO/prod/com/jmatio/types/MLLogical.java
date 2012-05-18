@@ -34,13 +34,13 @@ public class MLLogical extends MLUInt8
      * construct a 2D real matrix from a one-dimensional packed array
      * 
      * @param name array name
-     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param vals One-dimensional array of boolean, packed by columns (ala Fortran).
      * @param m Number of rows
      */
-    public MLLogical(String name, Byte[] vals, int m )
+    public MLLogical(String name, boolean[] vals, int m )
     {
-        super(name, vals, m );
-        this.type = MLArray.mxUINT8_CLASS;
+        super(name, castToByte( vals ), m );
+        this.attributes |= MLArray.mtFLAG_LOGICAL;
     }
     
     /**

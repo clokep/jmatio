@@ -47,9 +47,9 @@ public class MLUInt16 extends MLNumericArray<Short>
     }
     /**
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style: 
-     * construct a 2D real matrix from <code>byte[][]</code>
+     * construct a 2D real matrix from <code>short[][]</code>
      * 
-     * Note: array is converted to Byte[]
+     * Note: array is converted to Short[]
      * 
      * @param name array name
      * @param vals two-dimensional array of values

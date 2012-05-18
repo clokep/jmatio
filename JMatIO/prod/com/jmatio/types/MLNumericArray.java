@@ -62,11 +62,7 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     public MLNumericArray(String name, int type, T[] vals, int m )
     {
         this(name, new int[] {  m, (int) Math.ceil(vals.length/(double)m) }, type, 0);
-        //fill the array
-        for ( int i = 0; i < vals.length; i++ )
-        {
-            set( vals[i], i );
-        }
+        setReal( vals );
     }
     /**
      * Gets single real array element of A(m,n).
@@ -121,7 +117,11 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
         {
             throw new IllegalArgumentException("Matrix dimensions do not match. " + getSize() + " not " + vector.length);
         }
-        System.arraycopy(vector, 0, real, 0, vector.length);
+        //fill the array
+        for ( int i = 0; i < vector.length; i++ )
+        {
+            set( vector[i], i );
+        }
     }
     /**
      * Sets single imaginary array element.

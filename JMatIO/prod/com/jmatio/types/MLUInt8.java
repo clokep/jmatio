@@ -38,7 +38,7 @@ public class MLUInt8 extends MLNumericArray<Byte>
      * construct a 2D real matrix from a one-dimensional packed array
      * 
      * @param name array name
-     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param vals One-dimensional array of Bytes, packed by columns (ala Fortran).
      * @param m Number of rows
      */
     public MLUInt8(String name, Byte[] vals, int m )
@@ -63,7 +63,7 @@ public class MLUInt8 extends MLNumericArray<Byte>
      * construct a matrix from a one-dimensional packed array
      * 
      * @param name array name
-     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param vals One-dimensional array of bytes, packed by columns (ala Fortran).
      * @param m Number of rows
      */
     public MLUInt8(String name, byte[] vals, int m)
