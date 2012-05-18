@@ -79,8 +79,35 @@
 			   target="1.5"
 		/>
 	</target>
+
+	<target name="compile-test" depends="compile" description="--> Compiles test folder">
+		<javac srcdir="${build.test}" destdir="${build.bin}">
+            <classpath>
+                <pathelement path="${build.bin}"/>
+                <fileset dir="${basedir}/lib" includes="*.jar"/>
+            </classpath>
+		</javac>
+	</target>
 	
-	
+    <target name="test" depends="compile-test" description="--> Run JUnit tests">
+		<mkdir dir="${build.bin}/reports"/>
+		
+        <junit fork="true" forkmode="once" printsummary="on">
+            <classpath>
+				<pathelement path="${build.bin}"/>
+                <fileset dir="${basedir}/lib" includes="*.jar"/>
+            </classpath>
+			<formatter type="plain"/>
+            <batchtest todir="${build.bin}/reports">
+                <fileset dir="${build.bin}">
+                    <include name="**/*Test.class"/>
+                </fileset>
+            </batchtest>
+        </junit>
+		
+		<delete dir="${basedir}" includes="*.mat"/>
+    </target>
+
 	<!-- ================================= 
           target: package              
          ================================= -->
