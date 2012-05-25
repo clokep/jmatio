@@ -59,8 +59,15 @@
         <attribute name="MATLABClass" />
 
         <sequential>
-            <echo message="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" />
             <copy file="${dev.src}/com/jmatio/types/MLUIntNN.java.in"
+                  tofile="${dev.src}/com/jmatio/types/MLU@{MATLABClass}.java" overwrite="true" />
+            <replace file="${dev.src}/com/jmatio/types/MLU@{MATLABClass}.java" token="@NumberClass@" value="@{NumberClass}" />
+            <replace file="${dev.src}/com/jmatio/types/MLU@{MATLABClass}.java" token="@primitive@" value="@{primitive}" />
+            <replace file="${dev.src}/com/jmatio/types/MLU@{MATLABClass}.java" token="@primitive2@" value="@{primitive2}" />
+            <replace file="${dev.src}/com/jmatio/types/MLU@{MATLABClass}.java" token="@MATLABArrayType@" value="@{MATLABArrayType}" />
+            <replace file="${dev.src}/com/jmatio/types/MLU@{MATLABClass}.java" token="@MATLABClass@" value="@{MATLABClass}" />
+
+            <copy file="${dev.src}/com/jmatio/types/MLIntNN.java.in"
                   tofile="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" overwrite="true" />
             <replace file="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" token="@NumberClass@" value="@{NumberClass}" />
             <replace file="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" token="@primitive@" value="@{primitive}" />
@@ -71,9 +78,9 @@
     </macrodef>
 
     <target name="generate-source" depends="init" description="--> Copies resource files">
-        <copy-and-replace NumberClass="Long" primitive="long" MATLABArrayType="UINT64" MATLABClass="UInt64" />
-        <copy-and-replace NumberClass="Integer" primitive="int" primitive2="Int" MATLABArrayType="UINT32" MATLABClass="UInt32" />
-        <copy-and-replace NumberClass="Short" primitive="short" MATLABArrayType="UINT16" MATLABClass="UInt16" />
+        <copy-and-replace NumberClass="Long" primitive="long" MATLABArrayType="INT64" MATLABClass="Int64" />
+        <copy-and-replace NumberClass="Integer" primitive="int" primitive2="Int" MATLABArrayType="INT32" MATLABClass="Int32" />
+        <copy-and-replace NumberClass="Short" primitive="short" MATLABArrayType="INT16" MATLABClass="Int16" />
     </target>
 
     <!-- =================================
