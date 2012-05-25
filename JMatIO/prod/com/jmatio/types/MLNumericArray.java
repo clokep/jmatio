@@ -102,7 +102,7 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
             throw new IllegalArgumentException("Matrix dimensions do not match. " + this.getSize() + " not " + vector.length);
         // Fill the array
         for (int i = 0; i < vector.length; ++i)
-            this.set(vector[i], i);
+            this.setReal(vector[i], i);
     }
 
     /**
@@ -188,7 +188,7 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
      * @param index
      * @return array element
      */
-    public T get (int index) {
+    public T get(int index) {
         if (this.isComplex())
             throw new IllegalStateException("Cannot use this method for Complex matrices");
         return this._get(this.real, index);

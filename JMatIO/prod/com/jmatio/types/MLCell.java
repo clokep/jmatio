@@ -2,68 +2,61 @@ package com.jmatio.types;
 
 import java.util.ArrayList;
 
-public class MLCell extends MLArray
-{
+public class MLCell extends MLArray {
     private ArrayList<MLArray> cells;
-    
-    public MLCell(String name, int[] dims )
-    {
+
+    public MLCell(String name, int[] dims) {
         this( name, dims, MLArray.mxCELL_CLASS, 0);
     }
-    
-    public MLCell(String name, int[] dims, int type, int attributes)
-    {
+
+    public MLCell(String name, int[] dims, int type, int attributes) {
         super(name, dims, type, attributes);
-        
-        cells = new ArrayList<MLArray>(getM()*getN());
-        
-        for ( int i = 0; i < getM()*getN(); i++ )
-        {
-            cells.add( new MLEmptyArray() );
-        }
-    }    
-    public void set(MLArray value, int m, int n)
-    {
+
+        int length = this.getM() * this.getN();
+        cells = new ArrayList<MLArray>(length);
+
+        for (int i = 0; i < length; ++i)
+            cells.add(new MLEmptyArray());
+    }
+
+    public void set(MLArray value, int m, int n) {
+        this.set(value, this.getIndex(m, n));
+    }
+
+    public void set(MLArray value, int index) {
         value.isChild = true;
-        cells.set( getIndex(m,n), value );
+        this.cells.set(index, value);
     }
-    public void set(MLArray value, int index)
-    {
-        value.isChild = true;
-        cells.set( index, value );
+
+    public MLArray get(int m, int n) {
+        return cells.get(this.getIndex(m, n));
     }
-    public MLArray get(int m, int n)
-    {
-        return cells.get( getIndex(m,n) );
+
+    public MLArray get(int index) {
+        return cells.get(index);
     }
-    public MLArray get(int index)
-    {
-        return cells.get( index );
-    }
-    public int getIndex(int m, int n)
-    {
-        return m+n*getM();
-    }
-    public ArrayList<MLArray> cells()
-    {
+
+    public ArrayList<MLArray> cells() {
         return cells;
     }
-    public String contentToString()
-    {
+
+    public String contentToString() {
         StringBuffer sb = new StringBuffer();
         sb.append(name + " = \n");
-        
-        for ( int m = 0; m < getM(); m++ )
-        {
+
+        for (int m = 0; m < this.getM(); ++m) {
            sb.append("\t");
-           for ( int n = 0; n < getN(); n++ )
-           {
-               sb.append( get(m,n) );
-               sb.append("\t");
-           }
-           sb.append("\n");
+            for ( int n = 0; n < this.getN(); n++ ) {
+                sb.append(this.get(m, n));
+                sb.append("\t");
+            }
+            sb.append("\n");
         }
         return sb.toString();
     }
 
+    public void dispose() {
+        if (this.cells != null)
+            this.cells.clear();
+    }
 }

@@ -65,14 +65,14 @@ public class ML@MATLABClass@ extends MLNumericArray<@NumberClass@> {
      * @param m Number of rows
      */
     public ML@MATLABClass@(String name, @primitive@[] vals, int m) {
-        this(name, ML@MATLABClass@.castToNumber(vals), m);
+        this(name, ML@MATLABClass@.castToObject(vals), m);
     }
 
     /**
      * @param vector
      */
     public void set(@primitive@[] vector) {
-    	this.set(ML@MATLABClass@.castToNumber(vector));
+    	this.set(ML@MATLABClass@.castToObject(vector));
     }
 
     /* (non-Javadoc)
@@ -107,7 +107,7 @@ public class ML@MATLABClass@ extends MLNumericArray<@NumberClass@> {
      * @param d <code>@primitive@[]</code>
      * @return result <code>@NumberClass@[]</code>
      */
-    protected static @NumberClass@[] castToNumber(@primitive@[] d){
+    protected static @NumberClass@[] castToObject(@primitive@[] d){
         @NumberClass@[] dest = new @NumberClass@[d.length];
         for (int i = 0; i < d.length; ++i)
             dest[i] = (@NumberClass@)d[i];

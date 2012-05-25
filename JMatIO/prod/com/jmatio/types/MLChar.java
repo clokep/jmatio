@@ -149,7 +149,6 @@ public class MLChar extends MLArray implements GenericArrayCreator<Character> {
     }
 
     public void dispose() {
-        if (this.chars != null)
-            this.chars = null;
+        this.chars = null;
     }
 }

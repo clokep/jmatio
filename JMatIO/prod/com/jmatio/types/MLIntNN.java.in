@@ -62,6 +62,6 @@ public class ML@MATLABClass@ extends MLU@MATLABClass@ {
      * @param m Number of rows
      */
     public ML@MATLABClass@(String name, @primitive@[] vals, int m) {
-        this(name, MLU@MATLABClass@.castToNumber(vals), m );
+        this(name, MLU@MATLABClass@.castToObject(vals), m );
     }
 }
