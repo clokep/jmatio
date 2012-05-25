@@ -50,7 +50,6 @@
         </copy>
     </target>
 
-    <!-- Runs MATLAB and executes the specified command. -->
     <macrodef name="copy-and-replace">
         <attribute name="NumberClass" />
         <attribute name="primitive" />
@@ -59,15 +58,32 @@
         <attribute name="MATLABClass" />
 
         <sequential>
-            <copy file="${dev.src}/com/jmatio/types/MLUIntNN.java.in"
-                  tofile="${dev.src}/com/jmatio/types/MLU@{MATLABClass}.java" overwrite="true" />
-            <replace file="${dev.src}/com/jmatio/types/MLU@{MATLABClass}.java" token="@NumberClass@" value="@{NumberClass}" />
-            <replace file="${dev.src}/com/jmatio/types/MLU@{MATLABClass}.java" token="@primitive@" value="@{primitive}" />
-            <replace file="${dev.src}/com/jmatio/types/MLU@{MATLABClass}.java" token="@primitive2@" value="@{primitive2}" />
-            <replace file="${dev.src}/com/jmatio/types/MLU@{MATLABClass}.java" token="@MATLABArrayType@" value="@{MATLABArrayType}" />
-            <replace file="${dev.src}/com/jmatio/types/MLU@{MATLABClass}.java" token="@MATLABClass@" value="@{MATLABClass}" />
+            <generate-from-template template="UIntNN"
+                                    NumberClass="@{NumberClass}"
+                                    primitive="@{primitive}"
+                                    primitive2="@{primitive2}"
+                                    MATLABArrayType="U@{MATLABArrayType}"
+                                    MATLABClass="U@{MATLABClass}" />
 
-            <copy file="${dev.src}/com/jmatio/types/MLIntNN.java.in"
+            <generate-from-template template="IntNN"
+                                    NumberClass="@{NumberClass}"
+                                    primitive="@{primitive}"
+                                    primitive2="@{primitive2}"
+                                    MATLABArrayType="@{MATLABArrayType}"
+                                    MATLABClass="@{MATLABClass}" />
+        </sequential>
+    </macrodef>
+
+    <macrodef name="generate-from-template">
+        <attribute name="template" />
+        <attribute name="NumberClass" />
+        <attribute name="primitive" />
+        <attribute name="primitive2" default="@{NumberClass}" />
+        <attribute name="MATLABArrayType" />
+        <attribute name="MATLABClass" default="@{NumberClass}" />
+
+        <sequential>
+            <copy file="${dev.src}/com/jmatio/types/ML@{template}.java.in"
                   tofile="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" overwrite="true" />
             <replace file="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" token="@NumberClass@" value="@{NumberClass}" />
             <replace file="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" token="@primitive@" value="@{primitive}" />
@@ -81,6 +97,9 @@
         <copy-and-replace NumberClass="Long" primitive="long" MATLABArrayType="INT64" MATLABClass="Int64" />
         <copy-and-replace NumberClass="Integer" primitive="int" primitive2="Int" MATLABArrayType="INT32" MATLABClass="Int32" />
         <copy-and-replace NumberClass="Short" primitive="short" MATLABArrayType="INT16" MATLABClass="Int16" />
+
+        <generate-from-template template="UIntNN" NumberClass="Double" primitive="double" MATLABArrayType="DOUBLE" />
+        <generate-from-template template="UIntNN" NumberClass="Float" primitive="float" MATLABArrayType="SINGLE" MATLABClass="Single" />
     </target>
 
     <!-- =================================

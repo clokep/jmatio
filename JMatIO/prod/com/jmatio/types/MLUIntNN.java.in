@@ -7,28 +7,28 @@ import java.nio.ByteBuffer;
  *
  * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
-public class MLU@MATLABClass@ extends MLNumericArray<@NumberClass@> {
+public class ML@MATLABClass@ extends MLNumericArray<@NumberClass@> {
     /**
      * Normally this constructor is used only by MatFileReader and MatFileWriter
      *
      * @param name array name
      * @param dims array dimensions
-     * @param type array type: here <code>mxU@MATLABArrayType@_CLASS</code>
+     * @param type array type: here <code>mx@MATLABArrayType@_CLASS</code>
      * @param attributes array flags
      */
-    public MLU@MATLABClass@(String name, int[] dims, int type, int attributes) {
+    public ML@MATLABClass@(String name, int[] dims, int type, int attributes) {
         super( name, dims, type, attributes );
     }
 
     /**
-     * Create a <code>{@link MLU@MATLABClass@}</code> array with given name,
+     * Create a <code>{@link ML@MATLABClass@}</code> array with given name,
      * and dimensions.
      *
      * @param name array name
      * @param dims array dimensions
      */
-    public MLU@MATLABClass@(String name, int[] dims) {
-        super(name, dims, MLArray.mxU@MATLABArrayType@_CLASS, 0);
+    public ML@MATLABClass@(String name, int[] dims) {
+        super(name, dims, MLArray.mx@MATLABArrayType@_CLASS, 0);
     }
 
     /**
@@ -39,21 +39,21 @@ public class MLU@MATLABClass@ extends MLNumericArray<@NumberClass@> {
      * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
      * @param m Number of rows
      */
-    public MLU@MATLABClass@(String name, @NumberClass@[] vals, int m) {
-        super(name, MLArray.mxU@MATLABArrayType@_CLASS, vals, m);
+    public ML@MATLABClass@(String name, @NumberClass@[] vals, int m) {
+        super(name, MLArray.mx@MATLABArrayType@_CLASS, vals, m);
     }
 
     /**
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style:
-     * construct a 2D real matrix from <code>@primivite@[][]</code>
+     * construct a 2D real matrix from <code>@primitive@[][]</code>
      *
      * Note: array is converted to @NumberClass@[]
      *
      * @param name array name
      * @param vals two-dimensional array of values
      */
-    public MLU@MATLABClass@(String name, @primitive@[][] vals) {
-        this(name, MLU@MATLABClass@.primitive2DToNumber(vals), vals.length);
+    public ML@MATLABClass@(String name, @primitive@[][] vals) {
+        this(name, ML@MATLABClass@.primitive2DToNumber(vals), vals.length);
     }
 
     /**
@@ -64,15 +64,15 @@ public class MLU@MATLABClass@ extends MLNumericArray<@NumberClass@> {
      * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
      * @param m Number of rows
      */
-    public MLU@MATLABClass@(String name, @primitive@[] vals, int m) {
-        this(name, MLU@MATLABClass@.castToNumber(vals), m);
+    public ML@MATLABClass@(String name, @primitive@[] vals, int m) {
+        this(name, ML@MATLABClass@.castToNumber(vals), m);
     }
 
     /**
      * @param vector
      */
     public void set(@primitive@[] vector) {
-    	this.set(MLU@MATLABClass@.castToNumber(vector));
+    	this.set(ML@MATLABClass@.castToNumber(vector));
     }
 
     /* (non-Javadoc)
