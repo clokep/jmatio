@@ -2,28 +2,33 @@ package com.jmatio.common;
 
 /**
  * MAT-file data types
- * 
+ *
  * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
-public class MatDataTypes
-{
-    /* MAT-File Data Types */
-    public static final int miUNKNOWN   = 0;
-    public static final int miINT8      = 1;
-    public static final int miUINT8     = 2;
-    public static final int miINT16     = 3;
-    public static final int miUINT16    = 4;
-    public static final int miINT32     = 5;
-    public static final int miUINT32    = 6;
-    public static final int miSINGLE    = 7;
-    public static final int miDOUBLE    = 9;
-    public static final int miINT64     = 12;
-    public static final int miUINT64    = 13;
-    public static final int miMATRIX    = 14;
+public class MatDataTypes {
+    // MAT-File Data Types
+    public static final int miUNKNOWN       = 0;
+    public static final int miINT8          = 1;
+    public static final int miUINT8         = 2;
+    public static final int miINT16         = 3;
+    /* Also used for character data that is not Unicode encoded. */
+    public static final int miUINT16        = 4;
+    public static final int miINT32         = 5;
+    public static final int miUINT32        = 6;
+    public static final int miSINGLE        = 7;
+    // RESERVED                             = 8;
+    public static final int miDOUBLE        = 9;
+    // RESERVED                             = 10;
+    // RESERVED                             = 11;
+    public static final int miINT64         = 12;
+    public static final int miUINT64        = 13;
+    public static final int miMATRIX        = 14;
     public static final int miCOMPRESSED    = 15;
-    public static final int miUTF8      = 16;
-    public static final int miUTF16     = 17;
-    public static final int miUTF32     = 18;
+    public static final int miUTF8          = 16;
+    /** Byte order specified by Endian Indicator. */
+    public static final int miUTF16         = 17;
+    /** Byte order specified by Endian Indicator. */
+    public static final int miUTF32         = 18;
 
     public static final int miSIZE_INT32    = 4;
     public static final int miSIZE_INT16    = 2;
@@ -33,17 +38,15 @@ public class MatDataTypes
     public static final int miSIZE_UINT8    = 1;
     public static final int miSIZE_DOUBLE   = 8;
     public static final int miSIZE_CHAR     = 1;
-    
+
     /**
      * Return number of bytes for given type.
-     * 
+     *
      * @param type <code>MatDataTypes</code>
      * @return the size of the type (in bytes)
      */
-    public static int sizeOf(int type)
-    {
-        switch ( type )
-        {
+    public static int sizeOf(int type) {
+        switch (type) {
             case MatDataTypes.miINT8:
                 return miSIZE_INT8;
             case MatDataTypes.miUINT8:
@@ -64,15 +67,13 @@ public class MatDataTypes
     }
     /**
      * Get String representation of a data type
-     * 
+     *
      * @param type data type
      * @return String representation
      */
-    public static String typeToString(int type)
-    {
+    public static String typeToString(int type) {
         String s;
-        switch (type)
-        {
+        switch (type) {
             case MatDataTypes.miUNKNOWN:
                 s = "unknown";
                 break;
@@ -126,5 +127,4 @@ public class MatDataTypes
         }
         return s;
     }
-    
 }

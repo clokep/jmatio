@@ -1,162 +1,160 @@
 package com.jmatio.types;
 
-public class MLArray
-{
-    
+public abstract class MLArray {
     /* Matlab Array Types (Classes) */
-    public static final int mxUNKNOWN_CLASS = 0;
-    public static final int mxCELL_CLASS    = 1;
-    public static final int mxSTRUCT_CLASS  = 2;
-    public static final int mxOBJECT_CLASS  = 3;
-    public static final int mxCHAR_CLASS    = 4;
-    public static final int mxSPARSE_CLASS  = 5;
-    public static final int mxDOUBLE_CLASS  = 6;
-    public static final int mxSINGLE_CLASS  = 7;
-    public static final int mxINT8_CLASS    = 8;
-    public static final int mxUINT8_CLASS   = 9;
-    public static final int mxINT16_CLASS   = 10;
-    public static final int mxUINT16_CLASS  = 11;
-    public static final int mxINT32_CLASS   = 12;
-    public static final int mxUINT32_CLASS  = 13;
-    public static final int mxINT64_CLASS   = 14;
-    public static final int mxUINT64_CLASS  = 15;
-    public static final int mxFUNCTION_CLASS = 16;
-    public static final int mxOPAQUE_CLASS  = 17;
-    
-    public static final int mtFLAG_COMPLEX       = 0x0800;
-    public static final int mtFLAG_GLOBAL        = 0x0400;
-    public static final int mtFLAG_LOGICAL       = 0x0200;
-    public static final int mtFLAG_TYPE          = 0xff;
-    
+    public static final int mxUNKNOWN_CLASS     = 0;
+    /** Cell array. */
+    public static final int mxCELL_CLASS        = 1;
+    /** Structure. */
+    public static final int mxSTRUCT_CLASS      = 2;
+    /** Object. */
+    public static final int mxOBJECT_CLASS      = 3;
+    /** Character array. */
+    public static final int mxCHAR_CLASS        = 4;
+    /** Sparse array. */
+    public static final int mxSPARSE_CLASS      = 5;
+    /** Double precision array. */
+    public static final int mxDOUBLE_CLASS      = 6;
+    /** Single precision array. */
+    public static final int mxSINGLE_CLASS      = 7;
+    /** 8-bit, signed integer. */
+    public static final int mxINT8_CLASS        = 8;
+    /** 8-bit, unsigned integer. */
+    public static final int mxUINT8_CLASS       = 9;
+    /** 16-bit, signed integer. */
+    public static final int mxINT16_CLASS       = 10;
+    /** 16-bit, unsigned integer. */
+    public static final int mxUINT16_CLASS      = 11;
+    /** 32-bit, signed integer. */
+    public static final int mxINT32_CLASS       = 12;
+    /** 32-bit, unsigned integer. */
+    public static final int mxUINT32_CLASS      = 13;
+    /** 64-bit, signed integer. */
+    public static final int mxINT64_CLASS       = 14;
+    /** 64-bit, unsigned integer. */
+    public static final int mxUINT64_CLASS      = 15;
+    public static final int mxFUNCTION_CLASS    = 16;
+    public static final int mxOPAQUE_CLASS      = 17;
+
+    /** The data element includes an imaginary part (pi). */
+    public static final int mtFLAG_COMPLEX      = 0x0800;
+    /** MATLAB loads the data element as a global variable in the base workspace. */
+    public static final int mtFLAG_GLOBAL       = 0x0400;
+    /** The array is used for logical indexing. */
+    public static final int mtFLAG_LOGICAL      = 0x0200;
+    public static final int mtFLAG_TYPE         = 0xff;
+
+    /** The dimensions of the array. */
     protected int dims[];
+    /** The array name. */
     public String name;
+    /** The attributes of the array (e.g. complex, global, logical). */
     protected int attributes;
+    /** The type of data stored in the array. */
     protected int type;
-    
+
     // This is true for elements of structs & cells where name does not matter.
     public boolean isChild = false;
-    
-    public MLArray(String name, int[] dims, int type, int attributes)
-    {
+
+    public MLArray(String name, int[] dims, int type, int attributes) {
         // MATLAB arrays must always have two dimensions. If only one is given, assume 2D with the other dimension equal to 1.
-        if (dims.length == 1)
-        {
-            // Since we have a vector but don't know the real dimensions, just assume it's a row vector
+        if (dims.length == 1) {
+            // Since we have a vector but don't know the real dimensions, just assume it's a column vector
             this.dims = new int[2];
             this.dims[0] = dims[0];
             this.dims[1] = 1;
-        }
-        else
-        {
+        } else {
             this.dims = new int[dims.length];
             System.arraycopy(dims, 0, this.dims, 0, dims.length);
         }
-        
-        
-        if ( name != null && !name.equals("") )
-        {
+
+        if (name != null && !name.equals(""))
             this.name = name;
-        }
         else
-        {
             this.name = "@"; //default name
-        }
-        
-        
+
         this.type = type;
         this.attributes = attributes;
     }
-    
+
     /**
      * Gets array name
-     * 
+     *
      * @return array name
      */
-    public String getName()
-    {
-        return name;
+    public String getName() {
+        return this.name;
     }
-    public int getFlags()
-    { 
-        int flags = type & mtFLAG_TYPE | attributes & 0xffffff00;
-        
-        return flags;
+    public int getFlags() {
+        return this.type & MLArray.mtFLAG_TYPE | this.attributes & 0xffffff00;
     }
-    public byte[] getNameToByteArray()
-    {
-        return name.getBytes();
+    public byte[] getNameToByteArray() {
+        return this.name.getBytes();
     }
-    
+
     public int[] getDimensions()
     {
         int ai[] = null;
-        if(dims != null)
-        {
-            ai = new int[dims.length];
-            System.arraycopy(dims, 0, ai, 0, dims.length);
+        if (dims != null) {
+            ai = new int[this.dims.length];
+            System.arraycopy(this.dims, 0, ai, 0, this.dims.length);
         }
         return ai;
     }
 
-    public int getM()
-    {
+    /**
+     * Get the number of rows.
+     */
+    public int getM() {
         int i = 0;
-        if( dims != null )
-        {
-            i = dims[0];
-        }
+        if (this.dims != null)
+            i = this.dims[0];
         return i;
     }
 
-    public int getN()
-    {
+    /**
+     * Get the number of columns and higher dimensions.
+     */
+    public int getN() {
         int i = 0;
-        if(dims != null)
-        {
-            if(dims.length > 2)
-            {
+        if (this.dims != null) {
+            if (this.dims.length > 2) {
                 i = 1;
-                for(int j = 1; j < dims.length; j++)
-                {
-                    i *= dims[j];
-                }
-            } 
-            else
-            {
-                i = dims[1];
-            }
+                for(int j = 1; j < this.dims.length; j++)
+                    i *= this.dims[j];
+            } else
+                i = this.dims[1];
         }
         return i;
     }
 
-    public int getNDimensions()
-    {
+    /**
+     * Get the number of dimensions.
+     */
+    public int getNDimensions() {
         int i = 0;
-        if(dims != null)
-        {
-            i = dims.length;
-        }
+        if (this.dims != null)
+            i = this.dims.length;
         return i;
     }
-    public int getSize()
-    {
-        return getM()*getN();
+    /**
+     * Get the total number of elements.
+     */
+    public int getSize() {
+        return this.getM() * this.getN();
     }
-    public int getType()
-    {
-        return type;
+    public int getType() {
+        return this.type;
     }
 
-    public boolean isEmpty()
-    {
-        return getN() == 0;
+    public boolean isEmpty() {
+        return this.getN() == 0;
     }
-    
+
     public static final String typeToString(int type)
     {
         String s;
-        switch (type)
-        {
+        switch (type) {
             case mxUNKNOWN_CLASS:
                 s = "unknown";
                 break;
@@ -217,166 +215,127 @@ public class MLArray
         }
         return s;
     }
-    
-    public boolean isCell()
-    {
-        return type == mxCELL_CLASS;
+
+    public boolean isCell() {
+        return this.type == MLArray.mxCELL_CLASS;
     }
 
-    public boolean isChar()
-    {
-        return type == mxCHAR_CLASS;
+    public boolean isChar() {
+        return this.type == MLArray.mxCHAR_CLASS;
     }
 
-    public boolean isComplex()
-    {
-        return (attributes & mtFLAG_COMPLEX) != 0;
+    public boolean isComplex() {
+        return (this.attributes & MLArray.mtFLAG_COMPLEX) != 0;
     }
 
-    public boolean isSparse()
-    {
-        return type == mxSPARSE_CLASS;
+    public boolean isSparse() {
+        return this.type == MLArray.mxSPARSE_CLASS;
     }
 
-    public boolean isStruct()
-    {
-        return type == mxSTRUCT_CLASS;
+    public boolean isStruct() {
+        return this.type == MLArray.mxSTRUCT_CLASS;
     }
 
-    public boolean isDouble()
-    {
-        return type == mxDOUBLE_CLASS;
+    public boolean isDouble() {
+        return this.type == MLArray.mxDOUBLE_CLASS;
     }
 
-    public boolean isSingle()
-    {
-        return type == mxSINGLE_CLASS;
+    public boolean isSingle() {
+        return this.type == MLArray.mxSINGLE_CLASS;
     }
 
-    public boolean isInt8()
-    {
-        return type == mxINT8_CLASS;
+    public boolean isInt8() {
+        return this.type == MLArray.mxINT8_CLASS;
     }
 
-    public boolean isUint8()
-    {
-        return type == mxUINT8_CLASS;
+    public boolean isUint8() {
+        return this.type == MLArray.mxUINT8_CLASS;
     }
 
-    public boolean isInt16()
-    {
-        return type == mxINT16_CLASS;
+    public boolean isInt16() {
+        return this.type == MLArray.mxINT16_CLASS;
     }
 
-    public boolean isUint16()
-    {
-        return type == mxUINT16_CLASS;
+    public boolean isUint16() {
+        return this.type == MLArray.mxUINT16_CLASS;
     }
 
-    public boolean isInt32()
-    {
-        return type == mxINT32_CLASS;
+    public boolean isInt32() {
+        return this.type == MLArray.mxINT32_CLASS;
     }
 
-    public boolean isUint32()
-    {
-        return type == mxUINT32_CLASS;
+    public boolean isUint32() {
+        return this.type == MLArray.mxUINT32_CLASS;
     }
 
-    public boolean isInt64()
-    {
-        return type == mxINT64_CLASS;
+    public boolean isInt64(){
+        return this.type == MLArray.mxINT64_CLASS;
     }
 
-    public boolean isUint64()
-    {
-        return type == mxUINT64_CLASS;
+    public boolean isUint64() {
+        return this.type == MLArray.mxUINT64_CLASS;
     }
 
-    public boolean isObject()
-    {
-        return type == mxOBJECT_CLASS;
+    public boolean isObject() {
+        return this.type == MLArray.mxOBJECT_CLASS;
     }
 
-    public boolean isOpaque()
-    {
-        return type == mxOPAQUE_CLASS;
+    public boolean isOpaque() {
+        return this.type == MLArray.mxOPAQUE_CLASS;
     }
 
-    public boolean isLogical()
-    {
-        return (attributes & mtFLAG_LOGICAL) != 0;
+    public boolean isLogical() {
+        return (this.attributes & MLArray.mtFLAG_LOGICAL) != 0;
     }
 
-    public boolean isFunctionObject()
-    {
-        return type == mxFUNCTION_CLASS;
+    public boolean isFunctionObject() {
+        return this.type == MLArray.mxFUNCTION_CLASS;
     }
 
-    public boolean isUnknown()
-    {
-        return type == mxUNKNOWN_CLASS;
+    public boolean isUnknown() {
+        return this.type == MLArray.mxUNKNOWN_CLASS;
     }
-    protected int getIndex(int m, int n)
-    {
-        return m+n*getM();
+
+    protected int getIndex(int m, int n) {
+        return m + n * this.getM();
     }
-    
-    public String toString()
-    {
+
+    public String toString() {
         StringBuffer sb = new StringBuffer();
-        if (dims != null)
-        {
+        if (this.dims != null) {
             sb.append('[');
-            if (dims.length > 3)
-            {
-                sb.append(dims.length);
+            // Print out the size: nD if more than three dimensions or nxm(xo) if <= 3 dimensions.
+            if (this.dims.length > 3) {
+                sb.append(this.dims.length);
                 sb.append('D');
-            }
-            else
-            {
-                sb.append(dims[0]);
+            } else {
+                sb.append(this.dims[0]);
                 sb.append('x');
-                sb.append(dims[1]);
-                if (dims.length == 3)
-                {
+                sb.append(this.dims[1]);
+                if (this.dims.length == 3) {
                     sb.append('x');
-                    sb.append(dims[2]);
+                    sb.append(this.dims[2]);
                 }
             }
             sb.append("  ");
-            sb.append(typeToString(type));
+            sb.append(this.typeToString(this.type));
             sb.append(" array");
-            if (isSparse())
-            {
+            if (this.isSparse()) {
                 sb.append(" (sparse");
-                if (isComplex())
-                {
+                if (this.isComplex())
                     sb.append(" complex");
-                }
                 sb.append(")");
-            }
-            else if (isComplex())
-            {
+            } else if (this.isComplex())
                 sb.append(" (complex)");
-            }
             sb.append(']');
-        }
-        else
-        {
+        } else
             sb.append("[invalid]");
-        }
         return sb.toString();
     }
-    
-    public String contentToString()
-    {
+
+    public String contentToString() {
         return "content cannot be displayed";
     }
-    
-    public void dispose()
-    {
-        
-    }
-    
+
+    abstract public void dispose();
 }
