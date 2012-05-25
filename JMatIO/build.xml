@@ -58,7 +58,7 @@
         <attribute name="MATLABClass" />
 
         <sequential>
-            <generate-from-template template="UIntNN"
+            <generate-from-template template="Numeric"
                                     NumberClass="@{NumberClass}"
                                     primitive="@{primitive}"
                                     primitive2="@{primitive2}"
@@ -98,8 +98,8 @@
         <copy-and-replace NumberClass="Integer" primitive="int" primitive2="Int" MATLABArrayType="INT32" MATLABClass="Int32" />
         <copy-and-replace NumberClass="Short" primitive="short" MATLABArrayType="INT16" MATLABClass="Int16" />
 
-        <generate-from-template template="UIntNN" NumberClass="Double" primitive="double" MATLABArrayType="DOUBLE" />
-        <generate-from-template template="UIntNN" NumberClass="Float" primitive="float" MATLABArrayType="SINGLE" MATLABClass="Single" />
+        <generate-from-template template="Numeric" NumberClass="Double" primitive="double" MATLABArrayType="DOUBLE" />
+        <generate-from-template template="Numeric" NumberClass="Float" primitive="float" MATLABArrayType="SINGLE" MATLABClass="Single" />
     </target>
 
     <!-- =================================

@@ -1,1 +1,6 @@
 JMatIO/build/*
+JMatIO/prod/com/jmatio/types/MLSingle.java
+JMatIO/prod/com/jmatio/types/MLDouble.java
+JMatIO/prod/com/jmatio/types/ML*Int16.java
+JMatIO/prod/com/jmatio/types/ML*Int32.java
+JMatIO/prod/com/jmatio/types/ML*Int64.java
