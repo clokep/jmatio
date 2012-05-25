@@ -50,10 +50,36 @@
         </copy>
     </target>
 
+    <!-- Runs MATLAB and executes the specified command. -->
+    <macrodef name="copy-and-replace">
+        <attribute name="NumberClass" />
+        <attribute name="primitive" />
+        <attribute name="primitive2" default="@{NumberClass}" />
+        <attribute name="MATLABArrayType" />
+        <attribute name="MATLABClass" />
+
+        <sequential>
+            <echo message="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" />
+            <copy file="${dev.src}/com/jmatio/types/MLUIntNN.java.in"
+                  tofile="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" overwrite="true" />
+            <replace file="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" token="@NumberClass@" value="@{NumberClass}" />
+            <replace file="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" token="@primitive@" value="@{primitive}" />
+            <replace file="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" token="@primitive2@" value="@{primitive2}" />
+            <replace file="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" token="@MATLABArrayType@" value="@{MATLABArrayType}" />
+            <replace file="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" token="@MATLABClass@" value="@{MATLABClass}" />
+        </sequential>
+    </macrodef>
+
+    <target name="generate-source" depends="init" description="--> Copies resource files">
+        <copy-and-replace NumberClass="Long" primitive="long" MATLABArrayType="UINT64" MATLABClass="UInt64" />
+        <copy-and-replace NumberClass="Integer" primitive="int" primitive2="Int" MATLABArrayType="UINT32" MATLABClass="UInt32" />
+        <copy-and-replace NumberClass="Short" primitive="short" MATLABArrayType="UINT16" MATLABClass="UInt16" />
+    </target>
+
     <!-- =================================
           target: compile
          ================================= -->
-    <target name="compile" depends="copy-resources" description="--> Compiles source folder">
+    <target name="compile" depends="copy-resources,generate-source" description="--> Compiles source folder">
         <mkdir dir="${build.bin}"/>
         <javac srcdir="${dev.src}"
                destdir="${build.bin}"

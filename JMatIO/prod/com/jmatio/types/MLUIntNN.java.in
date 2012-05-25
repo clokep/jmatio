@@ -1,0 +1,154 @@
+package com.jmatio.types;
+
+import java.nio.ByteBuffer;
+
+/**
+ * Class represents @MATLABClass@ (@primitive@) array (matrix).
+ *
+ * @author Wojciech Gradkowski <wgradkowski@gmail.com>
+ */
+public class ML@MATLABClass@ extends MLNumericArray<@NumberClass@> {
+    /**
+     * Normally this constructor is used only by MatFileReader and MatFileWriter
+     *
+     * @param name array name
+     * @param dims array dimensions
+     * @param type array type: here <code>mx@MATLABArrayType@_CLASS</code>
+     * @param attributes array flags
+     */
+    public ML@MATLABClass@(String name, int[] dims, int type, int attributes) {
+        super( name, dims, type, attributes );
+    }
+
+    /**
+     * Create a <code>{@link ML@MATLABClass@}</code> array with given name,
+     * and dimensions.
+     *
+     * @param name array name
+     * @param dims array dimensions
+     */
+    public ML@MATLABClass@(String name, int[] dims) {
+        super(name, dims, MLArray.mx@MATLABArrayType@_CLASS, 0);
+    }
+
+    /**
+     * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style:
+     * construct a 2D real matrix from a one-dimensional packed array
+     *
+     * @param name array name
+     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param m Number of rows
+     */
+    public ML@MATLABClass@(String name, @NumberClass@[] vals, int m) {
+        super(name, MLArray.mx@MATLABArrayType@_CLASS, vals, m);
+    }
+
+    /**
+     * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style:
+     * construct a 2D real matrix from <code>@primivite@[][]</code>
+     *
+     * Note: array is converted to @NumberClass@[]
+     *
+     * @param name array name
+     * @param vals two-dimensional array of values
+     */
+    public ML@MATLABClass@(String name, @primitive@[][] vals) {
+        this(name, ML@MATLABClass@.primitive2DToNumber(vals), vals.length);
+    }
+
+    /**
+     * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style:
+     * construct a matrix from a one-dimensional packed array
+     *
+     * @param name array name
+     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param m Number of rows
+     */
+    public ML@MATLABClass@(String name, @primitive@[] vals, int m) {
+        this(name, ML@MATLABClass@.castToNumber(vals), m);
+    }
+
+    /**
+     * @param vector
+     */
+    public void set(@primitive@[] vector) {
+    	this.set(ML@MATLABClass@.castToNumber(vector));
+    }
+
+    /* (non-Javadoc)
+     * @see com.jmatio.types.GenericArrayCreator#createArray(int, int)
+     */
+    public @NumberClass@[] createArray(int m, int n) {
+        return new @NumberClass@[m * n];
+    }
+
+    /**
+     * Gets two-dimensional real array.
+     *
+     * @return 2D real array
+     */
+    public @primitive@[][] getArray() {
+        final int M = this.getM();
+        final int N = this.getN();
+        @primitive@[][] result = new @primitive@[M][];
+
+        for (int m = 0; m < M; ++m) {
+           result[m] = new @primitive@[N];
+
+			for (int n = 0; n < N; ++n)
+				result[m][n] = this.getReal(m, n);
+        }
+        return result;
+    }
+
+    /**
+     * Casts <code>@primitive@[]</code> to <code>@NumberClass@[]</code>
+     *
+     * @param d <code>@primitive@[]</code>
+     * @return result <code>@NumberClass@[]</code>
+     */
+    protected static @NumberClass@[] castToNumber(@primitive@[] d){
+        @NumberClass@[] dest = new @NumberClass@[d.length];
+        for (int i = 0; i < d.length; ++i)
+            dest[i] = (@NumberClass@)d[i];
+        return dest;
+    }
+
+    /**
+     * Converts <code>@primitive@[][]</code> to <code>@NumberClass@[][]</code>
+     *
+     * @param dd <code>@primitive@[][]</code>
+     * @return result <code>@NumberClass@[][]</code>
+     */
+    protected static @NumberClass@[] primitive2DToNumber (@primitive@[][] dd) {
+        @NumberClass@[] d = new @NumberClass@[ dd.length*dd[0].length ];
+        for (int n = 0; n < dd[0].length; ++n) {
+            for (int m = 0; m < dd.length; ++m)
+                d[m + n * dd.length] = dd[m][n];
+        }
+        return d;
+    }
+
+    public @NumberClass@ buildFromBytes(byte[] bytes) {
+        if (bytes.length != this.getBytesAllocated()) {
+            throw new IllegalArgumentException(
+                        "To build from byte array I need array of size: "
+                                + this.getBytesAllocated() );
+        }
+        return ByteBuffer.wrap(bytes).get@primitive2@();
+    }
+
+    public int getBytesAllocated() {
+        return @NumberClass@.SIZE >> 3;
+    }
+
+    public Class<@NumberClass@> getStorageClazz() {
+        return @NumberClass@.class;
+    }
+
+    public byte[] getByteArray(@NumberClass@ value) {
+        ByteBuffer buff = ByteBuffer.allocate(this.getBytesAllocated());
+        buff.put@primitive2@(value);
+        return buff.array();
+    }
+}
