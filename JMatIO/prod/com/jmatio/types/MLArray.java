@@ -11,6 +11,7 @@ import com.jmatio.io.MatlabIOException;
 
 public abstract class MLArray {
     /* Matlab Array Types (Classes) */
+    /** This is undocumented. */
     public static final int mxUNKNOWN_CLASS     = 0;
     /** Cell array. */
     public static final int mxCELL_CLASS        = 1;
@@ -42,7 +43,9 @@ public abstract class MLArray {
     public static final int mxINT64_CLASS       = 14;
     /** 64-bit, unsigned integer. */
     public static final int mxUINT64_CLASS      = 15;
+    /** This is undocumented. */
     public static final int mxFUNCTION_CLASS    = 16;
+    /** This is undocumented. */
     public static final int mxOPAQUE_CLASS      = 17;
 
     /** The data element includes an imaginary part (pi). */
@@ -62,7 +65,7 @@ public abstract class MLArray {
     /** The type of data stored in the array. */
     protected int type;
 
-    // This is true for elements of structs & cells where name does not matter.
+    /** This is true for sub-elements of structs & cells where name does not matter. */
     public boolean isChild = false;
 
     public MLArray(String name, int[] dims, int type, int attributes) {
