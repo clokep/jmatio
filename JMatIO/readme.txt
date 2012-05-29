@@ -19,7 +19,7 @@ Have fun :)
 Wojciech Gradkowski
 
 TODO:
-- Other array types (serialized objects (OPAQUE) is done partially)
+- Other array types (Object, Function and Opaque)
 - Writer performance enhancement
 - Documentation and examples
 - Organize JUnit tests

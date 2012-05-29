@@ -1,26 +1,15 @@
 <?xml version="1.0"?>
-<!-- ======================================================================
-     JMatIO
-     The Matlab MAT-file IO API in Java
-
-     wgradkowski
-     ====================================================================== -->
 <project name="JMatIO" default="package">
     <description>
         The Matlab MAT-file IO API in Java
     </description>
 
-    <!-- =================================
-          target: init
-         ================================= -->
+    <!-- Set up paths and variables. -->
     <target name="init" description="--> initialization">
-
         <property name="name" value="jmatio"/>
-        <property name="version" value="0.2"/>
-        <property name="author" value="Wojciech Gradkowski"/>
-        <property name="year" value="2007"/>
-
-
+        <property name="version" value="0.3"/>
+        <property name="author" value="Wojciech Gradkowski, Patrick Cloke"/>
+        <property name="year" value="2007 - 2012"/>
 
         <property name="dev.dir" location="${basedir}"/>
         <property name="dev.src" location="${dev.dir}\prod"/>
@@ -39,9 +28,7 @@
 
     </target>
 
-    <!-- =================================
-          target: copy-resources
-         ================================= -->
+    <!-- Copy the license and readme files. -->
     <target name="copy-resources" depends="init" description="--> Copies resource files">
         <copy todir="${build.resource}">
             <fileset dir="${dev.dir}">
@@ -102,9 +89,6 @@
         <generate-from-template template="Numeric" NumberClass="Float" primitive="float" MATLABArrayType="SINGLE" MATLABClass="Single" />
     </target>
 
-    <!-- =================================
-          target: compile
-         ================================= -->
     <target name="compile" depends="copy-resources,generate-source" description="--> Compiles source folder">
         <mkdir dir="${build.bin}"/>
         <javac srcdir="${dev.src}"
@@ -152,9 +136,6 @@
         <delete dir="${build.dir}" includes="*.mat"/>
     </target>
 
-    <!-- =================================
-          target: package
-         ================================= -->
     <target name="package" depends="compile" description="--> Creates a .jar package">
         <mkdir dir="${build.bin}/META-INF"/>
         <manifest file="${build.bin}/META-INF/MANIFEST.MF">
@@ -169,18 +150,13 @@
         />
     </target>
 
-    <!-- =================================
-          target: clean
-         ================================= -->
     <target name="clean" depends="init" description="--> Performs clean">
         <delete includeEmptyDirs="true" quiet="true">
             <fileset dir="${build.dir}"/>
         </delete>
     </target>
 
-    <!-- =================================================================== -->
-    <!-- Creates the API documentation                                       -->
-    <!-- =================================================================== -->
+    <!-- Creates the API documentation. -->
     <target name="javadoc" depends="init" description="Creates the API documentation">
         <mkdir dir="${build.javadocs}"/>
         <javadoc packagenames="*" sourcepath="${dev.src}"
