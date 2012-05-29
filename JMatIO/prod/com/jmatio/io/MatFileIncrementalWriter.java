@@ -61,9 +61,7 @@ import com.jmatio.types.MLStructure;
  *
  * @author tkutz
  */
-public class MatFileIncrementalWriter {
-    private WritableByteChannel channel = null;
-
+public class MatFileIncrementalWriter extends MatFileWriter {
     private boolean headerWritten = false;
     private boolean isStillValid = false;
     private Set<String> varNames = new TreeSet<String>();
@@ -74,9 +72,8 @@ public class MatFileIncrementalWriter {
      * @throws IOException
      * @throws DataFormatException
      */
-    public MatFileIncrementalWriter(String fileName) throws IOException
-    {
-        this( new File(fileName) );
+    public MatFileIncrementalWriter(String fileName) throws IOException {
+        this(new File(fileName));
     }
     /**
      * Creates a writer to a file given the File object.
@@ -97,7 +94,7 @@ public class MatFileIncrementalWriter {
      * @throws IOException
      */
     public MatFileIncrementalWriter(WritableByteChannel chan) throws IOException {
-    	this.channel = chan;
+		this.channel = chan;
     	this.isStillValid = true;
     }
 
@@ -106,9 +103,11 @@ public class MatFileIncrementalWriter {
         if (this.varNames.contains(vName))
         	throw new IllegalArgumentException("Error: variable " + vName + " specified more than once for file input.");
         try {
-            //write the header, but only once.
-        	if (!this.headerWritten)
-        		this.writeHeader(this.channel);
+            // Write the header, but only once.
+        	if (!this.headerWritten) {
+        		this.writeHeader();
+				this.headerWritten = true;
+        	}
 
             // Prepare buffer for MATRIX data.
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -151,7 +150,7 @@ public class MatFileIncrementalWriter {
      * @throws IOException
      *             if writing fails
      */
-    public synchronized void write( Collection<MLArray> data) throws IOException {
+    public synchronized void write(Collection<MLArray> data) throws IOException {
         try {
             // Write data.
             for (MLArray matrix : data)
@@ -166,39 +165,5 @@ public class MatFileIncrementalWriter {
 
     public synchronized void close() throws IOException {
     	this.channel.close();
-    }
-
-    /**
-     * Writes MAT-file header into <code>OutputStream</code>
-     * @param os <code>OutputStream</code>
-     * @throws IOException
-     */
-    private void writeHeader(WritableByteChannel channel) throws IOException {
-        //write descriptive text
-        MatFileHeader header = MatFileHeader.createHeader();
-        char[] dest = new char[116];
-        char[] src = header.getDescription().toCharArray();
-        System.arraycopy(src, 0, dest, 0, src.length);
-
-        byte[] endianIndicator = header.getEndianIndicator();
-
-        ByteBuffer buf = ByteBuffer.allocateDirect(dest.length * 2 /* Char size */ + 2 + endianIndicator.length);
-
-        for ( int i = 0; i < dest.length; i++ )
-            buf.put( (byte)dest[i] );
-        //write subsyst data offset
-        buf.position( buf.position() + 8);
-
-        //write version
-        int version = header.getVersion();
-        buf.put((byte)(version >> 8));
-        buf.put((byte)version);
-
-        buf.put(endianIndicator);
-
-        buf.flip();
-        channel.write(buf);
-
-        this.headerWritten = true;
     }
 }

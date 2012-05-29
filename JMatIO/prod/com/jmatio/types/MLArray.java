@@ -160,8 +160,7 @@ public abstract class MLArray {
         return this.getN() == 0;
     }
 
-    public static final String typeToString(int type)
-    {
+    public static final String typeToString(int type) {
         String s;
         switch (type) {
             case mxUNKNOWN_CLASS:
@@ -424,7 +423,6 @@ public abstract class MLArray {
      * Writes MATRIX name into <code>OutputStream</code>.
      *
      * @param os <code>OutputStream</code>
-     * @param array a <code>MLArray</code>
      * @throws IOException
      */
     private void writeName(DataOutputStream os) throws IOException {

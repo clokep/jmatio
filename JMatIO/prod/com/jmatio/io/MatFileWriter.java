@@ -50,6 +50,8 @@ import com.jmatio.types.MLStructure;
  * @author Wojciech Gradkowski (<a href="mailto:wgradkowski@gmail.com">wgradkowski@gmail.com</a>)
  */
 public class MatFileWriter {
+    protected WritableByteChannel channel = null;
+
     /**
      * Creates the new <code>{@link MatFileWriter}</code> instance
      */
@@ -91,7 +93,8 @@ public class MatFileWriter {
      * @throws IOException
      */
     public MatFileWriter(WritableByteChannel channel, Collection<MLArray> data) throws IOException {
-        this.write(channel, data);
+        this.channel = channel;
+        this.write(data);
     }
 
     /**
@@ -121,14 +124,8 @@ public class MatFileWriter {
      */
     public synchronized void write(File file, Collection<MLArray> data) throws IOException {
         FileOutputStream fos = new FileOutputStream(file);
-
-        try {
-            this.write(fos.getChannel(), data);
-        } catch (IOException e) {
-            throw e;
-        } finally {
-            fos.close();
-        }
+        this.channel = fos.getChannel();
+        this.write(data);
     }
 
     /**
@@ -141,10 +138,10 @@ public class MatFileWriter {
      * @throws IOException
      *             if writing fails
      */
-    private synchronized void write(WritableByteChannel channel, Collection<MLArray> data) throws IOException {
+    private synchronized void write(Collection<MLArray> data) throws IOException {
         try {
             // Write header.
-            this.writeHeader(channel);
+            this.writeHeader();
 
             // Write data.
             for (MLArray matrix : data) {
@@ -175,21 +172,20 @@ public class MatFileWriter {
                 buf.put(compressedBytes);
 
                 buf.flip();
-                channel.write(buf);
+                this.channel.write(buf);
             }
         } catch (IOException e) {
             throw e;
         } finally {
-            channel.close();
+            this.channel.close();
         }
     }
 
     /**
      * Writes MAT-file header into <code>OutputStream</code>
-     * @param os <code>OutputStream</code>
      * @throws IOException
      */
-    private void writeHeader(WritableByteChannel channel) throws IOException {
+    protected void writeHeader() throws IOException {
         // Write descriptive text.
         MatFileHeader header = MatFileHeader.createHeader();
         char[] dest = new char[116];
@@ -213,6 +209,6 @@ public class MatFileWriter {
         buf.put(endianIndicator);
 
         buf.flip();
-        channel.write(buf);
+        this.channel.write(buf);
     }
 }
