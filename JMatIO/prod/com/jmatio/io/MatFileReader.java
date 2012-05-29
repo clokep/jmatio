@@ -70,7 +70,7 @@ public class MatFileReader {
      */
     private MatFileHeader matFileHeader;
     /**
-     * Container for red <code>MLArray</code>s
+     * Container for read <code>MLArray</code>s
      */
     private Map<String, MLArray> data;
     /**
@@ -371,7 +371,7 @@ public class MatFileReader {
     }
 
     /**
-     * Returns the value to which the red file maps the specified array name.
+     * Returns the value to which the read file maps the specified array name.
      *
      * Returns <code>null</code> if the file contains no content for this name.
      *
@@ -440,7 +440,7 @@ public class MatFileReader {
      * @param is
      *            input byte buffer
      * @param numOfBytes
-     *            number of bytes to be red
+     *            number of bytes to be read
      * @return new <code>ByteBuffer</code> with inflated block of data
      * @throws IOException
      *             when error occurs while reading or inflating the buffer .
@@ -513,7 +513,7 @@ public class MatFileReader {
                 int toRead = tag.size - read;
 
                 if (toRead != 0)
-                    throw new MatlabIOException("Matrix was not red fully! " + toRead + " remaining in the buffer.");
+                    throw new MatlabIOException("Matrix was not read fully! " + toRead + " remaining in the buffer.");
                 break;
             default:
                 throw new MatlabIOException("Incorrect data tag: " + tag);
@@ -642,14 +642,7 @@ public class MatFileReader {
                 }
                 break;
             case MLArray.mxUINT8_CLASS:
-                if ((attributes & MLArray.mtFLAG_LOGICAL) != 0)
-                {
-                    mlArray = new MLLogical(name, dims, type, attributes);
-                }
-                else
-                {
-                    mlArray = new MLUInt8(name, dims, type, attributes);
-                }
+                mlArray = new MLUInt8(name, dims, type, attributes);
                 //read real
                 tag = new ISMatTag(buf);
                 tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
@@ -828,9 +821,13 @@ public class MatFileReader {
 //                mlArray = null;
 //                break;
             default:
-                throw new MatlabIOException("Incorrect matlab array class: " + MLArray.typeToString(type) );
+                throw new MatlabIOException("Incorrect matlab array class: " + MLArray.typeToString(type));
 
         }
+
+        if ((attributes & MLArray.mtFLAG_LOGICAL) != 0)
+            mlArray = new MLLogical((MLNumericArray<?>)mlArray);
+
         return mlArray;
     }
 

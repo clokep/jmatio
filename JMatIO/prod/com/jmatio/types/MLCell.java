@@ -1,6 +1,11 @@
 package com.jmatio.types;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import com.jmatio.io.OSArrayTag;
+import com.jmatio.io.MatlabIOException;
 
 public class MLCell extends MLArray {
     private ArrayList<MLArray> cells;
@@ -58,5 +63,10 @@ public class MLCell extends MLArray {
     public void dispose() {
         if (this.cells != null)
             this.cells.clear();
+    }
+
+    public void writeData(DataOutputStream dos) throws IOException {
+        for (MLArray a : this.cells())
+            a.writeMatrix(dos);
     }
 }

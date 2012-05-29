@@ -1,7 +1,12 @@
 package com.jmatio.types;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+
+import com.jmatio.common.MatDataTypes;
+import com.jmatio.io.OSArrayTag;
 
 /**
  * Abstract class for numeric arrays.
@@ -311,5 +316,54 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
             this.real.clear();
         if (this.imaginary != null)
             this.imaginary.clear();
+    }
+
+    public void writeData(DataOutputStream dos) throws IOException {
+        int type;
+        switch (this.type) {
+            case MLArray.mxDOUBLE_CLASS:
+                type = MatDataTypes.miDOUBLE;
+                break;
+            case MLArray.mxSINGLE_CLASS:
+                type = MatDataTypes.miSINGLE;
+                break;
+            case MLArray.mxINT8_CLASS:
+                type = MatDataTypes.miINT8;
+                break;
+            case MLArray.mxUINT8_CLASS:
+                type = MatDataTypes.miUINT8;
+                break;
+            case MLArray.mxINT16_CLASS:
+                type = MatDataTypes.miINT16;
+                break;
+            case MLArray.mxUINT16_CLASS:
+                type = MatDataTypes.miUINT16;
+                break;
+            case MLArray.mxINT32_CLASS:
+                type = MatDataTypes.miINT32;
+                break;
+            case MLArray.mxUINT32_CLASS:
+                type = MatDataTypes.miUINT32;
+                break;
+            case MLArray.mxINT64_CLASS:
+                type = MatDataTypes.miINT64;
+                break;
+            case MLArray.mxUINT64_CLASS:
+                type = MatDataTypes.miUINT64;
+                break;
+            default:
+                type = MatDataTypes.miUNKNOWN;
+        }
+
+
+        // Write real part.
+        OSArrayTag tag = new OSArrayTag(type, this.getRealByteBuffer());
+        tag.writeTo(dos);
+
+        // Write imaginary part.
+        if (this.isComplex()) {
+            tag = new OSArrayTag(type, this.getImaginaryByteBuffer());
+            tag.writeTo(dos);
+        }
     }
 }

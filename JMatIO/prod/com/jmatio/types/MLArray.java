@@ -1,5 +1,14 @@
 package com.jmatio.types;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import com.jmatio.common.MatDataTypes;
+import com.jmatio.extra.VariableUtils;
+import com.jmatio.io.OSArrayTag;
+import com.jmatio.io.MatlabIOException;
+
 public abstract class MLArray {
     /* Matlab Array Types (Classes) */
     public static final int mxUNKNOWN_CLASS     = 0;
@@ -338,4 +347,104 @@ public abstract class MLArray {
     }
 
     abstract public void dispose();
+
+    /**
+     * Writes MATRIX into <code>OutputStream</code>.
+     *
+     * @param os <code>OutputStream</code>
+     * @throws IOException
+     */
+    public void writeMatrix(DataOutputStream output) throws IOException {
+        OSArrayTag tag;
+        ByteArrayOutputStream buffer;
+        DataOutputStream bufferDOS;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(baos);
+
+        // Flags.
+        this.writeFlags(dos);
+
+        // Dimensions.
+        this.writeDimensions(dos);
+
+        // Array name.
+        this.writeName(dos);
+
+        // Write the actual data.
+        this.writeData(dos);
+
+        // Write atrix tag.
+        output.writeInt(MatDataTypes.miMATRIX);
+        // Write size of matrix.
+        output.writeInt(baos.size());
+        // Write matrix data.
+        output.write(baos.toByteArray());
+    }
+
+    /**
+     * Writes MATRIX flags into <code>OutputStream</code>.
+     *
+     * @param os <code>OutputStream</code>
+     * @throws IOException
+     */
+    private void writeFlags(DataOutputStream os) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        DataOutputStream bufferDOS = new DataOutputStream(buffer);
+
+        bufferDOS.writeInt(this.getFlags());
+
+        if (this.isSparse())
+            bufferDOS.writeInt(((MLSparse)this).getMaxNZ());
+        else
+            bufferDOS.writeInt(0);
+        OSArrayTag tag = new OSArrayTag(MatDataTypes.miUINT32, buffer.toByteArray());
+        tag.writeTo(os);
+    }
+
+    /**
+     * Writes MATRIX dimensions into <code>OutputStream</code>.
+     *
+     * @param os <code>OutputStream</code>
+     * @param array a <code>MLArray</code>
+     * @throws IOException
+     */
+    private void writeDimensions(DataOutputStream os) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        DataOutputStream bufferDOS = new DataOutputStream(buffer);
+
+        int[] dims = this.getDimensions();
+        for ( int i = 0; i < dims.length; i++ )
+            bufferDOS.writeInt(dims[i]);
+        OSArrayTag tag = new OSArrayTag(MatDataTypes.miUINT32, buffer.toByteArray() );
+        tag.writeTo( os );
+
+    }
+
+    /**
+     * Writes MATRIX name into <code>OutputStream</code>.
+     *
+     * @param os <code>OutputStream</code>
+     * @param array a <code>MLArray</code>
+     * @throws IOException
+     */
+    private void writeName(DataOutputStream os) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        DataOutputStream bufferDOS = new DataOutputStream(buffer);
+
+        if (!this.isChild && !VariableUtils.IsVarName(this.name))
+            throw new MatlabIOException("Invalid variable name: " + this.name);
+
+        byte[] nameByteArray = this.getNameToByteArray();
+        buffer = new ByteArrayOutputStream();
+        bufferDOS = new DataOutputStream(buffer);
+        bufferDOS.write(nameByteArray);
+        OSArrayTag tag = new OSArrayTag(16, buffer.toByteArray());
+        tag.writeTo(os);
+    }
+
+    /**
+     * Write the data section of the MATLAB array to a data output stream.
+     *
+     */
+    abstract public void writeData(DataOutputStream dos) throws IOException;
 }

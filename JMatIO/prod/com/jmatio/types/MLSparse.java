@@ -1,10 +1,16 @@
 package com.jmatio.types;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import com.jmatio.common.MatDataTypes;
+import com.jmatio.io.OSArrayTag;
 
 public class MLSparse extends MLNumericArray<Double> {
     int nzmax;
@@ -278,5 +284,47 @@ public class MLSparse extends MLNumericArray<Double> {
         ByteBuffer buff = ByteBuffer.allocate(this.getBytesAllocated());
         buff.putDouble(value);
         return buff.array();
+    }
+
+    public void writeData(DataOutputStream dos) throws IOException {
+        int[] ai;
+
+        // Write ir.
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        DataOutputStream bufferDOS = new DataOutputStream(buffer);
+        ai = this.getIR();
+        for (int i : ai)
+            bufferDOS.writeInt(i);
+        OSArrayTag tag = new OSArrayTag(MatDataTypes.miINT32, buffer.toByteArray() );
+        tag.writeTo(dos);
+
+        // Write jc.
+        buffer = new ByteArrayOutputStream();
+        bufferDOS = new DataOutputStream(buffer);
+        ai = this.getJC();
+        for (int i : ai)
+            bufferDOS.writeInt(i);
+        tag = new OSArrayTag(MatDataTypes.miINT32, buffer.toByteArray());
+        tag.writeTo(dos);
+
+        // Write real part.
+        buffer = new ByteArrayOutputStream();
+        bufferDOS = new DataOutputStream(buffer);
+        Double[] ad = this.exportReal();
+        for (int i = 0; i < ad.length; ++i)
+            bufferDOS.writeDouble(ad[i].doubleValue());
+        tag = new OSArrayTag(MatDataTypes.miDOUBLE, buffer.toByteArray());
+        tag.writeTo(dos);
+
+        // Write imaginary part.
+        if (this.isComplex()) {
+            buffer = new ByteArrayOutputStream();
+            bufferDOS = new DataOutputStream(buffer);
+            ad = this.exportImaginary();
+            for (int i = 0; i < ad.length; ++i)
+                bufferDOS.writeDouble(ad[i].doubleValue());
+            tag = new OSArrayTag(MatDataTypes.miDOUBLE, buffer.toByteArray() );
+            tag.writeTo(dos);
+        }
     }
 }

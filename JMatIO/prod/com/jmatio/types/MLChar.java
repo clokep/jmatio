@@ -1,6 +1,12 @@
 package com.jmatio.types;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
+
+import com.jmatio.io.OSArrayTag;
+import com.jmatio.common.MatDataTypes;
 
 public class MLChar extends MLArray implements GenericArrayCreator<Character> {
     Character[] chars;
@@ -150,5 +156,16 @@ public class MLChar extends MLArray implements GenericArrayCreator<Character> {
 
     public void dispose() {
         this.chars = null;
+    }
+
+    public void writeData(DataOutputStream dos) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        DataOutputStream bufferDOS = new DataOutputStream(buffer);
+        Character[] ac = this.exportChar();
+        for (int i = 0; i < ac.length; ++i)
+            bufferDOS.writeByte((byte)ac[i].charValue());
+
+        OSArrayTag tag = new OSArrayTag(MatDataTypes.miUTF8, buffer.toByteArray());
+        tag.writeTo(dos);
     }
 }
