@@ -1,7 +1,7 @@
 package com.jmatio.common;
 
 /**
- * MAT-file data types
+ * MAT-file data types.
  *
  * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
@@ -38,6 +38,9 @@ public class MatDataTypes {
     public static final int miSIZE_UINT8    = 1;
     public static final int miSIZE_DOUBLE   = 8;
     public static final int miSIZE_CHAR     = 1;
+
+    // Suppress default constructor for noninstantiability.
+    private MatDataTypes() { }
 
     /**
      * Return number of bytes for given type.

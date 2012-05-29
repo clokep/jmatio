@@ -562,271 +562,167 @@ public class MatFileReader {
             return null;
 
         // Read data >> consider changing it to stategy pattern
-        switch (type) {
-            case MLArray.mxSTRUCT_CLASS:
-                MLStructure struct = new MLStructure(name, dims, type, attributes);
+        if (type == MLArray.mxSTRUCT_CLASS) {
+            MLStructure struct = new MLStructure(name, dims, type, attributes);
 
-                // Field name length - this subelement always uses the compressed data element format.
-                tag = new ISMatTag(buf);
-                // Maximum field length
-                int maxlen = buf.getInt();
+            // Field name length - this subelement always uses the compressed data element format.
+            tag = new ISMatTag(buf);
+            // Maximum field length
+            int maxlen = buf.getInt();
 
-                // Read fields data as Int8.
-                tag = new ISMatTag(buf);
-                // Calculate number of fields
-                int numOfFields = tag.size / maxlen;
+            // Read fields data as Int8.
+            tag = new ISMatTag(buf);
+            // Calculate number of fields
+            int numOfFields = tag.size / maxlen;
 
-                // Padding after field names
-                int padding = (tag.size % 8) != 0 ? 8 - (tag.size % 8) : 0;
+            // Padding after field names
+            int padding = (tag.size % 8) != 0 ? 8 - (tag.size % 8) : 0;
 
-                String[] fieldNames = new String[numOfFields];
+            String[] fieldNames = new String[numOfFields];
+            for (int i = 0; i < numOfFields; ++i) {
+                byte[] names = new byte[maxlen];
+                buf.get(names);
+                fieldNames[i] = zeroEndByteArrayToString(names);
+            }
+            buf.position(buf.position() + padding);
+            // Read fields
+            for (int index = 0; index < struct.getM() * struct.getN(); ++index) {
                 for (int i = 0; i < numOfFields; ++i) {
-                    byte[] names = new byte[maxlen];
-                    buf.get(names);
-                    fieldNames[i] = zeroEndByteArrayToString(names);
-                }
-                buf.position(buf.position() + padding);
-                // Read fields
-                for (int index = 0; index < struct.getM() * struct.getN(); ++index) {
-                    for (int i = 0; i < numOfFields; ++i) {
-                        // Read matrix recursively
-                        tag = new ISMatTag(buf);
-                        if (tag.size > 0) {
-                            MLArray fieldValue = this.readMatrix(buf, false);
-                            struct.setField(fieldNames[i], fieldValue, index);
-                        } else
-                            struct.setField(fieldNames[i], new MLEmptyArray(), index);
-                    }
-                }
-                mlArray = struct;
-                break;
-            case MLArray.mxCELL_CLASS:
-                MLCell cell = new MLCell(name, dims, type, attributes);
-                for (int i = 0; i < cell.getM() * cell.getN(); ++i) {
+                    // Read matrix recursively
                     tag = new ISMatTag(buf);
                     if (tag.size > 0) {
-                        // Read matrix recursively
-                        MLArray cellmatrix = this.readMatrix(buf, false);
-                        cell.set(cellmatrix, i);
+                        MLArray fieldValue = this.readMatrix(buf, false);
+                        struct.setField(fieldNames[i], fieldValue, index);
                     } else
-                        cell.set(new MLEmptyArray(), i);
+                        struct.setField(fieldNames[i], new MLEmptyArray(), index);
                 }
-                mlArray = cell;
-                break;
-            case MLArray.mxDOUBLE_CLASS:
-                mlArray = new MLDouble(name, dims, type, attributes);
-                //read real
+            }
+            mlArray = struct;
+        } else if (type == MLArray.mxCELL_CLASS) {
+            MLCell cell = new MLCell(name, dims, type, attributes);
+            for (int i = 0; i < cell.getM() * cell.getN(); ++i) {
                 tag = new ISMatTag(buf);
-                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
-                                            (MLNumericArray<?>) mlArray );
-                //read complex
-                if ( mlArray.isComplex() )
-                {
-                    tag = new ISMatTag(buf);
-                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
-                            (MLNumericArray<?>) mlArray );
-                }
-                break;
-            case MLArray.mxSINGLE_CLASS:
-                mlArray = new MLSingle(name, dims, type, attributes);
-                //read real
-                tag = new ISMatTag(buf);
-                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
-                                            (MLNumericArray<?>) mlArray );
-                //read complex
-                if ( mlArray.isComplex() )
-                {
-                    tag = new ISMatTag(buf);
-                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
-                            (MLNumericArray<?>) mlArray );
-                }
-                break;
-            case MLArray.mxUINT8_CLASS:
-                mlArray = new MLUInt8(name, dims, type, attributes);
-                //read real
-                tag = new ISMatTag(buf);
-                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
-                                            (MLNumericArray<?>) mlArray );
-                //read complex
-                if ( mlArray.isComplex() )
-                {
-                    tag = new ISMatTag(buf);
-                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
-                            (MLNumericArray<?>) mlArray );
-                }
-                break;
-            case MLArray.mxINT8_CLASS:
-                mlArray = new MLInt8(name, dims, type, attributes);
-                //read real
-                tag = new ISMatTag(buf);
-                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
-                                            (MLNumericArray<?>) mlArray );
-                //read complex
-                if ( mlArray.isComplex() )
-                {
-                    tag = new ISMatTag(buf);
-                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
-                            (MLNumericArray<?>) mlArray );
-                }
-                break;
-            case MLArray.mxUINT16_CLASS:
-                mlArray = new MLUInt16(name, dims, type, attributes);
-                //read real
-                tag = new ISMatTag(buf);
-                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
-                                            (MLNumericArray<?>) mlArray );
-                //read complex
-                if ( mlArray.isComplex() )
-                {
-                    tag = new ISMatTag(buf);
-                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
-                            (MLNumericArray<?>) mlArray );
-                }
-                break;
-            case MLArray.mxINT16_CLASS:
-                mlArray = new MLInt16(name, dims, type, attributes);
-                //read real
-                tag = new ISMatTag(buf);
-                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
-                                            (MLNumericArray<?>) mlArray );
-                //read complex
-                if ( mlArray.isComplex() )
-                {
-                    tag = new ISMatTag(buf);
-                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
-                            (MLNumericArray<?>) mlArray );
-                }
-                break;
-            case MLArray.mxUINT32_CLASS:
-                mlArray = new MLUInt32(name, dims, type, attributes);
-                //read real
-                tag = new ISMatTag(buf);
-                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
-                                            (MLNumericArray<?>) mlArray );
-                //read complex
-                if ( mlArray.isComplex() )
-                {
-                    tag = new ISMatTag(buf);
-                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
-                            (MLNumericArray<?>) mlArray );
-                }
-                break;
-            case MLArray.mxINT32_CLASS:
-                mlArray = new MLInt32(name, dims, type, attributes);
-                //read real
-                tag = new ISMatTag(buf);
-                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
-                                            (MLNumericArray<?>) mlArray );
-                //read complex
-                if ( mlArray.isComplex() )
-                {
-                    tag = new ISMatTag(buf);
-                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
-                            (MLNumericArray<?>) mlArray );
-                }
-                break;
-            case MLArray.mxINT64_CLASS:
-                mlArray = new MLInt64(name, dims, type, attributes);
-                //read real
-                tag = new ISMatTag(buf);
-                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
-                                            (MLNumericArray<?>) mlArray );
-                //read complex
-                if ( mlArray.isComplex() )
-                {
-                    tag = new ISMatTag(buf);
-                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
-                            (MLNumericArray<?>) mlArray );
-                }
-                break;
-            case MLArray.mxUINT64_CLASS:
-                mlArray = new MLUInt64(name, dims, type, attributes);
-                //read real
-                tag = new ISMatTag(buf);
-                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
-                                            (MLNumericArray<?>) mlArray );
-                //read complex
-                if ( mlArray.isComplex() )
-                {
-                    tag = new ISMatTag(buf);
-                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
-                            (MLNumericArray<?>) mlArray );
-                }
-                break;
-            case MLArray.mxCHAR_CLASS:
-                MLChar mlchar = new MLChar(name, dims, type, attributes);
+                if (tag.size > 0) {
+                    // Read matrix recursively
+                    MLArray cellmatrix = this.readMatrix(buf, false);
+                    cell.set(cellmatrix, i);
+                } else
+                    cell.set(new MLEmptyArray(), i);
+            }
+            mlArray = cell;
+        } else if (type == MLArray.mxCHAR_CLASS) {
+            MLChar mlchar = new MLChar(name, dims, type, attributes);
 
-                //read real
-                tag = new ISMatTag(buf);
-                char[] ac = tag.readToCharArray();
-                for ( int i = 0; i < ac.length; i++ )
-                {
-                    mlchar.setChar( ac[i], i );
-                }
-                mlArray = mlchar;
-                break;
-            case MLArray.mxSPARSE_CLASS:
-                MLSparse sparse = new MLSparse(name, dims, attributes, nzmax);
-                // Read ir (row indices).
-                tag = new ISMatTag(buf);
-                int[] ir = tag.readToIntArray();
-                // Read jc (column count).
-                tag = new ISMatTag(buf);
-                int[] jc = tag.readToIntArray();
+            //read real
+            tag = new ISMatTag(buf);
+            char[] ac = tag.readToCharArray();
+            for ( int i = 0; i < ac.length; i++ )
+                mlchar.setChar( ac[i], i );
+            mlArray = mlchar;
+        } else if (type == MLArray.mxSPARSE_CLASS) {
+            MLSparse sparse = new MLSparse(name, dims, attributes, nzmax);
+            // Read ir (row indices).
+            tag = new ISMatTag(buf);
+            int[] ir = tag.readToIntArray();
+            // Read jc (column count).
+            tag = new ISMatTag(buf);
+            int[] jc = tag.readToIntArray();
 
-                // Read pr (real part).
+            // Read pr (real part).
+            tag = new ISMatTag(buf);
+            double[] ad1 = tag.readToDoubleArray();
+            int count = 0;
+            for (int column = 0; column < sparse.getN(); column++) {
+                while(count < jc[column + 1]) {
+                    sparse.setReal(ad1[count], ir[count], column);
+                    ++count;
+                }
+            }
+
+            // Read pi (imaginary part)
+            if (sparse.isComplex()) {
                 tag = new ISMatTag(buf);
-                double[] ad1 = tag.readToDoubleArray();
-                int count = 0;
+                double[] ad2 = tag.readToDoubleArray();
+
+                count = 0;
                 for (int column = 0; column < sparse.getN(); column++) {
-                    while(count < jc[column + 1]) {
-                        sparse.setReal(ad1[count], ir[count], column);
-                        ++count;
+                    while(count < jc[column+1]) {
+                        sparse.setImaginary(ad2[count], ir[count], column);
+                        count++;
                     }
                 }
+            }
+            mlArray = sparse;
+        //} else if (type == MLArray.mxOPAQUE_CLASS) {
+        //    // Read ir (row indices).
+        //    tag = new ISMatTag(buf);
+        //    bytes = new byte[tag.size];
+        //    //buf.get(bytes);
+        //    System.out.println( "Class name: " + new String(tag.readToCharArray()));
+        //    System.out.println( "Array name: " + name );
+        //    System.out.println( "Array type: " + type);
+        //
+        //    byte[] nn = new byte[dims.length];
+        //    for ( int i = 0; i < dims.length; i++ )
+        //        nn[i] = (byte)dims[i];
+        //    System.out.println( "Array name: " + new String ( nn ) );
+        //
+        //    readData(buf);
+        //
+        //    mlArray = null;
+        //    break;
+        } else {
+            // At this point we should have a numeric class.
+            switch (type) {
+                case MLArray.mxDOUBLE_CLASS:
+                    mlArray = new MLDouble(name, dims, type, attributes);
+                    break;
+                case MLArray.mxSINGLE_CLASS:
+                    mlArray = new MLSingle(name, dims, type, attributes);
+                    break;
+                case MLArray.mxUINT8_CLASS:
+                    mlArray = new MLUInt8(name, dims, type, attributes);
+                    break;
+                case MLArray.mxINT8_CLASS:
+                    mlArray = new MLInt8(name, dims, type, attributes);
+                    break;
+                case MLArray.mxUINT16_CLASS:
+                    mlArray = new MLUInt16(name, dims, type, attributes);
+                    break;
+                case MLArray.mxINT16_CLASS:
+                    mlArray = new MLInt16(name, dims, type, attributes);
+                    break;
+                case MLArray.mxUINT32_CLASS:
+                    mlArray = new MLUInt32(name, dims, type, attributes);
+                    break;
+                case MLArray.mxINT32_CLASS:
+                    mlArray = new MLInt32(name, dims, type, attributes);
+                    break;
+                case MLArray.mxINT64_CLASS:
+                    mlArray = new MLInt64(name, dims, type, attributes);
+                    break;
+                case MLArray.mxUINT64_CLASS:
+                    mlArray = new MLUInt64(name, dims, type, attributes);
+                    break;
+                default:
+                    throw new MatlabIOException("Incorrect matlab array class: " + MLArray.typeToString(type));
+            }
 
-                // Read pi (imaginary part)
-                if (sparse.isComplex()) {
-                    tag = new ISMatTag(buf);
-                    double[] ad2 = tag.readToDoubleArray();
-
-                    count = 0;
-                    for (int column = 0; column < sparse.getN(); column++) {
-                        while(count < jc[column+1]) {
-                            sparse.setImaginary(ad2[count], ir[count], column);
-                            count++;
-                        }
-                    }
-                }
-                mlArray = sparse;
-                break;
-//            case MLArray.mxOPAQUE_CLASS:
-//                //read ir (row indices)
-//                tag = new ISMatTag(buf);
-//                bytes = new byte[tag.size];
-//                //buf.get(bytes);
-//                System.out.println( "Class name: " + new String(tag.readToCharArray()));
-//                System.out.println( "Array name: " + name );
-//                System.out.println( "Array type: " + type);
-//
-//                byte[] nn = new byte[dims.length];
-//                for ( int i = 0; i < dims.length; i++ )
-//                {
-//                    nn[i] = (byte)dims[i];
-//                }
-//                System.out.println( "Array name: " + new String ( nn ) );
-//
-//                readData(buf);
-//
-//                mlArray = null;
-//                break;
-            default:
-                throw new MatlabIOException("Incorrect matlab array class: " + MLArray.typeToString(type));
-
+            // Read real.
+            tag = new ISMatTag(buf);
+            tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
+                                        (MLNumericArray<?>) mlArray );
+            // Read complex.
+            if (mlArray.isComplex()) {
+                tag = new ISMatTag(buf);
+                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
+                        (MLNumericArray<?>) mlArray );
+            } else if (mlArray.isLogical()) {
+                // If it's not complex and is logical, convert it to a logical
+                // array.
+                mlArray = new MLLogical((MLNumericArray<?>)mlArray);
+            }
         }
-
-        if ((attributes & MLArray.mtFLAG_LOGICAL) != 0)
-            mlArray = new MLLogical((MLNumericArray<?>)mlArray);
 
         return mlArray;
     }

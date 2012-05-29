@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
  */
 public class ML@MATLABClass@ extends MLNumericArray<@NumberClass@> {
     /**
-     * Normally this constructor is used only by MatFileReader and MatFileWriter
+     * Normally this constructor is used only by MatFileReader.
      *
      * @param name array name
      * @param dims array dimensions

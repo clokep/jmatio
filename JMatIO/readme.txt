@@ -1,24 +1,45 @@
 JMatIO is a JAVA library to read/write/manipulate with Matlab binary
 MAT-files.
 
-If you would like to comment, improve, critisize the project please 
-email me: wgradkowski@gmail.com 
+If you would like to comment, improve, critisize the project please
+email me: wgradkowski@gmail.com
 
 or visit JMatIO project page at Sourceforge:
 http://www.sourceforge.net/projects/jmatio
 
 Subversion Access
 
-This project's SourceForge.net Subversion repository can be checked out through 
+This project's SourceForge.net Subversion repository can be checked out through
 SVN with the following instruction set:
 
-svn co https://jmatio.svn.sourceforge.net/svnroot/jmatio/trunk jmatio 
+svn co https://jmatio.svn.sourceforge.net/svnroot/jmatio/trunk jmatio
 
 Have fun :)
 
 Wojciech Gradkowski
 
+TODO:
+- Other array types (serialized objects (OPAQUE) is done partially)
+- Writer performance enhancement
+- Documentation and examples
+- Organize JUnit tests
+- Refactor exceptions
+- Make structures and cell arrays more user friendly
+
 CHANGE LOG:
+[05.25.2012]
++ Generate Numeric classes from a template file.
++ Rewrite MLLogical to internally handle data different.
++ Add inheritance to MatFileWriter.
++ Mark some classes as abstract.
+
+[05.18.2012]
++ Fix JavaDoc warnings.
++ Added missing constructors to MLInt8 and MLUInt8.
++ Fix MLLogical get and set code.
++ Fix up build scripts and include JUnit.
++ Miscellaneous clean up and fixes.
+
 [07.14.2011]
 + Added support: Int16, UInt16, Int32, UInt32 array
 + Added a wrapper class for logical
@@ -31,27 +52,18 @@ CHANGE LOG:
 + new MatFileReader methods added
 
 [02.03.2007]
-+ Regression bug fixed: Double arrays created natively in Matlab are read 
++ Regression bug fixed: Double arrays created natively in Matlab are read
   incorrectly (reversed byte ordering)
 
 [22.02.2007]
-+ Added support:UInt8 array 
++ Added support:UInt8 array
 + MAJOR reading performance enhancement - reading is as fast as in Matlab now
 + Removed Log4j references
 
-TODO:
-- Other array types (serialized objects (OPAQUE) is done partially)
-- Writer performance enhancement
-- Documentation and examples
-- Organize JUnit tests
-- Refactor exceptions
-- Make structures and cell arrays more user friendly
-
 NOTE:
-Numerical arrays (MLDouble, MLUint8) are now backed by direct ByteBuffers. For 
-really BIG arrays the maximum heap size for direct buffers may be modified by 
+Numerical arrays (MLDouble, MLUint8) are now backed by direct ByteBuffers. For
+really BIG arrays the maximum heap size for direct buffers may be modified by
 -XX:MaxDirectMemorySize=<size>
-
 
 [some.time.2006]
 Currently supproted data types are:
@@ -60,4 +72,3 @@ Currently supproted data types are:
 + Structure
 + Cell array
 + Sparse array
-
