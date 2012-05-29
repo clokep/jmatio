@@ -350,7 +350,7 @@ public abstract class MLArray {
     /**
      * Writes MATRIX into <code>OutputStream</code>.
      *
-     * @param os <code>OutputStream</code>
+     * @param output <code>OutputStream</code>
      * @throws IOException
      */
     public void writeMatrix(DataOutputStream output) throws IOException {
@@ -404,7 +404,6 @@ public abstract class MLArray {
      * Writes MATRIX dimensions into <code>OutputStream</code>.
      *
      * @param os <code>OutputStream</code>
-     * @param array a <code>MLArray</code>
      * @throws IOException
      */
     private void writeDimensions(DataOutputStream os) throws IOException {
