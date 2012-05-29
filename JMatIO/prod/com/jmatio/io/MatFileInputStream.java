@@ -11,14 +11,9 @@ import com.jmatio.types.ByteStorageSupport;
  *
  * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
-class MatFileInputStream
-{
+class MatFileInputStream {
     private int type;
     private ByteBuffer buf;
-
-    enum DataType {
-    	BYTE, INTEGER, LONG, FLOAT, DOUBLE, SHORT, UNSUPPORTED
-    }
 
     /**
      * Attach MAT-file input stream to <code>InputStream</code>
@@ -27,161 +22,232 @@ class MatFileInputStream
      * @param type type of data in the stream
      * @see com.jmatio.common.MatDataTypes
      */
-    public MatFileInputStream( ByteBuffer buf, int type )
-    {
+    public MatFileInputStream(ByteBuffer buf, int type) {
         this.type = type;
         this.buf = buf;
     }
 
     /**
-     * Reads data (number of bytes red is determined by <i>data type</i>)
-     * from the stream to <code>int</code>.
+     * Reads data (number of bytes read is determined by <i>data type</i>)
+     * from the stream to <code>byte</code>.
      *
-     * @return int
+     * @return byte
      * @throws IOException
      */
-    public int readInt() throws IOException
-    {
-        switch ( type )
-        {
+    public byte readByte() throws IOException {
+        switch (this.type) {
             case MatDataTypes.miUINT8:
-                return (int)( buf.get() & 0xFF);
+                return (byte)(buf.get() & 0xFF);
             case MatDataTypes.miINT8:
-                return (int) buf.get();
+                return (byte)buf.get();
             case MatDataTypes.miUINT16:
-                return (int)( buf.getShort() & 0xFFFF);
+                return (byte)(buf.getShort() & 0xFFFF);
             case MatDataTypes.miINT16:
-                return (int) buf.getShort();
+                return (byte)buf.getShort();
             case MatDataTypes.miUINT32:
-                return (int)( buf.getInt() & 0xFFFFFFFF);
+                return (byte)(buf.getInt() & 0xFFFFFFFF);
             case MatDataTypes.miINT32:
-                return (int) buf.getInt();
-            case MatDataTypes.miUINT64:
-                return (int) buf.getLong();
-            case MatDataTypes.miINT64:
-                return (int) buf.getLong();
+                return (byte)buf.getInt();
+			case MatDataTypes.miSINGLE:
+				return (byte)buf.getFloat();
             case MatDataTypes.miDOUBLE:
-                return (int) buf.getDouble();
+                return (byte)buf.getDouble();
+            case MatDataTypes.miUINT64:
+                return (byte)buf.getLong();
+            case MatDataTypes.miINT64:
+                return (byte)buf.getLong();
             default:
                 throw new IllegalArgumentException("Unknown data type: " + type);
         }
     }
 
     /**
-     * Reads data (number of bytes red is determined by <i>data type</i>)
+     * Reads data (number of bytes read is determined by <i>data type</i>)
      * from the stream to <code>int</code>.
      *
      * @return short
      * @throws IOException
      */
-    public short readShort() throws IOException
-    {
-        switch ( type )
-        {
+    public short readShort() throws IOException {
+        switch (this.type) {
             case MatDataTypes.miUINT8:
-                return (short)( buf.get() & 0xFF);
+                return (short)(buf.get() & 0xFF);
             case MatDataTypes.miINT8:
-                return (short) buf.get();
+                return (short)buf.get();
             case MatDataTypes.miUINT16:
-                return (short)( buf.getShort() & 0xFFFF);
+                return (short)(buf.getShort() & 0xFFFF);
             case MatDataTypes.miINT16:
-                return (short) buf.getShort();
+                return (short)buf.getShort();
             case MatDataTypes.miUINT32:
-                return (short)( buf.getInt() & 0xFFFFFFFF);
+                return (short)(buf.getInt() & 0xFFFFFFFF);
             case MatDataTypes.miINT32:
-                return (short) buf.getInt();
-            case MatDataTypes.miUINT64:
-                return (short) buf.getLong();
-            case MatDataTypes.miINT64:
-                return (short) buf.getLong();
+                return (short)buf.getInt();
+			case MatDataTypes.miSINGLE:
+				return (short)buf.getFloat();
             case MatDataTypes.miDOUBLE:
-                return (short) buf.getDouble();
+                return (short)buf.getDouble();
+            case MatDataTypes.miUINT64:
+                return (short)buf.getLong();
+            case MatDataTypes.miINT64:
+                return (short)buf.getLong();
             default:
                 throw new IllegalArgumentException("Unknown data type: " + type);
         }
     }
 
     /**
-     * Reads data (number of bytes red is determined by <i>data type</i>)
+     * Reads data (number of bytes read is determined by <i>data type</i>)
      * from the stream to <code>char</code>.
      *
-     * @return char
+     * @return byte
      * @throws IOException
      */
-    public char readChar() throws IOException
-    {
-        switch ( type )
-        {
+    public char readChar() throws IOException {
+        switch (this.type) {
             case MatDataTypes.miUINT8:
-                return (char)( buf.get() & 0xFF);
+                return (char)(buf.get() & 0xFF);
             case MatDataTypes.miINT8:
-                return (char) buf.get();
+                return (char)buf.get();
             case MatDataTypes.miUINT16:
-                return (char)( buf.getShort() & 0xFFFF);
+                return (char)(buf.getShort() & 0xFFFF);
             case MatDataTypes.miINT16:
-                return (char) buf.getShort();
+                return (char)buf.getShort();
             case MatDataTypes.miUINT32:
-                return (char)( buf.getInt() & 0xFFFFFFFF);
+                return (char)(buf.getInt() & 0xFFFFFFFF);
             case MatDataTypes.miINT32:
-                return (char) buf.getInt();
+                return (char)buf.getInt();
+			case MatDataTypes.miSINGLE:
+				return (char)buf.getFloat();
             case MatDataTypes.miDOUBLE:
-                return (char) buf.getDouble();
+                return (char)buf.getDouble();
+            case MatDataTypes.miUINT64:
+                return (char)buf.getLong();
+            case MatDataTypes.miINT64:
+                return (char)buf.getLong();
             case MatDataTypes.miUTF8:
-                return (char) buf.get();
+                return (char)buf.get();
             default:
                 throw new IllegalArgumentException("Unknown data type: " + type);
         }
     }
+
     /**
-     * Reads data (number of bytes red is determined by <i>data type</i>)
+     * Reads data (number of bytes read is determined by <i>data type</i>)
+     * from the stream to <code>int</code>.
+     *
+     * @return int
+     * @throws IOException
+     */
+    public int readInt() throws IOException  {
+        switch (this.type) {
+            case MatDataTypes.miUINT8:
+                return (int)(buf.get() & 0xFF);
+            case MatDataTypes.miINT8:
+                return (int)buf.get();
+            case MatDataTypes.miUINT16:
+                return (int)(buf.getShort() & 0xFFFF);
+            case MatDataTypes.miINT16:
+                return (int)buf.getShort();
+            case MatDataTypes.miUINT32:
+                return (int)(buf.getInt() & 0xFFFFFFFF);
+            case MatDataTypes.miINT32:
+                return (int)buf.getInt();
+			case MatDataTypes.miSINGLE:
+				return (int)buf.getFloat();
+            case MatDataTypes.miDOUBLE:
+                return (int)buf.getDouble();
+            case MatDataTypes.miUINT64:
+                return (int)buf.getLong();
+            case MatDataTypes.miINT64:
+                return (int)buf.getLong();
+            default:
+                throw new IllegalArgumentException("Unknown data type: " + type);
+        }
+    }
+
+    private long readLong() {
+        switch (this.type) {
+            case MatDataTypes.miUINT8:
+                return (long)(buf.get() & 0xFF);
+            case MatDataTypes.miINT8:
+                return (long)buf.get();
+            case MatDataTypes.miUINT16:
+                return (long)(buf.getShort() & 0xFFFF);
+            case MatDataTypes.miINT16:
+                return (long)buf.getShort();
+            case MatDataTypes.miUINT32:
+                return (long)(buf.getInt() & 0xFFFFFFFF);
+            case MatDataTypes.miINT32:
+                return (long)buf.getInt();
+			case MatDataTypes.miSINGLE:
+				return (long)buf.getFloat();
+            case MatDataTypes.miDOUBLE:
+                return (long)buf.getDouble();
+            case MatDataTypes.miUINT64:
+                return (long)buf.getLong();
+            case MatDataTypes.miINT64:
+                return (long)buf.getLong();
+            default:
+                throw new IllegalArgumentException("Unknown data type: " + type);
+        }
+    }
+
+	private float readFloat() {
+        switch (this.type) {
+            case MatDataTypes.miUINT8:
+                return (float)(buf.get() & 0xFF);
+            case MatDataTypes.miINT8:
+                return (float)buf.get();
+            case MatDataTypes.miUINT16:
+                return (float)(buf.getShort() & 0xFFFF);
+            case MatDataTypes.miINT16:
+                return (float)buf.getShort();
+            case MatDataTypes.miUINT32:
+                return (float)(buf.getInt() & 0xFFFFFFFF);
+            case MatDataTypes.miINT32:
+                return (float)buf.getInt();
+			case MatDataTypes.miSINGLE:
+				return (float)buf.getFloat();
+            case MatDataTypes.miDOUBLE:
+                return (float)buf.getDouble();
+            case MatDataTypes.miUINT64:
+                return (float)buf.getLong();
+            case MatDataTypes.miINT64:
+                return (float)buf.getLong();
+            default:
+                throw new IllegalArgumentException("Unknown data type: " + type);
+        }
+    }
+
+    /**
+     * Reads data (number of bytes read is determined by <i>data type</i>)
      * from the stream to <code>double</code>.
      *
      * @return double
      * @throws IOException
      */
-    public double readDouble() throws IOException
-    {
-        switch ( type )
-        {
+    public double readDouble() throws IOException {
+        switch (this.type) {
             case MatDataTypes.miUINT8:
-                return (double)( buf.get() & 0xFF);
+                return (double)(buf.get() & 0xFF);
             case MatDataTypes.miINT8:
-                return (double) buf.get();
+                return (double)buf.get();
             case MatDataTypes.miUINT16:
-                return (double)( buf.getShort() & 0xFFFF);
+                return (double)(buf.getShort() & 0xFFFF);
             case MatDataTypes.miINT16:
-                return (double) buf.getShort();
+                return (double)buf.getShort();
             case MatDataTypes.miUINT32:
-                return (double)( buf.getInt() & 0xFFFFFFFF);
+                return (double)(buf.getInt() & 0xFFFFFFFF);
             case MatDataTypes.miINT32:
-                return (double) buf.getInt();
+                return (double)buf.getInt();
+			case MatDataTypes.miSINGLE:
+				return (double)buf.getFloat();
             case MatDataTypes.miDOUBLE:
-                return (double) buf.getDouble();
-            default:
-                throw new IllegalArgumentException("Unknown data type: " + type);
-        }
-    }
-
-    public byte readByte()
-    {
-        switch ( type )
-        {
-            case MatDataTypes.miUINT8:
-                return (byte)( buf.get() & 0xFF);
-            case MatDataTypes.miINT8:
-                return (byte) buf.get();
-            case MatDataTypes.miUINT16:
-                return (byte)( buf.getShort() & 0xFFFF);
-            case MatDataTypes.miINT16:
-                return (byte) buf.getShort();
-            case MatDataTypes.miUINT32:
-                return (byte)( buf.getInt() & 0xFFFFFFFF);
-            case MatDataTypes.miINT32:
-                return (byte) buf.getInt();
-            case MatDataTypes.miDOUBLE:
-                return (byte) buf.getDouble();
-            case MatDataTypes.miUTF8:
-                return (byte) buf.get();
+                return (double)buf.getDouble();
+            case MatDataTypes.miUINT64:
+                return (double)buf.getLong();
+            case MatDataTypes.miINT64:
+                return (double)buf.getLong();
             default:
                 throw new IllegalArgumentException("Unknown data type: " + type);
         }
@@ -202,131 +268,47 @@ class MatFileInputStream
      * @throws IOException
      *             if buffer is under-fed, or another IO problem occurs
      */
-    public ByteBuffer readToByteBuffer(ByteBuffer dest, int elements,
-                    ByteStorageSupport<?> storage) throws IOException
-    {
-
+    public ByteBuffer readToByteBuffer(ByteBuffer dest, int elements, ByteStorageSupport<?> storage) throws IOException {
         int bytesAllocated = storage.getBytesAllocated();
         int size = elements * storage.getBytesAllocated();
 
-        //direct buffer copy
-        if ( MatDataTypes.sizeOf(type) == bytesAllocated && buf.order().equals(dest.order()) )
-        {
+        // Direct buffer copy.
+        if (MatDataTypes.sizeOf(this.type) == bytesAllocated && buf.order().equals(dest.order())) {
             int bufMaxSize = 1024;
             int bufSize = Math.min(buf.remaining(), bufMaxSize);
-            int bufPos = buf.position();
+            int bufPos = this.buf.position();
 
-            byte[] tmp = new byte[ bufSize ];
+            byte[] tmp = new byte[bufSize];
 
-            while ( dest.remaining() > 0 )
-            {
+            while (dest.remaining() > 0) {
                 int length = Math.min(dest.remaining(), tmp.length);
-                buf.get( tmp, 0, length );
-                dest.put( tmp, 0, length );
+                buf.get(tmp, 0, length);
+                dest.put(tmp, 0, length);
             }
-            buf.position( bufPos + size );
-        }
-        else
-        {
-            //because Matlab writes data not respectively to the declared
-            //matrix type, the reading is not straight forward (as above)
+            buf.position(bufPos + size);
+        } else {
+            // Because Matlab writes data not respectively to the declared
+            // matrix type, the reading is not straight forward (as above).
             Class<?> clazz = storage.getStorageClazz();
-            final DataType dataType = getDataType(clazz);
-            while ( dest.remaining() > 0 )
-            {
-            	switch (dataType){
-            	case DOUBLE:
-                    dest.putDouble( readDouble() );
-                    continue;
-            	case BYTE:
-                    dest.put( readByte() );
-                    continue;
-                case INTEGER:
-                    dest.putInt( readInt() );
-                    continue;
-                case LONG:
-                    dest.putLong( readLong() );
-                    continue;
-                case FLOAT:
-                    dest.putFloat( readFloat() );
-                    continue;
-				case SHORT:
-					dest.putShort( readShort() );
-					continue;
-                case UNSUPPORTED:
-                	throw new RuntimeException("Not supported buffer reader for " + clazz );
-            	}
+
+            while (dest.remaining() > 0) {
+            	if (clazz.equals(Byte.class))
+					dest.put(this.readByte());
+				else if (clazz.equals (Short.class))
+					dest.putShort(this.readShort());
+				else if (clazz.equals(Integer.class))
+					dest.putInt(this.readInt());
+				else if (clazz.equals(Long.class))
+					dest.putLong(this.readLong());
+				else if (clazz.equals(Float.class))
+					dest.putFloat(this.readFloat());
+				else if (clazz.equals(Double.class))
+					dest.putDouble(this.readDouble());
+				else
+					throw new RuntimeException("Not supported buffer reader for " + clazz );
             }
         }
         dest.rewind();
         return dest;
-    }
-
-    private final static DataType getDataType(Class<?> clazz) {
-    	if ( clazz.equals( Byte.class) )
-    		return DataType.BYTE;
-    	if ( clazz.equals( Integer.class) )
-    		return DataType.INTEGER;
-    	if ( clazz.equals( Long.class) )
-   		 	return DataType.LONG;
-    	if ( clazz.equals( Float.class) )
-    		return DataType.FLOAT;
-    	if ( clazz.equals( Double.class) )
-   		 	return DataType.DOUBLE;
-		if (clazz.equals ( Short.class) )
-			return DataType.SHORT;
-		return DataType.UNSUPPORTED;
-	}
-
-	private float readFloat()
-    {
-        switch ( type )
-        {
-            case MatDataTypes.miUINT8:
-                return (float)( buf.get() & 0xFF);
-            case MatDataTypes.miINT8:
-                return (float) buf.get();
-            case MatDataTypes.miUINT16:
-                return (float)( buf.getShort() & 0xFFFF);
-            case MatDataTypes.miINT16:
-                return (float) buf.getShort();
-            case MatDataTypes.miUINT32:
-                return (float)( buf.getInt() & 0xFFFFFFFF);
-            case MatDataTypes.miINT32:
-                return (float) buf.getInt();
-            case MatDataTypes.miSINGLE:
-                return (float) buf.getFloat();
-            case MatDataTypes.miDOUBLE:
-                return (float) buf.getDouble();
-            default:
-                throw new IllegalArgumentException("Unknown data type: " + type);
-        }
-    }
-
-    private long readLong()
-    {
-        switch ( type )
-        {
-            case MatDataTypes.miUINT8:
-                return (long)( buf.get() & 0xFF);
-            case MatDataTypes.miINT8:
-                return (long) buf.get();
-            case MatDataTypes.miUINT16:
-                return (long)( buf.getShort() & 0xFFFF);
-            case MatDataTypes.miINT16:
-                return (long) buf.getShort();
-            case MatDataTypes.miUINT32:
-                return (long)( buf.getInt() & 0xFFFFFFFF);
-            case MatDataTypes.miINT32:
-                return (long) buf.getInt();
-            case MatDataTypes.miUINT64:
-                return (long) buf.getLong();
-            case MatDataTypes.miINT64:
-                return (long) buf.getLong();
-            case MatDataTypes.miDOUBLE:
-                return (long) buf.getDouble();
-            default:
-                throw new IllegalArgumentException("Unknown data type: " + type);
-        }
     }
 }
