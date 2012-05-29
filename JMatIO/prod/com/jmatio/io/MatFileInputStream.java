@@ -7,22 +7,22 @@ import com.jmatio.common.MatDataTypes;
 import com.jmatio.types.ByteStorageSupport;
 
 /**
- * MAT-file input stream class. 
- * 
+ * MAT-file input stream class.
+ *
  * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
 class MatFileInputStream
 {
     private int type;
     private ByteBuffer buf;
-    
+
     enum DataType {
-    	BYTE, INTEGER, LONG, FLOAT, DOUBLE, UNSUPPORTED
+    	BYTE, INTEGER, LONG, FLOAT, DOUBLE, SHORT, UNSUPPORTED
     }
-    
+
     /**
      * Attach MAT-file input stream to <code>InputStream</code>
-     * 
+     *
      * @param is input stream
      * @param type type of data in the stream
      * @see com.jmatio.common.MatDataTypes
@@ -32,11 +32,11 @@ class MatFileInputStream
         this.type = type;
         this.buf = buf;
     }
-    
+
     /**
      * Reads data (number of bytes red is determined by <i>data type</i>)
      * from the stream to <code>int</code>.
-     * 
+     *
      * @return int
      * @throws IOException
      */
@@ -66,10 +66,45 @@ class MatFileInputStream
                 throw new IllegalArgumentException("Unknown data type: " + type);
         }
     }
+
+    /**
+     * Reads data (number of bytes red is determined by <i>data type</i>)
+     * from the stream to <code>int</code>.
+     *
+     * @return short
+     * @throws IOException
+     */
+    public short readShort() throws IOException
+    {
+        switch ( type )
+        {
+            case MatDataTypes.miUINT8:
+                return (short)( buf.get() & 0xFF);
+            case MatDataTypes.miINT8:
+                return (short) buf.get();
+            case MatDataTypes.miUINT16:
+                return (short)( buf.getShort() & 0xFFFF);
+            case MatDataTypes.miINT16:
+                return (short) buf.getShort();
+            case MatDataTypes.miUINT32:
+                return (short)( buf.getInt() & 0xFFFFFFFF);
+            case MatDataTypes.miINT32:
+                return (short) buf.getInt();
+            case MatDataTypes.miUINT64:
+                return (short) buf.getLong();
+            case MatDataTypes.miINT64:
+                return (short) buf.getLong();
+            case MatDataTypes.miDOUBLE:
+                return (short) buf.getDouble();
+            default:
+                throw new IllegalArgumentException("Unknown data type: " + type);
+        }
+    }
+
     /**
      * Reads data (number of bytes red is determined by <i>data type</i>)
      * from the stream to <code>char</code>.
-     * 
+     *
      * @return char
      * @throws IOException
      */
@@ -100,7 +135,7 @@ class MatFileInputStream
     /**
      * Reads data (number of bytes red is determined by <i>data type</i>)
      * from the stream to <code>double</code>.
-     * 
+     *
      * @return double
      * @throws IOException
      */
@@ -155,7 +190,7 @@ class MatFileInputStream
     /**
      * Reads the data into a <code>{@link ByteBuffer}</code>. This method is
      * only supported for arrays with backing ByteBuffer (<code>{@link ByteStorageSupport}</code>).
-     * 
+     *
      * @param dest
      *            the destination <code>{@link ByteBuffer}</code>
      * @param elements
@@ -170,19 +205,19 @@ class MatFileInputStream
     public ByteBuffer readToByteBuffer(ByteBuffer dest, int elements,
                     ByteStorageSupport<?> storage) throws IOException
     {
-        
+
         int bytesAllocated = storage.getBytesAllocated();
         int size = elements * storage.getBytesAllocated();
-        
+
         //direct buffer copy
         if ( MatDataTypes.sizeOf(type) == bytesAllocated && buf.order().equals(dest.order()) )
         {
             int bufMaxSize = 1024;
             int bufSize = Math.min(buf.remaining(), bufMaxSize);
             int bufPos = buf.position();
-            
+
             byte[] tmp = new byte[ bufSize ];
-            
+
             while ( dest.remaining() > 0 )
             {
                 int length = Math.min(dest.remaining(), tmp.length);
@@ -196,14 +231,14 @@ class MatFileInputStream
             //because Matlab writes data not respectively to the declared
             //matrix type, the reading is not straight forward (as above)
             Class<?> clazz = storage.getStorageClazz();
-            final DataType dataType = getDataType(clazz); 
+            final DataType dataType = getDataType(clazz);
             while ( dest.remaining() > 0 )
             {
             	switch (dataType){
             	case DOUBLE:
                     dest.putDouble( readDouble() );
                     continue;
-            	case BYTE:                
+            	case BYTE:
                     dest.put( readByte() );
                     continue;
                 case INTEGER:
@@ -215,6 +250,9 @@ class MatFileInputStream
                 case FLOAT:
                     dest.putFloat( readFloat() );
                     continue;
+				case SHORT:
+					dest.putShort( readShort() );
+					continue;
                 case UNSUPPORTED:
                 	throw new RuntimeException("Not supported buffer reader for " + clazz );
             	}
@@ -235,6 +273,8 @@ class MatFileInputStream
     		return DataType.FLOAT;
     	if ( clazz.equals( Double.class) )
    		 	return DataType.DOUBLE;
+		if (clazz.equals ( Short.class) )
+			return DataType.SHORT;
 		return DataType.UNSUPPORTED;
 	}
 

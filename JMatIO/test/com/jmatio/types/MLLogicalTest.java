@@ -13,6 +13,7 @@ import org.junit.Test;
 import com.jmatio.io.MatFileReader;
 import com.jmatio.io.MatFileWriter;
 import com.jmatio.types.MLArray;
+import com.jmatio.types.MLInt16;
 import com.jmatio.types.MLLogical;
 
 /**
@@ -54,5 +55,22 @@ public class MLLogicalTest {
         MLLogical readLogical = (MLLogical)reader.read(new File("logicaltmp.mat")).get("arr");
 
         assertEquals(this.array, readLogical);
+    }
+
+    @Test
+    public void testReadingAndWritingNonUInt8() throws Exception {
+        MLInt16 array = new MLInt16("arr", new int[]{1, 5}, MLArray.mxINT16_CLASS, MLArray.mtFLAG_LOGICAL);
+        array.set(new short[]{-32768, -1, 0, 1, 32767});
+        MLLogical logical = new MLLogical(array);
+
+        // Test writing the MLLogical.
+        MatFileWriter writer = new MatFileWriter();
+        writer.write("logicaltmp2.mat", Arrays.asList((MLArray)logical));
+
+        // Test reading the MLLogical.
+        MatFileReader reader = new MatFileReader();
+        MLLogical readLogical = (MLLogical)reader.read(new File("logicaltmp2.mat")).get("arr");
+
+        assertEquals(logical, readLogical);
     }
 }
