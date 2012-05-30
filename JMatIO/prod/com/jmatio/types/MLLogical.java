@@ -97,16 +97,33 @@ public class MLLogical extends MLArray {
         return this.bools[index];
     }
 
+    public boolean[] get() {
+        return MLLogical.castToPrimitive(this.bools);
+    }
+
     /**
-     * Casts <code>Double[]</code> to <code>byte[]</code>
+     * Casts <code>boolean[]</code> to <code>Boolean[]</code>.
      *
-     * @param d <code>Long[]</code>
-     * @return result <code>long[]</code>
+     * @param d <code>boolean[]</code>
+     * @return result <code>Boolean[]</code>
      */
     protected static Boolean[] castToObject(boolean[] d) {
         Boolean[] dest = new Boolean[d.length];
         for (int i = 0; i < d.length; ++i)
             dest[i] = d[i];
+        return dest;
+    }
+
+    /**
+     * Casts <code>Boolean[]</code> to <code>boolean[]</code>.
+     *
+     * @param d <code>Boolean[]</code>
+     * @return result <code>boolean[]</code>
+     */
+    protected static boolean[] castToPrimitive(Boolean[] d) {
+        boolean[] dest = new boolean[d.length];
+        for (int i = 0; i < d.length; ++i)
+            dest[i] = d[i].booleanValue();
         return dest;
     }
 
