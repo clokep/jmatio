@@ -29,8 +29,8 @@ public class MLLogicalTest {
         return new JUnit4TestAdapter(MLLogicalTest.class);
     }
 
-	@Test
-	public void testObject() throws Exception {
+    @Test
+    public void testObject() throws Exception {
         assertEquals(this.bools[0], this.array.get(0));
         assertEquals(this.bools[1], this.array.get(1));
     }
@@ -42,7 +42,7 @@ public class MLLogicalTest {
         MLLogical readLogical = (MLLogical) reader.read(new File("test/logical.mat")).get("arr");
 
         assertEquals(this.array, readLogical);
-	}
+    }
 
     @Test
     public void testReadingAndWriting() throws Exception {

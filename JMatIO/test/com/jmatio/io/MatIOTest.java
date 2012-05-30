@@ -48,13 +48,13 @@ public class MatIOTest
 
 //    @Test
 //    public void testMLDoubleConstructor(){
-//    	// Test whether the constuctor can handle an array with a length != a multiple of dsize
-//    	// BufferOverflowException was thrown before a fix in MLNumericArray
-//    	int dsize=2;
-//		List<Double> list = new ArrayList<Double>();
-//		list.add(1.0);
+//        // Test whether the constuctor can handle an array with a length != a multiple of dsize
+//        // BufferOverflowException was thrown before a fix in MLNumericArray
+//        int dsize=2;
+//        List<Double> list = new ArrayList<Double>();
+//        list.add(1.0);
 //
-//		new MLDouble("name",(Double[])list.toArray(new Double[list.size()]), dsize);
+//        new MLDouble("name",(Double[])list.toArray(new Double[list.size()]), dsize);
 //    }
 
     //@Test

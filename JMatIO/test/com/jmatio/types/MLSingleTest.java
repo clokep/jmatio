@@ -29,8 +29,8 @@ public class MLSingleTest {
         return new JUnit4TestAdapter(MLSingleTest.class);
     }
 
-	@Test
-	public void testObject() throws Exception {
+    @Test
+    public void testObject() throws Exception {
         assertEquals(this.expected[0], this.array.get(0));
         assertEquals(this.expected[1], this.array.get(1));
         assertEquals(this.expected[2], this.array.get(2));
@@ -43,7 +43,7 @@ public class MLSingleTest {
         MLSingle readArray = (MLSingle)reader.read(new File("test/single.mat")).get("arr");
 
         assertEquals(this.array, readArray);
-	}
+    }
 
     @Test
     public void testReadingAndWriting() throws Exception {

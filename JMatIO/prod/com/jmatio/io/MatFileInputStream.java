@@ -48,8 +48,8 @@ class MatFileInputStream {
                 return (byte)(buf.getInt() & 0xFFFFFFFF);
             case MatDataTypes.miINT32:
                 return (byte)buf.getInt();
-			case MatDataTypes.miSINGLE:
-				return (byte)buf.getFloat();
+            case MatDataTypes.miSINGLE:
+                return (byte)buf.getFloat();
             case MatDataTypes.miDOUBLE:
                 return (byte)buf.getDouble();
             case MatDataTypes.miUINT64:
@@ -82,8 +82,8 @@ class MatFileInputStream {
                 return (short)(buf.getInt() & 0xFFFFFFFF);
             case MatDataTypes.miINT32:
                 return (short)buf.getInt();
-			case MatDataTypes.miSINGLE:
-				return (short)buf.getFloat();
+            case MatDataTypes.miSINGLE:
+                return (short)buf.getFloat();
             case MatDataTypes.miDOUBLE:
                 return (short)buf.getDouble();
             case MatDataTypes.miUINT64:
@@ -116,8 +116,8 @@ class MatFileInputStream {
                 return (char)(buf.getInt() & 0xFFFFFFFF);
             case MatDataTypes.miINT32:
                 return (char)buf.getInt();
-			case MatDataTypes.miSINGLE:
-				return (char)buf.getFloat();
+            case MatDataTypes.miSINGLE:
+                return (char)buf.getFloat();
             case MatDataTypes.miDOUBLE:
                 return (char)buf.getDouble();
             case MatDataTypes.miUINT64:
@@ -152,8 +152,8 @@ class MatFileInputStream {
                 return (int)(buf.getInt() & 0xFFFFFFFF);
             case MatDataTypes.miINT32:
                 return (int)buf.getInt();
-			case MatDataTypes.miSINGLE:
-				return (int)buf.getFloat();
+            case MatDataTypes.miSINGLE:
+                return (int)buf.getFloat();
             case MatDataTypes.miDOUBLE:
                 return (int)buf.getDouble();
             case MatDataTypes.miUINT64:
@@ -179,8 +179,8 @@ class MatFileInputStream {
                 return (long)(buf.getInt() & 0xFFFFFFFF);
             case MatDataTypes.miINT32:
                 return (long)buf.getInt();
-			case MatDataTypes.miSINGLE:
-				return (long)buf.getFloat();
+            case MatDataTypes.miSINGLE:
+                return (long)buf.getFloat();
             case MatDataTypes.miDOUBLE:
                 return (long)buf.getDouble();
             case MatDataTypes.miUINT64:
@@ -192,7 +192,7 @@ class MatFileInputStream {
         }
     }
 
-	private float readFloat() {
+    private float readFloat() {
         switch (this.type) {
             case MatDataTypes.miUINT8:
                 return (float)(buf.get() & 0xFF);
@@ -206,8 +206,8 @@ class MatFileInputStream {
                 return (float)(buf.getInt() & 0xFFFFFFFF);
             case MatDataTypes.miINT32:
                 return (float)buf.getInt();
-			case MatDataTypes.miSINGLE:
-				return (float)buf.getFloat();
+            case MatDataTypes.miSINGLE:
+                return (float)buf.getFloat();
             case MatDataTypes.miDOUBLE:
                 return (float)buf.getDouble();
             case MatDataTypes.miUINT64:
@@ -240,8 +240,8 @@ class MatFileInputStream {
                 return (double)(buf.getInt() & 0xFFFFFFFF);
             case MatDataTypes.miINT32:
                 return (double)buf.getInt();
-			case MatDataTypes.miSINGLE:
-				return (double)buf.getFloat();
+            case MatDataTypes.miSINGLE:
+                return (double)buf.getFloat();
             case MatDataTypes.miDOUBLE:
                 return (double)buf.getDouble();
             case MatDataTypes.miUINT64:
@@ -292,20 +292,20 @@ class MatFileInputStream {
             Class<?> clazz = storage.getStorageClazz();
 
             while (dest.remaining() > 0) {
-            	if (clazz.equals(Byte.class))
-					dest.put(this.readByte());
-				else if (clazz.equals (Short.class))
-					dest.putShort(this.readShort());
-				else if (clazz.equals(Integer.class))
-					dest.putInt(this.readInt());
-				else if (clazz.equals(Long.class))
-					dest.putLong(this.readLong());
-				else if (clazz.equals(Float.class))
-					dest.putFloat(this.readFloat());
-				else if (clazz.equals(Double.class))
-					dest.putDouble(this.readDouble());
-				else
-					throw new RuntimeException("Not supported buffer reader for " + clazz );
+                if (clazz.equals(Byte.class))
+                    dest.put(this.readByte());
+                else if (clazz.equals (Short.class))
+                    dest.putShort(this.readShort());
+                else if (clazz.equals(Integer.class))
+                    dest.putInt(this.readInt());
+                else if (clazz.equals(Long.class))
+                    dest.putLong(this.readLong());
+                else if (clazz.equals(Float.class))
+                    dest.putFloat(this.readFloat());
+                else if (clazz.equals(Double.class))
+                    dest.putDouble(this.readDouble());
+                else
+                    throw new RuntimeException("Not supported buffer reader for " + clazz );
             }
         }
         dest.rewind();

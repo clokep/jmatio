@@ -65,7 +65,7 @@ public class MatFileIncrementalWriter extends MatFileWriter {
     private boolean headerWritten = false;
     private boolean isStillValid = false;
     private Set<String> varNames = new TreeSet<String>();
-	/**
+    /**
      * Creates a writer to a file given the filename.
      *
      * @param fileName name of output file
@@ -94,20 +94,20 @@ public class MatFileIncrementalWriter extends MatFileWriter {
      * @throws IOException
      */
     public MatFileIncrementalWriter(WritableByteChannel chan) throws IOException {
-		this.channel = chan;
-    	this.isStillValid = true;
+        this.channel = chan;
+        this.isStillValid = true;
     }
 
     public synchronized void write(MLArray data) throws IOException {
         String vName = data.getName();
         if (this.varNames.contains(vName))
-        	throw new IllegalArgumentException("Error: variable " + vName + " specified more than once for file input.");
+            throw new IllegalArgumentException("Error: variable " + vName + " specified more than once for file input.");
         try {
             // Write the header, but only once.
-        	if (!this.headerWritten) {
-        		this.writeHeader();
-				this.headerWritten = true;
-        	}
+            if (!this.headerWritten) {
+                this.writeHeader();
+                this.headerWritten = true;
+            }
 
             // Prepare buffer for MATRIX data.
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -154,16 +154,16 @@ public class MatFileIncrementalWriter extends MatFileWriter {
         try {
             // Write data.
             for (MLArray matrix : data)
-            	this.write(matrix);
+                this.write(matrix);
         } catch (IllegalArgumentException iae) {
-        	this.isStillValid = false;
-        	throw iae;
+            this.isStillValid = false;
+            throw iae;
         } catch (IOException e) {
             throw e;
         }
     }
 
     public synchronized void close() throws IOException {
-    	this.channel.close();
+        this.channel.close();
     }
 }

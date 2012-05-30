@@ -14,7 +14,7 @@ import com.jmatio.common.MatDataTypes;
  * @author Patrick Cloke <pcloke@mitre.org>
  */
 public class MLLogical extends MLArray {
-	Boolean[] bools;
+    Boolean[] bools;
 
     /**
      * Normally this constructor is used only by MatFileReader and MatFileWriter
@@ -26,7 +26,7 @@ public class MLLogical extends MLArray {
      */
     public MLLogical(String name, int[] dims, int type, int attributes) {
         super(name, dims, type, attributes);
-		this.allocate();
+        this.allocate();
     }
     /**
      * Create a <code>{@link MLLogical}</code> array with given name,
@@ -60,8 +60,8 @@ public class MLLogical extends MLArray {
     public MLLogical(MLNumericArray<?> array) {
         this(array.name, array.dims, array.type, array.attributes);
 
-		for (int i = 0; i < this.getSize(); ++i)
-			this.set((Number)array.get(i), i);
+        for (int i = 0; i < this.getSize(); ++i)
+            this.set((Number)array.get(i), i);
     }
 
     protected void allocate() {
@@ -72,7 +72,7 @@ public class MLLogical extends MLArray {
      * @param vector
      */
     public void set(boolean[] vector) {
-    	this.set(MLLogical.castToObject(vector));
+        this.set(MLLogical.castToObject(vector));
     }
 
     public void set(Boolean[] vector) {
@@ -81,13 +81,13 @@ public class MLLogical extends MLArray {
             this.set(vector[i], i);
     }
 
-	public void set(Boolean value, int index) {
-		this.bools[index] = value;
-	}
+    public void set(Boolean value, int index) {
+        this.bools[index] = value;
+    }
 
-	public void set(Number value, int index) {
-		this.bools[index] = value.longValue() != 0 || value.doubleValue() != 0;
-	}
+    public void set(Number value, int index) {
+        this.bools[index] = value.longValue() != 0 || value.doubleValue() != 0;
+    }
 
     public Boolean get(int m, int n) {
         return this.get(this.getIndex(m, n));
@@ -104,7 +104,7 @@ public class MLLogical extends MLArray {
      * @return result <code>long[]</code>
      */
     protected static Boolean[] castToObject(boolean[] d) {
-    	Boolean[] dest = new Boolean[d.length];
+        Boolean[] dest = new Boolean[d.length];
         for (int i = 0; i < d.length; ++i)
             dest[i] = d[i];
         return dest;
@@ -117,9 +117,9 @@ public class MLLogical extends MLArray {
         return super.equals(o);
     }
 
-	public void dispose() {
-		this.bools = null;
-	}
+    public void dispose() {
+        this.bools = null;
+    }
 
     public void writeData(DataOutputStream dos) throws IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();

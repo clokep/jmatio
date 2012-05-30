@@ -27,10 +27,10 @@ public class MLUInt8Test {
         return new JUnit4TestAdapter(MLUInt8Test.class);
     }
 
-	@Test
-	public void testObject() throws Exception {
-		byte[] bytes = new byte[] {0, 1, 2, 3};
-		MLUInt8 array = new MLUInt8("arr", bytes , 1);
+    @Test
+    public void testObject() throws Exception {
+        byte[] bytes = new byte[] {0, 1, 2, 3};
+        MLUInt8 array = new MLUInt8("arr", bytes , 1);
 
         assertEquals(bytes[0], (byte)array.get(0));
         assertEquals(bytes[1], (byte)array.get(1));
@@ -38,10 +38,10 @@ public class MLUInt8Test {
         assertEquals(bytes[3], (byte)array.get(3));
     }
 
-	@Test
-	public void testExtremes() throws Exception {
-		byte[] bytes = new byte[] {0, (byte)255};
-		MLUInt8 array = new MLUInt8("arr", bytes , 1);
+    @Test
+    public void testExtremes() throws Exception {
+        byte[] bytes = new byte[] {0, (byte)255};
+        MLUInt8 array = new MLUInt8("arr", bytes , 1);
 
         assertEquals(bytes[0], (byte)array.get(0));
         assertEquals(bytes[1], (byte)array.get(1));
@@ -49,19 +49,19 @@ public class MLUInt8Test {
 
     @Test
     public void testReadingNative() throws Exception {
-		MLUInt8 expected = new MLUInt8("arr", new byte[] {0, (byte)255}, 1);
+        MLUInt8 expected = new MLUInt8("arr", new byte[] {0, (byte)255}, 1);
 
         // Test reading the MLArray generated natively by Matlab.
         MatFileReader reader = new MatFileReader();
         MLUInt8 readArray = (MLUInt8)reader.read(new File("test/uint8.mat")).get("arr");
 
         assertEquals(expected, readArray);
-	}
+    }
 
     @Test
     public void testReadingAndWriting() throws Exception {
-		byte[] bytes = new byte[] {0, 1, 2, 3};
-		MLUInt8 array = new MLUInt8("arr", bytes , 1);
+        byte[] bytes = new byte[] {0, 1, 2, 3};
+        MLUInt8 array = new MLUInt8("arr", bytes , 1);
 
         // Test writing the MLUInt8.
         MatFileWriter writer = new MatFileWriter();
