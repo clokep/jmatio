@@ -28,6 +28,7 @@ import com.jmatio.types.MLCell;
 import com.jmatio.types.MLChar;
 import com.jmatio.types.MLDouble;
 import com.jmatio.types.MLEmptyArray;
+import com.jmatio.types.MLFunctionHandle;
 import com.jmatio.types.MLInt16;
 import com.jmatio.types.MLInt32;
 import com.jmatio.types.MLInt64;
@@ -670,8 +671,6 @@ public class MatFileReader {
                 nn[i] = (byte)dims[i];
             name = new String(nn);
 
-            System.out.println(buf);
-
             MLOpaque opaque = new MLOpaque(name, classType, className);
 
             // Opaque contains one other miMATRIX.
@@ -683,6 +682,66 @@ public class MatFileReader {
                 opaque.set(new MLEmptyArray());
 
             mlArray = opaque;
+        //} else if (type == MLArray.mxFUNCTION_CLASS) {
+        //    MLFunctionHandle function = new MLFunctionHandle(name, dims, type, attributes);
+        //
+        //    // Function handles contains one other miMATRIX.
+        //    tag = new ISMatTag(buf);
+        //    if (tag.size > 0) {
+        //        // The matrix is a structure with some unintersting stuff in it:
+        //        //  MLChar      matlabroot      [ = 'C:\MATLAB2012a' ]
+        //        //  MLChar      seperator       [ = '\' ]
+        //        //  MLChar      sentinel        [ = '@' ]
+        //        //  MLStructure function_handle
+        //        //      	MLChar      function
+        //        //          MLChar      type
+        //        //          MLChar      file
+        //        //          MLOpaque    workspace
+        //        MLStructure functionmatrix = (MLStructure)this.readMatrix(buf, false);
+        //        System.out.println(functionmatrix);
+        //        System.out.println(functionmatrix.contentToString());
+        //
+        //        MLArray temp = functionmatrix.getField("matlabroot");
+        //        System.out.println(temp);
+        //        System.out.println(temp.contentToString());
+        //
+        //        temp = functionmatrix.getField("separator");
+        //        System.out.println(temp);
+        //        System.out.println(temp.contentToString());
+        //
+        //        temp = functionmatrix.getField("sentinel");
+        //        System.out.println(temp);
+        //        System.out.println(temp.contentToString());
+        //
+        //        functionmatrix = (MLStructure)functionmatrix.getField("function_handle");
+        //        System.out.println(functionmatrix);
+        //        System.out.println(functionmatrix.contentToString());
+        //
+        //        temp = functionmatrix.getField("function");
+        //        System.out.println(temp);
+        //        System.out.println(temp.contentToString());
+        //
+        //        temp = functionmatrix.getField("type");
+        //        System.out.println(temp);
+        //        System.out.println(temp.contentToString());
+        //
+        //        temp = functionmatrix.getField("file");
+        //        System.out.println(temp);
+        //        System.out.println(temp.contentToString());
+        //
+        //        temp = functionmatrix.getField("workspace");
+        //        System.out.println(temp);
+        //        System.out.println(temp.contentToString());
+        //
+        //        temp = ((MLOpaque)temp).get();
+        //        System.out.println(temp);
+        //        System.out.println(temp.contentToString());
+        //
+        //        //opaque.set(functionmatrix);
+        //    }/* else
+        //        opaque.set(new MLEmptyArray());*/
+        //
+        //    mlArray = null;
         } else {
             // At this point we should have a numeric class.
             switch (type) {
