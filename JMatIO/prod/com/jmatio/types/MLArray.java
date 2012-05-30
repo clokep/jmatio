@@ -90,22 +90,33 @@ public abstract class MLArray {
     }
 
     /**
-     * Gets array name
+     * Gets the array name.
      *
      * @return array name
      */
     public String getName() {
         return this.name;
     }
+
+    /**
+     * Gets the array flags.
+     *
+     * @return array flags
+     */
     public int getFlags() {
         return this.type & MLArray.mtFLAG_TYPE | this.attributes & 0xffffff00;
     }
+
+    /**
+     * Gets the array name as an array of bytes.
+     *
+     * @return array name as bytes
+     */
     public byte[] getNameToByteArray() {
         return this.name.getBytes();
     }
 
-    public int[] getDimensions()
-    {
+    public int[] getDimensions() {
         int ai[] = null;
         if (dims != null) {
             ai = new int[this.dims.length];
@@ -155,6 +166,7 @@ public abstract class MLArray {
     public int getSize() {
         return this.getM() * this.getN();
     }
+
     public int getType() {
         return this.type;
     }

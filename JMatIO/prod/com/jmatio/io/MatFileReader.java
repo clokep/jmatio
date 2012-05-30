@@ -705,7 +705,7 @@ public class MatFileReader {
                     mlArray = new MLUInt64(name, dims, type, attributes);
                     break;
                 default:
-                    throw new MatlabIOException("Incorrect matlab array class: " + MLArray.typeToString(type));
+                    throw new MatlabIOException("Unsupported matlab array class: " + MLArray.typeToString(type));
             }
 
             // Read real.

@@ -93,11 +93,9 @@
         <mkdir dir="${build.bin}"/>
         <javac srcdir="${dev.src}"
                destdir="${build.bin}"
-               classpath=""
                debug="no"
-               optimize="yes"
-               target="1.5"
-        />
+               includeantruntime="no"
+               target="1.5" />
     </target>
 
     <target name="compile-test" depends="compile" description="--> Compiles test folder">
