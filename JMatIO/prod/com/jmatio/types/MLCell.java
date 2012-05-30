@@ -11,13 +11,13 @@ public class MLCell extends MLArray {
     private ArrayList<MLArray> cells;
 
     public MLCell(String name, int[] dims) {
-        this( name, dims, MLArray.mxCELL_CLASS, 0);
+        this(name, dims, MLArray.mxCELL_CLASS, 0);
     }
 
     public MLCell(String name, int[] dims, int type, int attributes) {
         super(name, dims, type, attributes);
 
-        int length = this.getM() * this.getN();
+        int length = this.getSize();
         cells = new ArrayList<MLArray>(length);
 
         for (int i = 0; i < length; ++i)
@@ -47,11 +47,11 @@ public class MLCell extends MLArray {
 
     public String contentToString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(name + " = \n");
+        sb.append(this.name + " = \n");
 
         for (int m = 0; m < this.getM(); ++m) {
-           sb.append("\t");
-            for ( int n = 0; n < this.getN(); n++ ) {
+            sb.append("\t");
+            for (int n = 0; n < this.getN(); ++n) {
                 sb.append(this.get(m, n));
                 sb.append("\t");
             }

@@ -34,6 +34,7 @@ import com.jmatio.types.MLInt64;
 import com.jmatio.types.MLInt8;
 import com.jmatio.types.MLLogical;
 import com.jmatio.types.MLNumericArray;
+import com.jmatio.types.MLOpaque;
 import com.jmatio.types.MLSingle;
 import com.jmatio.types.MLSparse;
 import com.jmatio.types.MLStructure;
@@ -489,7 +490,7 @@ public class MatFileReader {
      * @throws IOException when error occurs while reading the buffer.
      */
     private void readData(ByteBuffer buf) throws IOException {
-        // Read data
+        // Read data.
         ISMatTag tag = new ISMatTag(buf);
         switch (tag.type) {
             case MatDataTypes.miCOMPRESSED:
@@ -600,7 +601,7 @@ public class MatFileReader {
             mlArray = struct;
         } else if (type == MLArray.mxCELL_CLASS) {
             MLCell cell = new MLCell(name, dims, type, attributes);
-            for (int i = 0; i < cell.getM() * cell.getN(); ++i) {
+            for (int i = 0; i < cell.getSize(); ++i) {
                 tag = new ISMatTag(buf);
                 if (tag.size > 0) {
                     // Read matrix recursively
@@ -648,29 +649,40 @@ public class MatFileReader {
                 for (int column = 0; column < sparse.getN(); column++) {
                     while(count < jc[column+1]) {
                         sparse.setImaginary(ad2[count], ir[count], column);
-                        count++;
+                        ++count;
                     }
                 }
             }
             mlArray = sparse;
-        //} else if (type == MLArray.mxOPAQUE_CLASS) {
-        //    // Read ir (row indices).
-        //    tag = new ISMatTag(buf);
-        //    bytes = new byte[tag.size];
-        //    //buf.get(bytes);
-        //    System.out.println( "Class name: " + new String(tag.readToCharArray()));
-        //    System.out.println( "Array name: " + name );
-        //    System.out.println( "Array type: " + type);
-        //
-        //    byte[] nn = new byte[dims.length];
-        //    for ( int i = 0; i < dims.length; i++ )
-        //        nn[i] = (byte)dims[i];
-        //    System.out.println( "Array name: " + new String ( nn ) );
-        //
-        //    readData(buf);
-        //
-        //    mlArray = null;
-        //    break;
+        } else if (type == MLArray.mxOPAQUE_CLASS) {
+            // Read the class name.
+            tag = new ISMatTag(buf);
+            String className = new String(tag.readToCharArray());
+
+            // The "name" field is actually used by MATLAB to store the class
+            // type (or something like that); e.g. java or MCOS
+            // (containers.Map).
+            String classType = name;
+
+            // The dims is used to store the variable name.
+            byte[] nn = new byte[dims.length];
+            for (int i = 0; i < dims.length; ++i)
+                nn[i] = (byte)dims[i];
+            name = new String(nn);
+
+            System.out.println(buf);
+
+            MLOpaque opaque = new MLOpaque(name, classType, className);
+
+            // Opaque contains one other miMATRIX.
+            tag = new ISMatTag(buf);
+            if (tag.size > 0) {
+                MLArray opaquematrix = this.readMatrix(buf, false);
+                opaque.set(opaquematrix);
+            } else
+                opaque.set(new MLEmptyArray());
+
+            mlArray = opaque;
         } else {
             // At this point we should have a numeric class.
             switch (type) {
@@ -757,9 +769,7 @@ public class MatFileReader {
      */
     private int[] readFlags(ByteBuffer buf) throws IOException {
         ISMatTag tag = new ISMatTag(buf);
-
         int[] flags = tag.readToIntArray();
-
         return flags;
     }
 
