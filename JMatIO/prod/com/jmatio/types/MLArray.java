@@ -400,16 +400,14 @@ public abstract class MLArray {
      * @throws IOException
      */
     private void writeFlags(DataOutputStream os) throws IOException {
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        DataOutputStream bufferDOS = new DataOutputStream(buffer);
-
-        bufferDOS.writeInt(this.getFlags());
+        ByteBuffer buffer = ByteBuffer.allocate(4 * 2);
+        buffer.putInt(this.getFlags());
 
         if (this.isSparse())
-            bufferDOS.writeInt(((MLSparse)this).getMaxNZ());
+            buffer.putInt(((MLSparse)this).getMaxNZ());
         else
-            bufferDOS.writeInt(0);
-        OSArrayTag tag = new OSArrayTag(MatDataTypes.miUINT32, buffer.toByteArray());
+            buffer.putInt(0);
+        OSArrayTag tag = new OSArrayTag(MatDataTypes.miUINT32, buffer);
         tag.writeTo(os);
     }
 
