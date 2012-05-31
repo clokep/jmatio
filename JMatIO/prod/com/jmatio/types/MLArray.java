@@ -3,6 +3,7 @@ package com.jmatio.types;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import com.jmatio.common.MatDataTypes;
 import com.jmatio.extra.VariableUtils;
@@ -369,9 +370,6 @@ public abstract class MLArray {
      * @throws IOException
      */
     public void writeMatrix(DataOutputStream output) throws IOException {
-        OSArrayTag tag;
-        ByteArrayOutputStream buffer;
-        DataOutputStream bufferDOS;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
 
@@ -422,15 +420,13 @@ public abstract class MLArray {
      * @throws IOException
      */
     private void writeDimensions(DataOutputStream os) throws IOException {
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        DataOutputStream bufferDOS = new DataOutputStream(buffer);
-
         int[] dims = this.getDimensions();
-        for (int i = 0; i < dims.length; ++i)
-            bufferDOS.writeInt(dims[i]);
-        OSArrayTag tag = new OSArrayTag(MatDataTypes.miUINT32, buffer.toByteArray());
-        tag.writeTo(os);
+        ByteBuffer buffer = ByteBuffer.allocate(4 * dims.length);
 
+        for (int i = 0; i < dims.length; ++i)
+            buffer.putInt(dims[i]);
+        OSArrayTag tag = new OSArrayTag(MatDataTypes.miUINT32, buffer);
+        tag.writeTo(os);
     }
 
     /**
