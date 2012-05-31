@@ -857,11 +857,9 @@ public class MatFileReader {
      * @throws IOException if reading from buffer fails
      */
     private String readName(ByteBuffer buf) throws IOException {
-        String s;
-
         ISMatTag tag = new ISMatTag(buf);
         char[] ac = tag.readToCharArray();
-        s = new String(ac);
+        String s = new String(ac);
 
         return s;
     }

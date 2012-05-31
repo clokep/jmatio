@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
- * Tiny class that represents MAT-file TAG
+ * Output stream array tag, a tiny class that represents MAT-file TAG.
  * It simplifies writing data. Automates writing padding for instance.
  */
 public class OSArrayTag extends MatTag {
@@ -36,25 +36,21 @@ public class OSArrayTag extends MatTag {
     }
 
     /**
-     * Writes tag and data to <code>DataOutputStream</code>. Wites padding if neccesary.
-     *
+     * Writes tag and data to <code>DataOutputStream</code>. Writes padding if
+     * neccesary.
      * @param os
      * @throws IOException
      */
     public void writeTo(DataOutputStream os) throws IOException {
-        os.writeInt(type);
-        os.writeInt(size);
+        // TODO Attempt to compress tags when appropriate.
+        // Write the type and size.
+        os.writeInt(this.type);
+        os.writeInt(this.size);
 
-        int maxBuffSize = 1024;
-        int writeBuffSize = data.remaining() < maxBuffSize ? data.remaining() : maxBuffSize;
-        byte[] tmp = new byte[writeBuffSize];
-        while (data.remaining() > 0) {
-            int length = data.remaining() > tmp.length ? tmp.length : data.remaining();
-            data.get(tmp, 0, length);
-            os.write(tmp, 0, length);
-        }
+        // Write all the data (or up to the maximum size) to the output stream.
+        os.write(this.data.array(), 0, this.data.remaining());
 
-        if (padding > 0)
-            os.write(new byte[padding]);
+        if (this.padding > 0)
+            os.write(new byte[this.padding]);
     }
 }

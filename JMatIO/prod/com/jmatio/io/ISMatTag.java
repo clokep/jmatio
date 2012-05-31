@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import com.jmatio.types.ByteStorageSupport;
 
 /**
- * TAG operator. Facilitates reading operations.
+ * Input stream tag operator. Facilitates reading operations.
  *
  * <i>Note: reading from buffer modifies it's position</i>
  *
@@ -30,10 +30,11 @@ public class ISMatTag extends MatTag {
             this.compressed = false;
         } else {
             // Data _packed_ in the tag (compressed).
-            this.size = tmp >> 16; // 2 more significant bytes
-            this.type = tmp & 0xffff; // 2 less significant bytes;
+            this.size = tmp >> 16; // 2 most significant bytes.
+            this.type = tmp & 0xffff; // 2 less significant bytes.
             this.compressed = true;
         }
+
         this.padding = this.getPadding(size, compressed);
     }
 
