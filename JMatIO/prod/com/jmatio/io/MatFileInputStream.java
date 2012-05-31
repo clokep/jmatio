@@ -57,7 +57,7 @@ class MatFileInputStream {
             case MatDataTypes.miINT64:
                 return (byte)buf.getLong();
             default:
-                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type));
+                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type) + " (" + type + ").");
         }
     }
 
@@ -91,7 +91,7 @@ class MatFileInputStream {
             case MatDataTypes.miINT64:
                 return (short)buf.getLong();
             default:
-                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type));
+                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type) + " (" + type + ").");
         }
     }
 
@@ -127,7 +127,7 @@ class MatFileInputStream {
             case MatDataTypes.miUTF8:
                 return (char)buf.get();
             default:
-                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type));
+                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type) + " (" + type + ").");
         }
     }
 
@@ -161,7 +161,7 @@ class MatFileInputStream {
             case MatDataTypes.miINT64:
                 return (int)buf.getLong();
             default:
-                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type));
+                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type) + " (" + type + ").");
         }
     }
 
@@ -188,7 +188,7 @@ class MatFileInputStream {
             case MatDataTypes.miINT64:
                 return (long)buf.getLong();
             default:
-                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type));
+                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type) + " (" + type + ").");
         }
     }
 
@@ -215,7 +215,7 @@ class MatFileInputStream {
             case MatDataTypes.miINT64:
                 return (float)buf.getLong();
             default:
-                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type));
+                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type) + " (" + type + ").");
         }
     }
 
@@ -249,7 +249,7 @@ class MatFileInputStream {
             case MatDataTypes.miINT64:
                 return (double)buf.getLong();
             default:
-                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type));
+                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type) + " (" + type + ").");
         }
     }
 
