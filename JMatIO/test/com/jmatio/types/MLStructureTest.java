@@ -103,6 +103,8 @@ public class MLStructureTest {
 
         reader = new MatFileReader("simplestructcopy.mat");
         MLArray mlArrayRetrieved = reader.getMLArray( "structure" );
+
+        assertEquals(mlArray, mlArrayRetrieved);
     }
 
 }

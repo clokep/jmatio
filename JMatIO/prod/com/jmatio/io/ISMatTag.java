@@ -101,6 +101,10 @@ public class ISMatTag extends MatTag {
         return ac;
     }
 
+    public String readToString() throws IOException {
+        return new String(this.readToCharArray());
+    }
+
     /**
      * Skip padding.
      */

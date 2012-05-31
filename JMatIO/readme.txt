@@ -19,7 +19,7 @@ Have fun :)
 Wojciech Gradkowski
 
 TODO:
-- Other array types (Object, Function and Opaque)
+- Finish other array types (Function and Opaque)
 - Writer performance enhancement
 - Documentation and examples
 - Organize JUnit tests

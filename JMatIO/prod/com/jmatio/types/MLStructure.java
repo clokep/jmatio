@@ -189,6 +189,22 @@ public class MLStructure extends MLArray {
         return this.mlStructArray.get(index).get(name);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof MLStructure) {
+            // Ensure the field names are equal.
+            if (!this.keys.equals(((MLStructure)o).keys))
+                return false;
+            // Ensure the values of those fields are equal.
+            for (String key : this.keys) {
+                if (!this.getField(key).equals(((MLStructure)o).getField(key)))
+                    return false;
+            }
+            return true;
+        }
+        return super.equals(o);
+    }
+
     /* (non-Javadoc)
      * @see com.paradigmdesigner.matlab.types.MLArray#contentToString()
      */

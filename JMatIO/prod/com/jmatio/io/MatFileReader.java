@@ -35,6 +35,7 @@ import com.jmatio.types.MLInt64;
 import com.jmatio.types.MLInt8;
 import com.jmatio.types.MLLogical;
 import com.jmatio.types.MLNumericArray;
+import com.jmatio.types.MLObject;
 import com.jmatio.types.MLOpaque;
 import com.jmatio.types.MLSingle;
 import com.jmatio.types.MLSparse;
@@ -564,8 +565,20 @@ public class MatFileReader {
             return null;
 
         // Read data >> consider changing it to stategy pattern
-        if (type == MLArray.mxSTRUCT_CLASS) {
-            MLStructure struct = new MLStructure(name, dims, type, attributes);
+        if (type == MLArray.mxSTRUCT_CLASS || type == MLArray.mxOBJECT_CLASS) {
+            MLStructure struct;
+
+            if (type == MLArray.mxSTRUCT_CLASS)
+                struct = new MLStructure(name, dims, type, attributes);
+            else {
+                // A MLObject has an additional field: the class name.
+                struct = new MLObject(name, dims, type, attributes);
+
+                // Read the class name.
+                tag = new ISMatTag(buf);
+                String className = tag.readToString();
+                ((MLObject)struct).setClassName(className);
+            }
 
             // Maximum field name length. This subelement always uses the compressed
             // data element format when created by Matlab.
@@ -615,11 +628,11 @@ public class MatFileReader {
         } else if (type == MLArray.mxCHAR_CLASS) {
             MLChar mlchar = new MLChar(name, dims, type, attributes);
 
-            //read real
+            // Read the characters.
             tag = new ISMatTag(buf);
             char[] ac = tag.readToCharArray();
             for ( int i = 0; i < ac.length; i++ )
-                mlchar.setChar( ac[i], i );
+                mlchar.setChar(ac[i], i);
             mlArray = mlchar;
         } else if (type == MLArray.mxSPARSE_CLASS) {
             MLSparse sparse = new MLSparse(name, dims, attributes, nzmax);
@@ -658,7 +671,7 @@ public class MatFileReader {
         } else if (type == MLArray.mxOPAQUE_CLASS) {
             // Read the class name.
             tag = new ISMatTag(buf);
-            String className = new String(tag.readToCharArray());
+            String className = tag.readToString();
 
             // The "name" field is actually used by MATLAB to store the class
             // type (or something like that); e.g. java or MCOS
@@ -858,10 +871,7 @@ public class MatFileReader {
      */
     private String readName(ByteBuffer buf) throws IOException {
         ISMatTag tag = new ISMatTag(buf);
-        char[] ac = tag.readToCharArray();
-        String s = new String(ac);
-
-        return s;
+        return tag.readToString();
     }
     /**
      * Reads MAT-file header.
