@@ -440,17 +440,11 @@ public abstract class MLArray {
      * @throws IOException
      */
     private void writeName(DataOutputStream os) throws IOException {
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        DataOutputStream bufferDOS = new DataOutputStream(buffer);
-
         if (!this.isChild && !VariableUtils.IsVarName(this.name))
             throw new MatlabIOException("Invalid variable name: " + this.name);
 
         byte[] nameByteArray = this.getNameToByteArray();
-        buffer = new ByteArrayOutputStream();
-        bufferDOS = new DataOutputStream(buffer);
-        bufferDOS.write(nameByteArray);
-        OSArrayTag tag = new OSArrayTag(16, buffer.toByteArray());
+        OSArrayTag tag = new OSArrayTag(MatDataTypes.miINT8, nameByteArray);
         tag.writeTo(os);
     }
 

@@ -38,7 +38,7 @@ public class MLSingleTest {
 
     @Test
     public void testReadingNative() throws Exception {
-        // Test reading the MLLogical generated natively by Matlab.
+        // Test reading the MLSingle generated natively by Matlab.
         MatFileReader reader = new MatFileReader();
         MLSingle readArray = (MLSingle)reader.read(new File("test/single.mat")).get("arr");
 
@@ -47,11 +47,11 @@ public class MLSingleTest {
 
     @Test
     public void testReadingAndWriting() throws Exception {
-        // Test writing the MLLogical.
+        // Test writing the MLSingle.
         MatFileWriter writer = new MatFileWriter();
         writer.write("singletmp.mat", Arrays.asList((MLArray)this.array));
 
-        // Test reading the MLLogical.
+        // Test reading the MLSingle.
         MatFileReader reader = new MatFileReader();
         MLSingle readArray = (MLSingle)reader.read(new File("singletmp.mat")).get("arr");
 
