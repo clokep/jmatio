@@ -3,6 +3,7 @@ package com.jmatio.types;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -96,7 +97,11 @@ public class MLStructure extends MLArray {
         int maxLen = 0;
         for (String s : this.keys)
             maxLen = s.length() > maxLen ? s.length() : maxLen;
-        return maxLen+1;
+        return maxLen + 1;
+    }
+
+    public byte[] getMaxFieldLengthToByteArray() {
+        return ByteBuffer.allocate(4).putInt(this.getMaxFieldLength()).array();
     }
 
     /**
@@ -212,12 +217,11 @@ public class MLStructure extends MLArray {
 
     public void writeData(DataOutputStream dos) throws IOException {
         // Field name length.
-        int itag = 4 << 16 | MatDataTypes.miINT32 & 0xffff;
-        dos.writeInt(itag);
-        dos.writeInt(this.getMaxFieldLength());
+        OSArrayTag tag = new OSArrayTag(MatDataTypes.miINT32, this.getMaxFieldLengthToByteArray());
+        tag.writeTo(dos);
 
         // Get field names.
-        OSArrayTag tag = new OSArrayTag(MatDataTypes.miINT8, this.getKeySetToByteArray());
+        tag = new OSArrayTag(MatDataTypes.miINT8, this.getKeySetToByteArray());
         tag.writeTo(dos);
 
         // Don't check the name for fields

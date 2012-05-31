@@ -567,10 +567,10 @@ public class MatFileReader {
         if (type == MLArray.mxSTRUCT_CLASS) {
             MLStructure struct = new MLStructure(name, dims, type, attributes);
 
-            // Field name length - this subelement always uses the compressed data element format.
+            // Maximum field name length. This subelement always uses the compressed
+            // data element format when created by Matlab.
             tag = new ISMatTag(buf);
-            // Maximum field length
-            int maxlen = buf.getInt();
+            int maxlen = tag.readToIntArray()[0];
 
             // Read fields data as Int8.
             tag = new ISMatTag(buf);
