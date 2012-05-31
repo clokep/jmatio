@@ -19,7 +19,7 @@ public class OSArrayTag extends MatTag {
      * @param data
      */
     public OSArrayTag(int type, byte[] data) {
-        this (type, ByteBuffer.wrap(data));
+        this(type, ByteBuffer.wrap(data));
     }
 
     /**

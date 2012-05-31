@@ -4,7 +4,7 @@ import com.jmatio.common.MatDataTypes;
 
 /**
  *
- * @author Wojciech Gradkowski (<a href="mailto:wgradkowski@gmail.com">wgradkowski@gmail.com</a>)
+ * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
 class MatTag {
     protected int type;

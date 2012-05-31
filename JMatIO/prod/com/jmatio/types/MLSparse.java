@@ -15,6 +15,8 @@ import com.jmatio.io.OSArrayTag;
 public class MLSparse extends MLNumericArray<Double> {
     int nzmax;
     private SortedSet<IndexMN> indexSet;
+    // XXX Sparse can have other data types according to the spec, but Matlab
+    // doesn't allow it.
     private SortedMap<IndexMN, Double> real;
     private SortedMap<IndexMN, Double> imaginary;
 

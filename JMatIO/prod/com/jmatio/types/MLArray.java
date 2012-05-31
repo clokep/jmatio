@@ -387,7 +387,7 @@ public abstract class MLArray {
         // Write the actual data.
         this.writeData(dos);
 
-        // Write atrix tag.
+        // Write matrix tag.
         output.writeInt(MatDataTypes.miMATRIX);
         // Write size of matrix.
         output.writeInt(baos.size());
@@ -426,10 +426,10 @@ public abstract class MLArray {
         DataOutputStream bufferDOS = new DataOutputStream(buffer);
 
         int[] dims = this.getDimensions();
-        for ( int i = 0; i < dims.length; i++ )
+        for (int i = 0; i < dims.length; ++i)
             bufferDOS.writeInt(dims[i]);
-        OSArrayTag tag = new OSArrayTag(MatDataTypes.miUINT32, buffer.toByteArray() );
-        tag.writeTo( os );
+        OSArrayTag tag = new OSArrayTag(MatDataTypes.miUINT32, buffer.toByteArray());
+        tag.writeTo(os);
 
     }
 
