@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import junit.framework.JUnit4TestAdapter;
@@ -23,10 +22,6 @@ import com.jmatio.types.MLUInt8;
  * @author Patrick Cloke <pcloke@mitre.org>
  */
 public class MLUInt8Test {
-    public static junit.framework.Test suite() {
-        return new JUnit4TestAdapter(MLUInt8Test.class);
-    }
-
     @Test
     public void testObject() throws Exception {
         byte[] bytes = new byte[] {0, 1, 2, 3};
@@ -84,85 +79,69 @@ public class MLUInt8Test {
         // Array name
         String name = "arr";
         // File name in which array will be stored.
-        String fileName = "mluint8tst.mat";
+        String fileName = "uint8tmp.mat";
 
-        //test column-packed vector
+        // Test column-packed vector
         byte[] src = new byte[] {1, 2, 3, 4, 5, 6};
-        //test 2D array coresponding to test vector
-        byte[][] src2D = new byte[][] {{ 1, 4 },
-                                       { 2, 5 },
-                                       { 3, 6 }};
-
-        //create 3x2 double matrix
-        // [1.0 4.0;
-        //  2.0 5.0;
-        //  3.0 6.0]
+        // Create 3x2 uint8 matrix
+        // [1, 4;
+        //  2, 5;
+        //  3, 6]
         MLUInt8 mluint8 = new MLUInt8(name, src, 3);
 
-        //write array to file
-        ArrayList<MLArray> list = new ArrayList<MLArray>();
-        list.add( mluint8 );
+        // Test 2D array coresponding to test vector
+        byte[][] src2D = new byte[][]{{1, 4},
+                                      {2, 5},
+                                      {3, 6}};
+        // Test 2D constructor.
+        MLArray mluint82D = new MLUInt8(name, src2D);
 
-        //write arrays to file
-        new MatFileWriter(fileName, list);
+        // Compare it with the original.
+        assertEquals("Test if byte[][] constructor produces the same matrix as byte[].", mluint8, mluint82D);
 
-        //read array form file
+        // Write array to file.
+        new MatFileWriter(fileName, Arrays.asList((MLArray)mluint8));
+
+        // Read array from file.
         MatFileReader mfr = new MatFileReader(fileName);
-        MLArray mlArrayRetrived = mfr.getMLArray(name);
+        MLUInt8 mlArrayRetrived = (MLUInt8)mfr.getMLArray(name);
 
-        //test if MLArray objects are equal
+        // Test if MLArray objects are equal
         assertEquals("Test if value red from file equals value stored", mluint8, mlArrayRetrived);
 
-        //test if 2D array match
+        // Test if 2D array match
         for (int i = 0; i < src2D.length; ++i) {
-            boolean result = Arrays.equals(src2D[i], ((MLUInt8)mlArrayRetrived).getArray()[i]);
+            boolean result = Arrays.equals(src2D[i], mlArrayRetrived.getArray()[i]);
             assertEquals("2D array match", true, result);
         }
-
-        //test new constructor
-        MLArray mlMLUInt82D = new MLUInt8(name, src2D);
-        //compare it with original
-        assertEquals("Test if double[][] constructor produces the same matrix as normal one", mlMLUInt82D, mluint8);
     }
 
     @Test
     public void testUInt8() throws Exception {
         String fileName = "test/uint8.mat";
         String arrName = "arr";
-        MatFileReader mfr;
-        MLArray src;
 
-        //read array form file
-        mfr = new MatFileReader( fileName );
-        assertEquals("Test min. value from file:" + fileName + " array: " + arrName,
-                     (byte)0,
-                     (byte)((MLUInt8)mfr.getMLArray( arrName )).get(0,0) );
+        // Read array from file.
+        MatFileReader mfr = new MatFileReader(fileName);
+        MLUInt8 src = (MLUInt8)mfr.getMLArray(arrName);
+        assertEquals("Test min. value from file: " + fileName + " array: " + arrName + ".",
+                     (byte)0, (byte)src.get(0));
+        assertEquals("Test max. value from file: " + fileName + " array: " + arrName + ".",
+                     (byte)255, (byte)src.get(1));
 
-        assertEquals("Test max. value from file:" + fileName + " array: " + arrName,
-                (byte)255,
-                (byte)((MLUInt8)mfr.getMLArray( arrName )).get(0,1) );
+        // Write.
+        fileName = "uint8tmp.mat";
+        new MatFileWriter(fileName, Arrays.asList((MLArray)src));
 
-        src = mfr.getMLArray( arrName );
+        // Read again.
+        mfr = new MatFileReader(fileName);
+        MLUInt8 ret = (MLUInt8)mfr.getMLArray(arrName);
+        assertEquals("Test min. value from file: " + fileName + " array: " + arrName + ".",
+                     (byte)0, (byte)ret.get(0));
+        assertEquals("Test max. value from file: " + fileName + " array: " + arrName + ".",
+                     (byte)255, (byte)ret.get(1));
 
-        //write
-        fileName = "uint8out.mat";
-        ArrayList<MLArray> towrite = new ArrayList<MLArray>();
-        towrite.add( mfr.getMLArray( arrName ) );
-        new MatFileWriter(fileName, towrite );
-
-        //read again
-        mfr = new MatFileReader( fileName );
-        assertEquals("Test min. value from file:" + fileName + " array: " + arrName,
-                     (byte)0,
-                     (byte)((MLUInt8)mfr.getMLArray( arrName )).get(0,0) );
-
-        assertEquals("Test max. value from file:" + fileName + " array: " + arrName,
-                (byte)255,
-                (byte)((MLUInt8)mfr.getMLArray( arrName )).get(0,1) );
-
-
-        assertEquals("Test if array retrieved from " + fileName + " equals source array",
-                src,
-                mfr.getMLArray( arrName ) );
+        assertEquals("Test if array retrieved from " + fileName + " equals source array.",
+                     src, ret);
     }
 }

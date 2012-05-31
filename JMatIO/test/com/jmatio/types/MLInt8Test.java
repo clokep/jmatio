@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 import junit.framework.JUnit4TestAdapter;
 
@@ -23,41 +23,30 @@ public class MLInt8Test {
     public void testInt8() throws Exception {
         String fileName = "test/int8.mat";
         String arrName = "arr";
-        MatFileReader mfr;
-        MLArray src;
 
-        //read array form file
-        mfr = new MatFileReader( fileName );
+        // Read the Matlab created array from file.
+        MatFileReader mfr = new MatFileReader(fileName);
+        MLInt8 src = (MLInt8)mfr.getMLArray("arr");
 
-        assertEquals("Test min. value from file:" + fileName + " array: " + arrName,
-                     (byte)-128,
-                     (byte)((MLInt8)mfr.getMLArray( "arr" )).get(0,0) );
+        // Check the values are as expected.
+        assertEquals("Test min. value from file: " + fileName + " array: " + arrName + ".",
+                     (byte)-128, (byte)src.get(0));
+        assertEquals("Test max. value from file: " + fileName + " array: " + arrName + ".",
+                     (byte)127, (byte)src.get(1));
 
-        assertEquals("Test max. value from file:" + fileName + " array: " + arrName,
-                (byte)127,
-                (byte) ((MLInt8)mfr.getMLArray( "arr" )).get(0,1) );
+        // Write the array back out.
+        fileName = "int8tmp.mat";
+        new MatFileWriter(fileName, Arrays.asList((MLArray)src));
 
-        src = mfr.getMLArray( "arr" );
+        // Read the written array back in again.
+        mfr = new MatFileReader(fileName);
+        MLInt8 ret = (MLInt8)mfr.getMLArray(arrName);
+        assertEquals("Test min. value from file: " + fileName + " array: " + arrName + ".",
+                     (byte)-128, (byte)ret.get(0));
+        assertEquals("Test max. value from file: " + fileName + " array: " + arrName + ".",
+                     (byte)127, (byte)ret.get(1));
 
-        //write
-        fileName = "int8out.mat";
-        ArrayList<MLArray> towrite = new ArrayList<MLArray>();
-        towrite.add( mfr.getMLArray( arrName ) );
-        new MatFileWriter(fileName, towrite );
-
-        //read again
-        mfr = new MatFileReader( fileName );
-        assertEquals("Test min. value from file:" + fileName + " array: " + arrName,
-                     (byte)-128,
-                     (byte)((MLInt8)mfr.getMLArray( arrName )).get(0,0) );
-
-        assertEquals("Test max. value from file:" + fileName + " array: " + arrName,
-                (byte)127,
-                (byte)((MLInt8)mfr.getMLArray( arrName )).get(0,1) );
-
-
-        assertEquals("Test if array retrieved from " + fileName + " equals source array",
-                src,
-                mfr.getMLArray( arrName ) );
+        assertEquals("Test that array retrieved from " + fileName + " equals source array.",
+                     src, ret);
     }
 }
