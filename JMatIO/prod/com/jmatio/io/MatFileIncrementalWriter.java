@@ -118,7 +118,7 @@ public class MatFileIncrementalWriter extends MatFileWriter {
 
             // Write COMPRESSED tag and compressed data into output channel.
             byte[] compressedBytes = compressed.toByteArray();
-            OSArrayTag tag = new OSArrayTag(MatDataTypes.miCOMPRESSED, compressedBytes);
+            OSMatTag tag = new OSMatTag(MatDataTypes.miCOMPRESSED, compressedBytes);
             tag.writeTo(this.fos);
         } catch (IOException e) {
             throw e;

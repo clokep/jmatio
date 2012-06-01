@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-import com.jmatio.io.OSArrayTag;
+import com.jmatio.io.OSMatTag;
 import com.jmatio.common.MatDataTypes;
 import com.jmatio.types.MLEmptyArray;
 

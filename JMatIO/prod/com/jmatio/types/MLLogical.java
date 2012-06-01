@@ -5,7 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
-import com.jmatio.io.OSArrayTag;
+import com.jmatio.io.OSMatTag;
 import com.jmatio.common.MatDataTypes;
 
 /**
@@ -144,7 +144,7 @@ public class MLLogical extends MLArray {
         for (int i = 0; i < this.bools.length; ++i)
             bufferDOS.writeByte(this.bools[i] ? 1 : 0);
 
-        OSArrayTag tag = new OSArrayTag(MatDataTypes.miUINT8, buffer.toByteArray());
+        OSMatTag tag = new OSMatTag(MatDataTypes.miUINT8, buffer.toByteArray());
         tag.writeTo(dos);
     }
 }

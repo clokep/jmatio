@@ -4,7 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.jmatio.io.OSArrayTag;
+import com.jmatio.io.OSMatTag;
 import com.jmatio.io.MatlabIOException;
 
 public class MLCell extends MLArray {

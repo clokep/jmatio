@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.jmatio.common.MatDataTypes;
-import com.jmatio.io.OSArrayTag;
+import com.jmatio.io.OSMatTag;
 
 /**
  * This class represents Matlab's Structure object (structure array).
@@ -233,11 +233,11 @@ public class MLStructure extends MLArray {
 
     public void writeData(DataOutputStream dos) throws IOException {
         // Field name length.
-        OSArrayTag tag = new OSArrayTag(MatDataTypes.miINT32, this.getMaxFieldLengthToByteArray());
+        OSMatTag tag = new OSMatTag(MatDataTypes.miINT32, this.getMaxFieldLengthToByteArray());
         tag.writeTo(dos);
 
         // Get field names.
-        tag = new OSArrayTag(MatDataTypes.miINT8, this.getKeySetToByteArray());
+        tag = new OSMatTag(MatDataTypes.miINT8, this.getKeySetToByteArray());
         tag.writeTo(dos);
 
         // Don't check the name for fields

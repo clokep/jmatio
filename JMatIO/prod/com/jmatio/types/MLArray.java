@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 
 import com.jmatio.common.MatDataTypes;
 import com.jmatio.extra.VariableUtils;
-import com.jmatio.io.OSArrayTag;
+import com.jmatio.io.OSMatTag;
 import com.jmatio.io.MatlabIOException;
 
 public abstract class MLArray {
@@ -407,7 +407,7 @@ public abstract class MLArray {
             buffer.putInt(((MLSparse)this).getMaxNZ());
         else
             buffer.putInt(0);
-        OSArrayTag tag = new OSArrayTag(MatDataTypes.miUINT32, buffer);
+        OSMatTag tag = new OSMatTag(MatDataTypes.miUINT32, buffer);
         tag.writeTo(os);
     }
 
@@ -423,7 +423,7 @@ public abstract class MLArray {
 
         for (int i = 0; i < dims.length; ++i)
             buffer.putInt(dims[i]);
-        OSArrayTag tag = new OSArrayTag(MatDataTypes.miINT32, buffer);
+        OSMatTag tag = new OSMatTag(MatDataTypes.miINT32, buffer);
         tag.writeTo(os);
     }
 
@@ -438,7 +438,7 @@ public abstract class MLArray {
             throw new MatlabIOException("Invalid variable name: " + this.name);
 
         byte[] nameByteArray = this.getNameToByteArray();
-        OSArrayTag tag = new OSArrayTag(MatDataTypes.miINT8, nameByteArray);
+        OSMatTag tag = new OSMatTag(MatDataTypes.miINT8, nameByteArray);
         tag.writeTo(os);
     }
 

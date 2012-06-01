@@ -11,14 +11,14 @@ import com.jmatio.common.MatDataTypes;
  * Output stream array tag, a tiny class that represents MAT-file TAG.
  * It simplifies writing data. Automates writing padding for instance.
  */
-public class OSArrayTag extends MatTag {
+public class OSMatTag extends MatTag {
     /**
      * Creates TAG and sets its <code>size</code> as size of byte array
      *
      * @param type
      * @param data
      */
-    public OSArrayTag(int type, byte[] data) {
+    public OSMatTag(int type, byte[] data) {
         this(type, ByteBuffer.wrap(data));
     }
 
@@ -28,7 +28,7 @@ public class OSArrayTag extends MatTag {
      * @param type
      * @param data
      */
-    public OSArrayTag(int type, ByteBuffer data) {
+    public OSMatTag(int type, ByteBuffer data) {
         super(data);
 
         this.type = type;

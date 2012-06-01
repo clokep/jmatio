@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import com.jmatio.common.MatDataTypes;
-import com.jmatio.io.OSArrayTag;
+import com.jmatio.io.OSMatTag;
 
 /**
  * This class represents a Matlab object (structure array).
@@ -81,7 +81,7 @@ public class MLObject extends MLStructure {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         DataOutputStream bufferDOS = new DataOutputStream(buffer);
         bufferDOS.write(nameByteArray);
-        OSArrayTag tag = new OSArrayTag(MatDataTypes.miINT8, buffer.toByteArray());
+        OSMatTag tag = new OSMatTag(MatDataTypes.miINT8, buffer.toByteArray());
         tag.writeTo(dos);
 
         super.writeData(dos);

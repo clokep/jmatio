@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import com.jmatio.common.MatDataTypes;
-import com.jmatio.io.OSArrayTag;
+import com.jmatio.io.OSMatTag;
 
 /**
  * Abstract class for numeric arrays.
@@ -357,12 +357,12 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
 
 
         // Write real part.
-        OSArrayTag tag = new OSArrayTag(type, this.getRealByteBuffer());
+        OSMatTag tag = new OSMatTag(type, this.getRealByteBuffer());
         tag.writeTo(dos);
 
         // Write imaginary part.
         if (this.isComplex()) {
-            tag = new OSArrayTag(type, this.getImaginaryByteBuffer());
+            tag = new OSMatTag(type, this.getImaginaryByteBuffer());
             tag.writeTo(dos);
         }
     }
