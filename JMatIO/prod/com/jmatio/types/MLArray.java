@@ -423,7 +423,7 @@ public abstract class MLArray {
 
         for (int i = 0; i < dims.length; ++i)
             buffer.putInt(dims[i]);
-        OSArrayTag tag = new OSArrayTag(MatDataTypes.miUINT32, buffer);
+        OSArrayTag tag = new OSArrayTag(MatDataTypes.miINT32, buffer);
         tag.writeTo(os);
     }
 
