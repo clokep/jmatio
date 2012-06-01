@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.WritableByteChannel;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
@@ -83,18 +82,7 @@ public class MatFileIncrementalWriter extends MatFileWriter {
      * @throws DataFormatException
      */
     public MatFileIncrementalWriter(File file) throws IOException {
-        this((new FileOutputStream(file)).getChannel());
-    }
-    /**
-     * Creates a writer for a file, given an output channel to the file..
-     *
-     * Writes MAT-file header and compressed data (<code>miCOMPRESSED</code>).
-     *
-     * @param chan <code>WritableByteChannel</code>
-     * @throws IOException
-     */
-    public MatFileIncrementalWriter(WritableByteChannel chan) throws IOException {
-        this.channel = chan;
+        this.fos = new FileOutputStream(file);
         this.isStillValid = true;
     }
 
@@ -128,15 +116,16 @@ public class MatFileIncrementalWriter extends MatFileWriter {
             dout.close();
             compressed.close();
 
-            //write COMPRESSED tag and compressed data into output channel.
+            // Write COMPRESSED tag and compressed data into output channel.
             byte[] compressedBytes = compressed.toByteArray();
-            ByteBuffer buf = ByteBuffer.allocateDirect(2 * 4 /* Int size */ + compressedBytes.length);
+            ByteBuffer buf = ByteBuffer.allocate(2 * 4 /* Int size */ + compressedBytes.length);
             buf.putInt(MatDataTypes.miCOMPRESSED);
             buf.putInt(compressedBytes.length);
             buf.put(compressedBytes);
 
-            buf.flip();
-            this.channel.write(buf);
+            buf.rewind();
+            System.out.println(buf.remaining());
+            this.fos.write(buf.array(), 0, buf.remaining());
         } catch (IOException e) {
             throw e;
         } finally { }
@@ -164,6 +153,6 @@ public class MatFileIncrementalWriter extends MatFileWriter {
     }
 
     public synchronized void close() throws IOException {
-        this.channel.close();
+        this.fos.close();
     }
 }

@@ -279,7 +279,7 @@ public class MatFileReader {
             this.readHeader(buf);
 
             while (buf.remaining() > 0)
-                readData(buf);
+                this.readData(buf);
 
             return getContent();
         } catch (IOException e) {

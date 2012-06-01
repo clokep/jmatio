@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.WritableByteChannel;
 import java.util.Collection;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
@@ -50,7 +49,7 @@ import com.jmatio.types.MLStructure;
  * @author Wojciech Gradkowski (<a href="mailto:wgradkowski@gmail.com">wgradkowski@gmail.com</a>)
  */
 public class MatFileWriter {
-    protected WritableByteChannel channel = null;
+    protected FileOutputStream fos;
 
     /**
      * Creates the new <code>{@link MatFileWriter}</code> instance
@@ -80,21 +79,7 @@ public class MatFileWriter {
      * @throws DataFormatException
      */
     public MatFileWriter(File file, Collection<MLArray> data) throws IOException {
-        this((new FileOutputStream(file)).getChannel(), data);
-    }
-
-    /**
-     * Writes MLArrays into <code>OuputSteram</code>.
-     *
-     * Writes MAT-file header and compressed data (<code>miCOMPRESSED</code>).
-     *
-     * @param channel <code>OutputStream</code>
-     * @param data <code>Collection</code> of <code>MLArray</code> elements
-     * @throws IOException
-     */
-    public MatFileWriter(WritableByteChannel channel, Collection<MLArray> data) throws IOException {
-        this.channel = channel;
-        this.write(data);
+        this.write(file, data);
     }
 
     /**
@@ -123,8 +108,7 @@ public class MatFileWriter {
      *             if error occurred during MAT-file writing
      */
     public synchronized void write(File file, Collection<MLArray> data) throws IOException {
-        FileOutputStream fos = new FileOutputStream(file);
-        this.channel = fos.getChannel();
+        this.fos = new FileOutputStream(file);
         this.write(data);
     }
 
@@ -166,18 +150,19 @@ public class MatFileWriter {
 
                 // Write COMPRESSED tag and compressed data into output channel.
                 byte[] compressedBytes = compressed.toByteArray();
-                ByteBuffer buf = ByteBuffer.allocateDirect(2 * 4 /* Int size */ + compressedBytes.length);
+                ByteBuffer buf = ByteBuffer.allocate(2 * 4 /* Int size */ + compressedBytes.length);
                 buf.putInt(MatDataTypes.miCOMPRESSED);
                 buf.putInt(compressedBytes.length);
                 buf.put(compressedBytes);
 
-                buf.flip();
-                this.channel.write(buf);
+                buf.rewind();
+                System.out.println(buf.remaining());
+                this.fos.write(buf.array(), 0, buf.remaining());
             }
         } catch (IOException e) {
             throw e;
         } finally {
-            this.channel.close();
+            this.fos.close();
         }
     }
 
@@ -186,29 +171,31 @@ public class MatFileWriter {
      * @throws IOException
      */
     protected void writeHeader() throws IOException {
-        // Write descriptive text.
+        DataOutputStream dos = new DataOutputStream(this.fos);
+
         MatFileHeader header = MatFileHeader.createHeader();
-        char[] dest = new char[116];
-        char[] src = header.getDescription().toCharArray();
-        System.arraycopy(src, 0, dest, 0, src.length);
 
-        byte[] endianIndicator = header.getEndianIndicator();
+        // Write descriptive text.
+        char[] description = header.getDescription().toCharArray();
+        // The maximum length for the description is 116 characters.
+        int maxLength = 116;
+        int length = description.length;
+        length = length > maxLength ? maxLength : length;
 
-        ByteBuffer buf = ByteBuffer.allocateDirect(dest.length * 2 /* Char size */ + 2 + endianIndicator.length);
+        for (int i = 0; i < length; ++i)
+            dos.write((byte)description[i]);
 
-        for (int i = 0; i < dest.length; ++i)
-            buf.put((byte)dest[i]);
-        // Write subsyst data offset.
-        buf.position(buf.position() + 8);
+        // Write description padding.
+        int padding = maxLength - length;
+        dos.write(new byte[padding], 0, padding);
 
-        // Write version.
-        int version = header.getVersion();
-        buf.put((byte)(version >> 8));
-        buf.put((byte)version);
+        // Write subsys data offset (8-bytes).
+        dos.writeLong(0);
 
-        buf.put(endianIndicator);
+        // Write version (2-bytes).
+        dos.writeShort(header.getVersion());
 
-        buf.flip();
-        this.channel.write(buf);
+        // Write the endian indicator (2-bytes).
+        dos.write(header.getEndianIndicator(), 0, 2);
     }
 }

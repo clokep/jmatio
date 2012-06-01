@@ -1,6 +1,7 @@
 package com.jmatio.io;
 
 import java.io.DataOutputStream;
+import java.io.OutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
@@ -45,7 +46,8 @@ public class OSArrayTag extends MatTag {
      * @param os
      * @throws IOException
      */
-    public void writeTo(DataOutputStream os) throws IOException {
+    public void writeTo(OutputStream os) throws IOException {
+        DataOutputStream dos = new DataOutputStream(os);
         // Small data element format. If the element takes up only 1 - 4 bytes,
         // the data is stored in a special 8-byte format, the number of bytes
         // stored as a 2-byte value, the data type is stored as a 2-byte value
@@ -53,16 +55,16 @@ public class OSArrayTag extends MatTag {
         if (this.compressed) {
             //os.writeShort(this.size);
             //os.writeShort(this.type);
-            os.writeInt(this.size << 16 | this.type);
+            dos.writeInt(this.size << 16 | this.type);
         } else {
             // Write the type and size.
-            os.writeInt(this.type);
-            os.writeInt(this.size);
+            dos.writeInt(this.type);
+            dos.writeInt(this.size);
         }
         // Write all the data (or up to the maximum size) to the output stream.
-        os.write(this.data.array(), 0, this.data.remaining());
+        dos.write(this.data.array(), 0, this.data.remaining());
 
         if (this.padding > 0)
-            os.write(new byte[this.padding]);
+            dos.write(new byte[this.padding]);
     }
 }
