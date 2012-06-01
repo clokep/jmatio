@@ -150,14 +150,8 @@ public class MatFileWriter {
 
                 // Write COMPRESSED tag and compressed data into output channel.
                 byte[] compressedBytes = compressed.toByteArray();
-                ByteBuffer buf = ByteBuffer.allocate(2 * 4 /* Int size */ + compressedBytes.length);
-                buf.putInt(MatDataTypes.miCOMPRESSED);
-                buf.putInt(compressedBytes.length);
-                buf.put(compressedBytes);
-
-                buf.rewind();
-                System.out.println(buf.remaining());
-                this.fos.write(buf.array(), 0, buf.remaining());
+                OSArrayTag tag = new OSArrayTag(MatDataTypes.miCOMPRESSED, compressedBytes);
+                tag.writeTo(this.fos);
             }
         } catch (IOException e) {
             throw e;

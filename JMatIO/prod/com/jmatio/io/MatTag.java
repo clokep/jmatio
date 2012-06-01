@@ -10,11 +10,11 @@ import com.jmatio.common.MatDataTypes;
  */
 public abstract class MatTag {
     /**
-     * The data type, {@see MatDataTypes}.
+     * The data type, see <code>MatDataTypes</code>.
      */
     protected int type;
     /**
-     * The number of bytes of data in the tag.
+     * The number of bytes of data in the tag (including any padding).
      */
     protected int size;
     /**
@@ -22,7 +22,7 @@ public abstract class MatTag {
      */
     protected boolean compressed;
     /**
-     * The number of bytes of padding.
+     * The number of bytes of padding (note that this is unused for <code>type</type> of <code>MatDataTypes.miCOMPRESSED</code>.
      */
     protected int padding;
 

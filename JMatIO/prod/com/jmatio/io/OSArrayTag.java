@@ -5,6 +5,8 @@ import java.io.OutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import com.jmatio.common.MatDataTypes;
+
 /**
  * Output stream array tag, a tiny class that represents MAT-file TAG.
  * It simplifies writing data. Automates writing padding for instance.
@@ -61,10 +63,12 @@ public class OSArrayTag extends MatTag {
             dos.writeInt(this.type);
             dos.writeInt(this.size);
         }
+
         // Write all the data (or up to the maximum size) to the output stream.
         dos.write(this.data.array(), 0, this.data.remaining());
 
-        if (this.padding > 0)
+        // Padding is only written for uncompressed data.
+        if (this.padding > 0 && this.type != MatDataTypes.miCOMPRESSED)
             dos.write(new byte[this.padding]);
     }
 }
