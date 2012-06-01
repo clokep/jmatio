@@ -101,7 +101,11 @@
     <target name="compile-test" depends="compile" description="--> Compiles test folder">
         <mkdir dir="${build.test.bin}"/>
 
-        <javac srcdir="${dev.test}" destdir="${build.test.bin}">
+        <javac srcdir="${dev.test}"
+               destdir="${build.test.bin}"
+               debug="no"
+               includeantruntime="no"
+               target="1.5" >
             <classpath>
                 <pathelement path="${build.bin}"/>
                 <fileset dir="${basedir}/lib" includes="*.jar"/>
