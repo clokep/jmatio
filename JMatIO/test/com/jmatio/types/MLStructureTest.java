@@ -94,17 +94,34 @@ public class MLStructureTest {
     public void testStructureFromMatlabCreatedFile() throws IOException {
         //array name
         File file = new File("test/simplestruct.mat");
-        MatFileReader reader = new MatFileReader( file );
-        MLArray mlArray = reader.getMLArray( "structure" );
+        MatFileReader reader = new MatFileReader(file);
+        MLArray mlArray = reader.getMLArray("structure");
 
-        List<MLArray> towrite =  Arrays.asList( mlArray );
+        List<MLArray> towrite =  Arrays.asList(mlArray);
 
-        new MatFileWriter( "simplestructcopy.mat", towrite );
+        new MatFileWriter("simplestructtmp.mat", towrite);
 
-        reader = new MatFileReader("simplestructcopy.mat");
-        MLArray mlArrayRetrieved = reader.getMLArray( "structure" );
+        reader = new MatFileReader("simplestructtmp.mat");
+        MLArray mlArrayRetrieved = reader.getMLArray("structure");
 
         assertEquals(mlArray, mlArrayRetrieved);
     }
 
+    @Test
+    public void testCellFromMatlabCreatedFile() throws IOException {
+        //array name
+        File file = new File("test/complexstruct.mat");
+        MatFileReader reader = new MatFileReader(file);
+        MLArray mlArray = reader.getMLArray("cel");
+
+        List<MLArray> towrite =  Arrays.asList(mlArray);
+
+        MatFileWriter  writer = new MatFileWriter("complexstructtmp.mat", towrite);
+
+        reader = new MatFileReader("complexstructtmp.mat");
+        MLArray mlArrayRetrieved = reader.getMLArray("cel");
+
+        // XXX Enable this.
+        //assertEquals(mlArray, mlArrayRetrieved);
+    }
 }

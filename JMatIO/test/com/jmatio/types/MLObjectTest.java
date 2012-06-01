@@ -41,5 +41,4 @@ public class MLObjectTest {
 
         assertEquals(mlArray, mlArrayRetrieved);
     }
-
 }

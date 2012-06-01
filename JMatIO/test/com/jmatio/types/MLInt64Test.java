@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 import junit.framework.JUnit4TestAdapter;
 
@@ -23,44 +23,32 @@ public class MLInt64Test {
     public void testInt64() throws Exception {
         String fileName = "test/int64.mat";
         String arrName = "arr";
-        MatFileReader mfr;
-        MLArray src;
 
         Long max = Long.parseLong("9223372036854775807");
         Long min = Long.parseLong("-9223372036854775808");
 
-        //read array form file
+        // Read array from file.
+        MatFileReader mfr = new MatFileReader(fileName);
+        MLInt64 src = (MLInt64)mfr.getMLArray(arrName);
+
+        assertEquals("Test min. value from file: " + fileName + " array: " + arrName + ".",
+                     min, src.get(0, 0));
+        assertEquals("Test max. value from file: " + fileName + " array: " + arrName + ".",
+                     max, src.get(0, 1));
+
+        // Write.
+        fileName = "int64tmp.mat";
+        new MatFileWriter(fileName, Arrays.asList((MLArray)src));
+
+        // Read again.
         mfr = new MatFileReader( fileName );
+        MLInt64 dst = (MLInt64)mfr.getMLArray(arrName);
+        assertEquals("Test min. value from file: " + fileName + " array: " + arrName + ".",
+                     min, src.get(0, 0));
+        assertEquals("Test max. value from file: " + fileName + " array: " + arrName + ".",
+                     max, src.get(0, 1));
 
-        assertEquals("Test min. value from file:" + fileName + " array: " + arrName,
-                     min,
-                     ((MLInt64)mfr.getMLArray( "arr" )).get(0,0) );
-
-        assertEquals("Test max. value from file:" + fileName + " array: " + arrName,
-                    max,
-                    ((MLInt64)mfr.getMLArray( "arr" )).get(0,1) );
-
-        src = mfr.getMLArray( "arr" );
-
-        //write
-        fileName = "int64out.mat";
-        ArrayList<MLArray> towrite = new ArrayList<MLArray>();
-        towrite.add( mfr.getMLArray( arrName ) );
-        new MatFileWriter(fileName, towrite );
-
-        //read again
-        mfr = new MatFileReader( fileName );
-        assertEquals("Test min. value from file:" + fileName + " array: " + arrName,
-                     min,
-                     ((MLInt64)mfr.getMLArray( arrName )).get(0,0) );
-
-        assertEquals("Test max. value from file:" + fileName + " array: " + arrName,
-                    max,
-                    ((MLInt64)mfr.getMLArray( arrName )).get(0,1) );
-
-
-        assertEquals("Test if array retrieved from " + fileName + " equals source array",
-                src,
-                mfr.getMLArray( arrName ) );
+        assertEquals("Test if array retrieved from " + fileName + " equals source array.",
+                     src, dst);
     }
 }

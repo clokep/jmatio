@@ -65,22 +65,4 @@ public class MLCellTest {
         assertEquals(mlDouble, mlArrayRetrived.get(1) );
         assertEquals(mlChar, mlArrayRetrived.get(0) );
     }
-
-    @Test
-    public void testCellFromMatlabCreatedFile() throws IOException {
-        //array name
-        File file = new File("test/cell.mat");
-        MatFileReader reader = new MatFileReader(file);
-        MLArray mlArray = reader.getMLArray("cel");
-
-        List<MLArray> towrite =  Arrays.asList(mlArray);
-
-        MatFileWriter  writer = new MatFileWriter("celltmp.mat", towrite);
-
-        reader = new MatFileReader("celltmp.mat");
-        MLArray mlArrayRetrieved = reader.getMLArray("cel");
-
-        // XXX Enable this.
-        //assertEquals(mlArray, mlArrayRetrieved);
-    }
 }

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 import junit.framework.JUnit4TestAdapter;
 
@@ -24,29 +24,23 @@ public class MLInt16Test {
         String fileName = "test/int16.mat";
         String arrName = "arr";
         MatFileReader mfr;
-        MLArray src;
 
-        //read array form file
-        mfr = new MatFileReader( fileName );
+        // Read array from file.
+        mfr = new MatFileReader(fileName);
+        MLInt16 src = (MLInt16)mfr.getMLArray(arrName);
 
         assertEquals("Test min. value from file:" + fileName + " array: " + arrName,
-                     (short)-32768,
-                     (short)((MLInt16)mfr.getMLArray("arr")).get(0,0));
+                     (short)-32768, (short)src.get(0, 0));
 
         assertEquals("Test max. value from file:" + fileName + " array: " + arrName,
-                (short)32767,
-                (short)((MLInt16)mfr.getMLArray("arr")).get(0,1));
+                     (short)32767, (short)src.get(0, 1));
 
-        src = mfr.getMLArray( "arr" );
+        // Write.
+        fileName = "int16tmp.mat";
+        new MatFileWriter(fileName, Arrays.asList((MLArray)src));
 
-        //write
-        fileName = "int16out.mat";
-        ArrayList<MLArray> towrite = new ArrayList<MLArray>();
-        towrite.add( mfr.getMLArray( arrName ) );
-        new MatFileWriter(fileName, towrite );
-
-        //read again
-        mfr = new MatFileReader( fileName );
+        // Read again.
+        mfr = new MatFileReader(fileName);
         assertEquals("Test min. value from file:" + fileName + " array: " + arrName,
                      (short)-32768,
                      (short)((MLInt16)mfr.getMLArray( arrName )).get(0,0) );
