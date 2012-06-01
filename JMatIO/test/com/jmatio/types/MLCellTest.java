@@ -70,16 +70,17 @@ public class MLCellTest {
     public void testCellFromMatlabCreatedFile() throws IOException {
         //array name
         File file = new File("test/cell.mat");
-        MatFileReader reader = new MatFileReader( file );
-        MLArray mlArray = reader.getMLArray( "cel" );
+        MatFileReader reader = new MatFileReader(file);
+        MLArray mlArray = reader.getMLArray("cel");
 
-        List<MLArray> towrite =  Arrays.asList( mlArray );
+        List<MLArray> towrite =  Arrays.asList(mlArray);
 
-        MatFileWriter  writer = new MatFileWriter( "cellcopy.mat", towrite );
+        MatFileWriter  writer = new MatFileWriter("celltmp.mat", towrite);
 
-        reader = new MatFileReader("cellcopy.mat");
-        MLArray mlArrayRetrieved = reader.getMLArray( "cel" );
+        reader = new MatFileReader("celltmp.mat");
+        MLArray mlArrayRetrieved = reader.getMLArray("cel");
 
-        //assertEquals( ((MLCell)mlArray).get(0), ((MLCell)mlArrayRetrieved).get(0));
+        // XXX Enable this.
+        //assertEquals(mlArray, mlArrayRetrieved);
     }
 }
