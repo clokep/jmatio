@@ -9,9 +9,6 @@ import java.nio.ByteBuffer;
  * It simplifies writing data. Automates writing padding for instance.
  */
 public class OSArrayTag extends MatTag {
-    private ByteBuffer data;
-    private int padding;
-
     /**
      * Creates TAG and sets its <code>size</code> as size of byte array
      *
@@ -29,10 +26,17 @@ public class OSArrayTag extends MatTag {
      * @param data
      */
     public OSArrayTag(int type, ByteBuffer data) {
-        super(type, data.limit());
-        this.data = data;
+        super(data);
+
+        this.type = type;
+        this.size = data.limit();
+        // If the number of bytes is less than 4, we can fit this into a
+        // compressed tag.
+        this.compressed = 1 <= this.size && this.size <= 4;
+
+        this.calculatePadding();
+
         data.rewind();
-        this.padding = this.getPadding(data.limit(), false);
     }
 
     /**
@@ -42,11 +46,19 @@ public class OSArrayTag extends MatTag {
      * @throws IOException
      */
     public void writeTo(DataOutputStream os) throws IOException {
-        // TODO Attempt to compress tags when appropriate.
-        // Write the type and size.
-        os.writeInt(this.type);
-        os.writeInt(this.size);
-
+        // Small data element format. If the element takes up only 1 - 4 bytes,
+        // the data is stored in a special 8-byte format, the number of bytes
+        // stored as a 2-byte value, the data type is stored as a 2-byte value
+        // and the data is stored as the final four-bytes.
+        if (this.compressed) {
+            //os.writeShort(this.size);
+            //os.writeShort(this.type);
+            os.writeInt(this.size << 16 | this.type);
+        } else {
+            // Write the type and size.
+            os.writeInt(this.type);
+            os.writeInt(this.size);
+        }
         // Write all the data (or up to the maximum size) to the output stream.
         os.write(this.data.array(), 0, this.data.remaining());
 

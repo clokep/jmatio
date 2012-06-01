@@ -587,20 +587,18 @@ public class MatFileReader {
 
             // Read fields data as Int8.
             tag = new ISMatTag(buf);
-            // Calculate number of fields
+            // Calculate number of fields.
             int numOfFields = tag.size / maxlen;
 
-            // Padding after field names
-            int padding = (tag.size % 8) != 0 ? 8 - (tag.size % 8) : 0;
-
             String[] fieldNames = new String[numOfFields];
+            byte[] names = new byte[maxlen];
             for (int i = 0; i < numOfFields; ++i) {
-                byte[] names = new byte[maxlen];
                 buf.get(names);
-                fieldNames[i] = zeroEndByteArrayToString(names);
+                fieldNames[i] = this.zeroEndByteArrayToString(names);
             }
-            buf.position(buf.position() + padding);
-            // Read fields
+            buf.position(buf.position() + tag.padding);
+
+            // Read fields.
             for (int index = 0; index < struct.getM() * struct.getN(); ++index) {
                 for (int i = 0; i < numOfFields; ++i) {
                     // Read matrix recursively
@@ -841,8 +839,7 @@ public class MatFileReader {
      */
     private int[] readFlags(ByteBuffer buf) throws IOException {
         ISMatTag tag = new ISMatTag(buf);
-        int[] flags = tag.readToIntArray();
-        return flags;
+        return tag.readToIntArray();
     }
 
     /**
@@ -856,8 +853,7 @@ public class MatFileReader {
      */
     private int[] readDimension(ByteBuffer buf) throws IOException {
         ISMatTag tag = new ISMatTag(buf);
-        int[] dims = tag.readToIntArray();
-        return dims;
+        return tag.readToIntArray();
     }
 
     /**
@@ -886,7 +882,6 @@ public class MatFileReader {
      */
     private void readHeader(ByteBuffer buf) throws IOException {
         // Header values.
-        String description;
         int version;
         byte[] endianIndicator = new byte[2];
 
@@ -894,7 +889,7 @@ public class MatFileReader {
         byte[] descriptionBuffer = new byte[116];
         buf.get(descriptionBuffer);
 
-        description = zeroEndByteArrayToString(descriptionBuffer);
+        String description = this.zeroEndByteArrayToString(descriptionBuffer);
 
         if (!description.matches("MATLAB 5.0 MAT-file.*"))
             throw new MatlabIOException("This is not a valid MATLAB 5.0 MAT-file.");
@@ -921,6 +916,6 @@ public class MatFileReader {
 
         buf.order(byteOrder);
 
-        matFileHeader = new MatFileHeader(description, version, endianIndicator);
+        this.matFileHeader = new MatFileHeader(description, version, endianIndicator);
     }
 }

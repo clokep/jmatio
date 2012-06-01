@@ -13,35 +13,29 @@ import com.jmatio.types.ByteStorageSupport;
  * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
 public class ISMatTag extends MatTag {
-    public ByteBuffer buf;
-    private int padding;
-    private boolean compressed;
+    public ISMatTag(ByteBuffer data) throws IOException {
+        super(data);
 
-    public ISMatTag(ByteBuffer buf) throws IOException {
-        // Must call parent constructor.
-        super(0, 0);
-        this.buf = buf;
-        int tmp = buf.getInt();
+        int tmp = data.getInt();
+        this.compressed = tmp >> 16 != 0;
 
-        if (tmp >> 16 == 0) {
+        if (!this.compressed) {
             // Data not packed in the tag.
             this.type = tmp;
-            this.size = buf.getInt();
-            this.compressed = false;
+            this.size = data.getInt();
         } else {
             // Data _packed_ in the tag (compressed).
             this.size = tmp >> 16; // 2 most significant bytes.
             this.type = tmp & 0xffff; // 2 less significant bytes.
-            this.compressed = true;
         }
 
-        this.padding = this.getPadding(size, compressed);
+        this.calculatePadding();
     }
 
-    public void readToByteBuffer(ByteBuffer buff, ByteStorageSupport<?> storage) throws IOException {
-        MatFileInputStream mfis = new MatFileInputStream(this.buf, this.type);
+    public void readToByteBuffer(ByteBuffer buf, ByteStorageSupport<?> storage) throws IOException {
+        MatFileInputStream mfis = new MatFileInputStream(this.data, this.type);
         int elements = this.getNElements();
-        mfis.readToByteBuffer(buff, elements, storage);
+        mfis.readToByteBuffer(buf, elements, storage);
         this.skipPadding();
     }
 
@@ -50,7 +44,7 @@ public class ISMatTag extends MatTag {
         int elements = this.getNElements();
         byte[] ab = new byte[elements];
 
-        MatFileInputStream mfis = new MatFileInputStream(buf, this.type);
+        MatFileInputStream mfis = new MatFileInputStream(this.data, this.type);
 
         for ( int i = 0; i < elements; i++ )
             ab[i] = mfis.readByte();
@@ -64,7 +58,7 @@ public class ISMatTag extends MatTag {
         int elements = this.getNElements();
         double[] ad = new double[elements];
 
-        MatFileInputStream mfis = new MatFileInputStream(buf, type);
+        MatFileInputStream mfis = new MatFileInputStream(this.data, this.type);
 
         for (int i = 0; i < elements; ++i)
             ad[i] = mfis.readDouble();
@@ -78,7 +72,7 @@ public class ISMatTag extends MatTag {
         int elements = this.getNElements();
         int[] ai = new int[elements];
 
-        MatFileInputStream mfis = new MatFileInputStream(buf, type);
+        MatFileInputStream mfis = new MatFileInputStream(this.data, this.type);
 
         for (int i = 0; i < elements; ++i)
             ai[i] = mfis.readInt();
@@ -92,7 +86,7 @@ public class ISMatTag extends MatTag {
         int elements = this.getNElements();
         char[] ac = new char[elements];
 
-        MatFileInputStream mfis = new MatFileInputStream(buf, type);
+        MatFileInputStream mfis = new MatFileInputStream(this.data, this.type);
 
         for (int i = 0; i < elements; ++i)
             ac[i] = mfis.readChar();
@@ -110,6 +104,6 @@ public class ISMatTag extends MatTag {
      */
     public void skipPadding() {
         if (padding > 0)
-            this.buf.position(this.buf.position() + this.padding);
+            this.data.position(this.data.position() + this.padding);
     }
 }

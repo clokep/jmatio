@@ -1,39 +1,49 @@
 package com.jmatio.io;
 
+import java.nio.ByteBuffer;
+
 import com.jmatio.common.MatDataTypes;
 
 /**
  *
  * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
-class MatTag {
-    protected int type;
-    protected int size;
-
+public abstract class MatTag {
     /**
-     * @param type
-     * @param size
+     * The data type, {@see MatDataTypes}.
      */
-    public MatTag(int type, int size) {
-        this.type = type;
-        this.size = size;
+    protected int type;
+    /**
+     * The number of bytes of data in the tag.
+     */
+    protected int size;
+    /**
+     * Whether the tag uses the small data format.
+     */
+    protected boolean compressed;
+    /**
+     * The number of bytes of padding.
+     */
+    protected int padding;
+
+    protected ByteBuffer data;
+
+    MatTag(ByteBuffer data) {
+        this.data = data;
     }
 
     /**
      * Calculate padding
      */
-    protected int getPadding(int size, boolean compressed) {
-        int padding;
-        // Data not packed in the tag.
-        if (!compressed) {
-            int b = ((size / this.sizeOf()) % (8 / this.sizeOf())) * this.sizeOf();
-            padding = b !=0 ? 8 - b : 0;
+    protected void calculatePadding() {
+        if (!this.compressed) {
+            // Data is not packed in the tag, must be divisible by 8 bytes.
+            int b = (this.getNElements() % (8 / this.sizeOf())) * this.sizeOf();
+            this.padding = b != 0 ? 8 - b : 0;
         } else {
-            // Data _packed_ in the tag (compressed).
-            int b = ((size / this.sizeOf()) % (4 / this.sizeOf())) * this.sizeOf();
-            padding = b !=0 ? 4 - b : 0;
+            // Data is _packed_ in the tag (compressed), must fit into 4 bytes.
+            this.padding = 4 - this.size;
         }
-        return padding;
     }
 
     /* (non-Javadoc)
