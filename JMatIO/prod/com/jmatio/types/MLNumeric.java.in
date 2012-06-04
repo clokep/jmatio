@@ -17,7 +17,7 @@ public class ML@matlabClassCamelCase@ extends MLNumericArray<@NumberClass@> {
      * @param attributes array flags
      */
     public ML@matlabClassCamelCase@(String name, int[] dims, int type, int attributes) {
-        super( name, dims, type, attributes );
+        super(name, dims, type, attributes);
     }
 
     /**

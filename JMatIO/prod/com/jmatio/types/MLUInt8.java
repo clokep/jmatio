@@ -3,13 +3,13 @@ package com.jmatio.types;
 import java.nio.ByteBuffer;
 
 /**
- * Class represents UInt8 (byte) array (matrix)
+ * Class represents uint8 (byte) array (matrix).
  *
  * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
 public class MLUInt8 extends MLNumericArray<Byte> {
     /**
-     * Normally this constructor is used only by MatFileReader and MatFileWriter
+     * Normally this constructor is used only by MatFileReader.
      *
      * @param name array name
      * @param dims array dimensions
@@ -19,6 +19,7 @@ public class MLUInt8 extends MLNumericArray<Byte> {
     public MLUInt8(String name, int[] dims, int type, int attributes) {
         super(name, dims, type, attributes);
     }
+
     /**
      * Create a <code>{@link MLUInt8}</code> array with given name,
      * and dimensions.
@@ -35,7 +36,7 @@ public class MLUInt8 extends MLNumericArray<Byte> {
      * construct a 2D real matrix from a one-dimensional packed array
      *
      * @param name array name
-     * @param vals One-dimensional array of Bytes, packed by columns (ala Fortran).
+     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
      * @param m Number of rows
      */
     public MLUInt8(String name, Byte[] vals, int m) {
@@ -60,7 +61,7 @@ public class MLUInt8 extends MLNumericArray<Byte> {
      * construct a matrix from a one-dimensional packed array
      *
      * @param name array name
-     * @param vals One-dimensional array of bytes, packed by columns (ala Fortran).
+     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
      * @param m Number of rows
      */
     public MLUInt8(String name, byte[] vals, int m) {
@@ -106,10 +107,10 @@ public class MLUInt8 extends MLNumericArray<Byte> {
      * @param d <code>byte[]</code>
      * @return result <code>Byte[]</code>
      */
-    protected static Byte[] castToObject(byte[] d) {
+    protected static Byte[] castToObject(byte[] d){
         Byte[] dest = new Byte[d.length];
         for (int i = 0; i < d.length; ++i)
-            dest[i] = (byte)d[i];
+            dest[i] = (Byte)d[i];
         return dest;
     }
 
@@ -120,10 +121,10 @@ public class MLUInt8 extends MLNumericArray<Byte> {
      * @return result <code>Byte[][]</code>
      */
     protected static Byte[] primitive2DToObject (byte[][] dd) {
-        Byte[] d = new Byte[dd.length * dd[0].length];
+        Byte[] d = new Byte[ dd.length*dd[0].length ];
         for (int n = 0; n < dd[0].length; ++n) {
             for (int m = 0; m < dd.length; ++m)
-                d[m + n * dd.length ] = dd[m][n];
+                d[m + n * dd.length] = dd[m][n];
         }
         return d;
     }
@@ -132,13 +133,9 @@ public class MLUInt8 extends MLNumericArray<Byte> {
         if (bytes.length != this.getBytesAllocated()) {
             throw new IllegalArgumentException(
                         "To build from byte array I need array of size: "
-                                + getBytesAllocated() );
+                                + this.getBytesAllocated() );
         }
         return bytes[0];
-    }
-
-    public byte[] getByteArray(Byte value) {
-        return new byte[] {value};
     }
 
     public int getBytesAllocated() {
@@ -157,5 +154,9 @@ public class MLUInt8 extends MLNumericArray<Byte> {
     @Override
     protected Byte _get(ByteBuffer buffer, int index) {
         return buffer.get(index);
+    }
+
+    public byte[] getByteArray(Byte value) {
+        return new byte[] {value};
     }
 }

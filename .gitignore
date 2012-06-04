@@ -5,3 +5,4 @@ JMatIO/test/com/jmatio/types/ML*Int*Test.java
 JMatIO/prod/com/jmatio/types/ML*Int32.java
 JMatIO/prod/com/jmatio/types/ML*Int16.java
 JMatIO/prod/com/jmatio/types/ML*Int64.java
+JMatIO/prod/com/jmatio/types/MLInt*.java
