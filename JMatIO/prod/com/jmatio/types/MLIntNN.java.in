@@ -1,32 +1,32 @@
 package com.jmatio.types;
 
 /**
- * Class represents @MATLABClass@ (@primitive@) array (matrix)
+ * Class represents @matlabClass@ (@primitive@) array (matrix)
  *
  * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
-public class ML@MATLABClass@ extends MLU@MATLABClass@ {
+public class ML@matlabClassCamelCase@ extends MLU@matlabClassCamelCase@ {
     /**
      * Normally this constructor is used only by MatFileReader.
      *
      * @param name array name
      * @param dims array dimensions
-     * @param type array type: here <code>mx@MATLABArrayType@_CLASS</code>
+     * @param type array type: here <code>mx@matlabArrayType@_CLASS</code>
      * @param attributes array flags
      */
-    public ML@MATLABClass@(String name, int[] dims, int type, int attributes) {
+    public ML@matlabClassCamelCase@(String name, int[] dims, int type, int attributes) {
         super( name, dims, type, attributes );
     }
 
     /**
-     * Create a <code>{@link ML@MATLABClass@}</code> array with given name,
+     * Create a <code>{@link ML@matlabClassCamelCase@}</code> array with given name,
      * and dimensions.
      *
      * @param name array name
      * @param dims array dimensions
      */
-    public ML@MATLABClass@(String name, int[] dims) {
-        super(name, dims, MLArray.mx@MATLABArrayType@_CLASS, 0);
+    public ML@matlabClassCamelCase@(String name, int[] dims) {
+        super(name, dims, MLArray.mx@matlabArrayType@_CLASS, 0);
     }
     /**
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style:
@@ -36,9 +36,9 @@ public class ML@MATLABClass@ extends MLU@MATLABClass@ {
      * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
      * @param m Number of rows
      */
-    public ML@MATLABClass@(String name, @NumberClass@[] vals, int m ) {
+    public ML@matlabClassCamelCase@(String name, @NumberClass@[] vals, int m) {
         super(name, vals, m);
-        this.type = MLArray.mx@MATLABArrayType@_CLASS;
+        this.type = MLArray.mx@matlabArrayType@_CLASS;
     }
 
     /**
@@ -50,8 +50,8 @@ public class ML@MATLABClass@ extends MLU@MATLABClass@ {
      * @param name array name
      * @param vals two-dimensional array of values
      */
-    public ML@MATLABClass@( String name, @primitive@[][] vals ) {
-        this(name, ML@MATLABClass@.primitive2DToNumber(vals), vals.length);
+    public ML@matlabClassCamelCase@(String name, @primitive@[][] vals) {
+        this(name, ML@matlabClassCamelCase@.primitive2DToNumber(vals), vals.length);
     }
     /**
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style:
@@ -61,7 +61,7 @@ public class ML@MATLABClass@ extends MLU@MATLABClass@ {
      * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
      * @param m Number of rows
      */
-    public ML@MATLABClass@(String name, @primitive@[] vals, int m) {
-        this(name, MLU@MATLABClass@.castToObject(vals), m );
+    public ML@matlabClassCamelCase@(String name, @primitive@[] vals, int m) {
+        this(name, MLU@matlabClassCamelCase@.castToObject(vals), m );
     }
 }

@@ -37,56 +37,117 @@
         </copy>
     </target>
 
-    <macrodef name="copy-and-replace">
-        <attribute name="NumberClass" />
-        <attribute name="primitive" />
-        <attribute name="primitive2" default="@{NumberClass}" />
-        <attribute name="MATLABArrayType" />
-        <attribute name="MATLABClass" />
+    <macrodef name="generate-from-template">
+        <text name="keys"/>
+        <attribute name="dir" />
+        <attribute name="template.file" />
+        <attribute name="dst.file" />
 
         <sequential>
-            <generate-from-template template="Numeric"
-                                    NumberClass="@{NumberClass}"
-                                    primitive="@{primitive}"
-                                    primitive2="@{primitive2}"
-                                    MATLABArrayType="U@{MATLABArrayType}"
-                                    MATLABClass="U@{MATLABClass}" />
+            <copy file="@{dir}/@{template.file}.java.in"
+                  tofile="@{dir}/@{dst.file}.java" overwrite="true" />
 
-            <generate-from-template template="IntNN"
-                                    NumberClass="@{NumberClass}"
-                                    primitive="@{primitive}"
-                                    primitive2="@{primitive2}"
-                                    MATLABArrayType="@{MATLABArrayType}"
-                                    MATLABClass="@{MATLABClass}" />
+            <script language="javascript"> <![CDATA[
+                var filename = "@{dir}/@{dst.file}.java";
+
+                // Read in the contents of the file.
+                var scanner = null;
+                var contents = "";
+                try {
+                    scanner = new java.util.Scanner(new java.io.File(filename));
+                    scanner.useDelimiter("\\Z");
+                    contents = scanner.next();
+                } finally {
+                    if (scanner != null)
+                        scanner.close();
+                }
+
+                // Do the find and replace on it.
+                var keys = eval("(@{keys})");
+                var key;
+                for (key in keys)
+                    contents = contents.replace("@" + key + "@", keys[key]);
+
+                // Write the file back out.
+                var output = null;
+                try {
+                    output = java.io.BufferedWriter(new java.io.FileWriter(filename));
+                    output.write(contents);
+                } finally {
+                    if (output != null)
+                        output.close();
+                }
+            ]]></script>
         </sequential>
     </macrodef>
 
-    <macrodef name="generate-from-template">
-        <attribute name="template" />
+    <macrodef name="generate-MLNumeric">
         <attribute name="NumberClass" />
         <attribute name="primitive" />
-        <attribute name="primitive2" default="@{NumberClass}" />
-        <attribute name="MATLABArrayType" />
-        <attribute name="MATLABClass" default="@{NumberClass}" />
+        <attribute name="matlabClass" />
+        <attribute name="hasSigned" default="false" />
 
         <sequential>
-            <copy file="${dev.src}/com/jmatio/types/ML@{template}.java.in"
-                  tofile="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" overwrite="true" />
-            <replace file="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" token="@NumberClass@" value="@{NumberClass}" />
-            <replace file="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" token="@primitive@" value="@{primitive}" />
-            <replace file="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" token="@primitive2@" value="@{primitive2}" />
-            <replace file="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" token="@MATLABArrayType@" value="@{MATLABArrayType}" />
-            <replace file="${dev.src}/com/jmatio/types/ML@{MATLABClass}.java" token="@MATLABClass@" value="@{MATLABClass}" />
+            <script language="javascript"> <![CDATA[
+                function camelCase(aStr) {
+                    if (aStr[0] == "u")
+                        return aStr.slice(0, 2).toUpperCase() + aStr.slice(2);
+                    return aStr[0].toUpperCase() + aStr.slice(1);
+                }
+
+                function stringify(aObj) {
+                    var str = "{";
+                    for (var param in aObj)
+                        str += param + ": '" + aObj[param] + "', ";
+                    // Remove the last ", " and add a closing brace.
+                    str = str.slice(0, -2) + "}";
+                    return str;
+                }
+
+                var hasSigned = @{hasSigned};
+
+                var params = {
+                    NumberClass: "@{NumberClass}",
+                    primitive: "@{primitive}",
+                    primitiveCamelCase: camelCase("@{primitive}"),
+                    matlabClass: "@{matlabClass}",
+                    matlabClassCamelCase: camelCase("@{matlabClass}"),
+                    matlabArrayType: "@{matlabClass}".toUpperCase()
+                };
+
+                // If a signed version exists, we need to handle that version
+                // first then used the unsigned version with MLNumeric.
+                if (hasSigned) {
+                    var callTask = project.createTask("generate-from-template");
+                    callTask.setDynamicAttribute("dir", "prod/com/jmatio/types");
+                    callTask.setDynamicAttribute("template.file", "MLIntNN");
+                    callTask.setDynamicAttribute("dst.file", "ML" + params.matlabClassCamelCase);
+                    callTask.addText(stringify(params));
+                    callTask.perform();
+
+                    params.matlabClass = "u" + params.matlabClass;
+                    params.matlabClassCamelCase = "U" + params.matlabClassCamelCase;
+                    params.matlabArrayType = "U" + params.matlabArrayType;
+                }
+
+                var callTask = project.createTask("generate-from-template");
+                callTask.setDynamicAttribute("dir", "prod/com/jmatio/types");
+                callTask.setDynamicAttribute("template.file", "MLNumeric");
+                callTask.setDynamicAttribute("dst.file", "ML" + params.matlabClassCamelCase);
+                callTask.addText(stringify(params));
+                callTask.perform();
+
+            ]]></script>
         </sequential>
     </macrodef>
 
     <target name="generate-source" depends="init" description="--> Copies resource files">
-        <copy-and-replace NumberClass="Long" primitive="long" MATLABArrayType="INT64" MATLABClass="Int64" />
-        <copy-and-replace NumberClass="Integer" primitive="int" primitive2="Int" MATLABArrayType="INT32" MATLABClass="Int32" />
-        <copy-and-replace NumberClass="Short" primitive="short" MATLABArrayType="INT16" MATLABClass="Int16" />
+        <generate-MLNumeric NumberClass="Long" primitive="long" matlabClass="int64" hasSigned="true" />
+        <generate-MLNumeric NumberClass="Integer" primitive="int" matlabClass="int32" hasSigned="true" />
+        <generate-MLNumeric NumberClass="Short" primitive="short" matlabClass="int16" hasSigned="true" />
 
-        <generate-from-template template="Numeric" NumberClass="Double" primitive="double" MATLABArrayType="DOUBLE" />
-        <generate-from-template template="Numeric" NumberClass="Float" primitive="float" MATLABArrayType="SINGLE" MATLABClass="Single" />
+        <generate-MLNumeric NumberClass="Double" primitive="double" matlabClass="Double" />
+        <generate-MLNumeric NumberClass="Float" primitive="float" matlabClass="Single" />
     </target>
 
     <target name="compile" depends="copy-resources,generate-source" description="--> Compiles source folder">
