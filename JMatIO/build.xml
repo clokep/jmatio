@@ -85,11 +85,13 @@
         <attribute name="NumberClass" />
         <attribute name="primitive" />
         <attribute name="matlabClass" />
-        <attribute name="hasSigned" default="false" />
+        <attribute name="template" default="MLNumeric" />
 
         <sequential>
             <script language="javascript"> <![CDATA[
                 function camelCase(aStr) {
+                    if (aStr[0] == "u")
+                        return aStr.slice(0, 2).toUpperCase() + aStr.slice(2);
                     return aStr[0].toUpperCase() + aStr.slice(1);
                 }
 
@@ -102,8 +104,6 @@
                     return str;
                 }
 
-                var hasSigned = @{hasSigned};
-
                 var params = {
                     NumberClass: "@{NumberClass}",
                     primitive: "@{primitive}",
@@ -113,28 +113,12 @@
                     matlabArrayType: "@{matlabClass}".toUpperCase()
                 };
 
-                // If a signed version exists, we need to handle that version
-                // first then used the unsigned version with MLNumeric.
-                if (hasSigned) {
-                    var callTask = project.createTask("generate-from-template");
-                    callTask.setDynamicAttribute("dir", "prod/com/jmatio/types");
-                    callTask.setDynamicAttribute("template.file", "MLIntNN");
-                    callTask.setDynamicAttribute("dst.file", "ML" + params.matlabClassCamelCase);
-                    callTask.addText(stringify(params));
-                    callTask.perform();
-
-                    params.matlabClass = "u" + params.matlabClass;
-                    params.matlabClassCamelCase = "U" + params.matlabClassCamelCase;
-                    params.matlabArrayType = "U" + params.matlabArrayType;
-                }
-
                 var callTask = project.createTask("generate-from-template");
                 callTask.setDynamicAttribute("dir", "prod/com/jmatio/types");
-                callTask.setDynamicAttribute("template.file", "MLNumeric");
+                callTask.setDynamicAttribute("template.file", "@{template}");
                 callTask.setDynamicAttribute("dst.file", "ML" + params.matlabClassCamelCase);
                 callTask.addText(stringify(params));
                 callTask.perform();
-
             ]]></script>
         </sequential>
     </macrodef>
@@ -183,9 +167,14 @@
     </macrodef>
 
     <target name="generate-source" depends="init">
-        <generate-MLNumeric NumberClass="Short" primitive="short" matlabClass="int16" hasSigned="true" />
-        <generate-MLNumeric NumberClass="Integer" primitive="int" matlabClass="int32" hasSigned="true" />
-        <generate-MLNumeric NumberClass="Long" primitive="long" matlabClass="int64" hasSigned="true" />
+        <generate-MLNumeric NumberClass="Short" primitive="short" matlabClass="uint16" />
+        <generate-MLNumeric NumberClass="Integer" primitive="int" matlabClass="uint32" />
+        <generate-MLNumeric NumberClass="Long" primitive="long" matlabClass="uint64" />
+
+        <generate-MLNumeric template="MLIntNN" NumberClass="Byte" primitive="byte" matlabClass="int8" />
+        <generate-MLNumeric template="MLIntNN" NumberClass="Short" primitive="short" matlabClass="int16" />
+        <generate-MLNumeric template="MLIntNN" NumberClass="Integer" primitive="int" matlabClass="int32" />
+        <generate-MLNumeric template="MLIntNN" NumberClass="Long" primitive="long" matlabClass="int64" />
 
         <generate-MLNumeric NumberClass="Double" primitive="double" matlabClass="Double" />
         <generate-MLNumeric NumberClass="Float" primitive="float" matlabClass="Single" />

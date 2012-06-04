@@ -51,7 +51,7 @@ public class ML@matlabClassCamelCase@ extends MLU@matlabClassCamelCase@ {
      * @param vals two-dimensional array of values
      */
     public ML@matlabClassCamelCase@(String name, @primitive@[][] vals) {
-        this(name, ML@matlabClassCamelCase@.primitive2DToNumber(vals), vals.length);
+        this(name, ML@matlabClassCamelCase@.primitive2DToObject(vals), vals.length);
     }
     /**
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style:

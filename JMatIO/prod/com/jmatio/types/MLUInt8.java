@@ -52,7 +52,7 @@ public class MLUInt8 extends MLNumericArray<Byte> {
      * @param vals two-dimensional array of values
      */
     public MLUInt8(String name, byte[][] vals) {
-        this(name, MLUInt8.byte2DToByte(vals), vals.length);
+        this(name, MLUInt8.primitive2DToObject(vals), vals.length);
     }
 
     /**
@@ -64,14 +64,14 @@ public class MLUInt8 extends MLNumericArray<Byte> {
      * @param m Number of rows
      */
     public MLUInt8(String name, byte[] vals, int m) {
-        this(name, MLUInt8.castToByte(vals), m);
+        this(name, MLUInt8.castToObject(vals), m);
     }
 
     /**
      * @param vector
      */
     public void set(byte[] vector) {
-        this.set(MLUInt8.castToByte(vector));
+        this.set(MLUInt8.castToObject(vector));
     }
 
     /* (non-Javadoc)
@@ -106,7 +106,7 @@ public class MLUInt8 extends MLNumericArray<Byte> {
      * @param d <code>byte[]</code>
      * @return result <code>Byte[]</code>
      */
-    protected static Byte[] castToByte(byte[] d) {
+    protected static Byte[] castToObject(byte[] d) {
         Byte[] dest = new Byte[d.length];
         for (int i = 0; i < d.length; ++i)
             dest[i] = (byte)d[i];
@@ -119,7 +119,7 @@ public class MLUInt8 extends MLNumericArray<Byte> {
      * @param dd <code>byte[][]</code>
      * @return result <code>Byte[][]</code>
      */
-    protected static Byte[] byte2DToByte (byte[][] dd) {
+    protected static Byte[] primitive2DToObject (byte[][] dd) {
         Byte[] d = new Byte[dd.length * dd[0].length];
         for (int n = 0; n < dd[0].length; ++n) {
             for (int m = 0; m < dd.length; ++m)
