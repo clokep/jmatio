@@ -90,8 +90,6 @@
         <sequential>
             <script language="javascript"> <![CDATA[
                 function camelCase(aStr) {
-                    if (aStr[0] == "u")
-                        return aStr.slice(0, 2).toUpperCase() + aStr.slice(2);
                     return aStr[0].toUpperCase() + aStr.slice(1);
                 }
 
@@ -141,16 +139,73 @@
         </sequential>
     </macrodef>
 
-    <target name="generate-source" depends="init" description="--> Copies resource files">
-        <generate-MLNumeric NumberClass="Long" primitive="long" matlabClass="int64" hasSigned="true" />
-        <generate-MLNumeric NumberClass="Integer" primitive="int" matlabClass="int32" hasSigned="true" />
+    <macrodef name="generate-MLNumericTest">
+        <attribute name="NumberClass" />
+        <attribute name="primitive" />
+        <attribute name="matlabClass" />
+        <attribute name="minValue" />
+        <attribute name="maxValue" />
+
+        <sequential>
+            <script language="javascript"> <![CDATA[
+                function camelCase(aStr) {
+                    if (aStr[0] == "u")
+                        return aStr.slice(0, 2).toUpperCase() + aStr.slice(2);
+                    return aStr[0].toUpperCase() + aStr.slice(1);
+                }
+
+                function stringify(aObj) {
+                    var str = "{";
+                    for (var param in aObj)
+                        str += param + ": '" + aObj[param] + "', ";
+                    // Remove the last ", " and add a closing brace.
+                    str = str.slice(0, -2) + "}";
+                    return str;
+                }
+
+                var params = {
+                    NumberClass: "@{NumberClass}",
+                    primitive: "@{primitive}",
+                    matlabClass: "@{matlabClass}",
+                    matlabClassCamelCase: camelCase("@{matlabClass}"),
+                    minValue: "@{minValue}",
+                    maxValue: "@{maxValue}"
+                };
+
+                var callTask = project.createTask("generate-from-template");
+                callTask.setDynamicAttribute("dir", "test/com/jmatio/types");
+                callTask.setDynamicAttribute("template.file", "MLNumericTest");
+                callTask.setDynamicAttribute("dst.file", "ML" + params.matlabClassCamelCase + "Test");
+                callTask.addText(stringify(params));
+                callTask.perform();
+            ]]></script>
+        </sequential>
+    </macrodef>
+
+    <target name="generate-source" depends="init">
         <generate-MLNumeric NumberClass="Short" primitive="short" matlabClass="int16" hasSigned="true" />
+        <generate-MLNumeric NumberClass="Integer" primitive="int" matlabClass="int32" hasSigned="true" />
+        <generate-MLNumeric NumberClass="Long" primitive="long" matlabClass="int64" hasSigned="true" />
 
         <generate-MLNumeric NumberClass="Double" primitive="double" matlabClass="Double" />
         <generate-MLNumeric NumberClass="Float" primitive="float" matlabClass="Single" />
     </target>
 
-    <target name="compile" depends="copy-resources,generate-source" description="--> Compiles source folder">
+    <target name="generate-test-source" depends="init">
+        <generate-MLNumericTest NumberClass="Byte" primitive="byte" matlabClass="int8" minValue="Byte.MIN_VALUE" maxValue="Byte.MAX_VALUE" />
+        <generate-MLNumericTest NumberClass="Byte" primitive="byte" matlabClass="uint8" minValue="0" maxValue="-1" />
+        <generate-MLNumericTest NumberClass="Short" primitive="short" matlabClass="int16" minValue="Short.MIN_VALUE" maxValue="Short.MAX_VALUE" />
+        <generate-MLNumericTest NumberClass="Short" primitive="short" matlabClass="uint16" minValue="0" maxValue="-1" />
+        <generate-MLNumericTest NumberClass="Integer" primitive="int" matlabClass="int32" minValue="Integer.MIN_VALUE" maxValue="Integer.MAX_VALUE" />
+        <generate-MLNumericTest NumberClass="Integer" primitive="int" matlabClass="uint32" minValue="0" maxValue="-1" />
+        <generate-MLNumericTest NumberClass="Long" primitive="long" matlabClass="int64" minValue="Long.MIN_VALUE" maxValue="Long.MAX_VALUE" />
+        <generate-MLNumericTest NumberClass="Long" primitive="long" matlabClass="uint64" minValue="new Long(0)" maxValue="new Long(-1)" />
+
+        <!--<generate-MLNumericTest primitive="double" matlabClass="Double" />
+        <generate-MLNumericTest primitive="float" matlabClass="Single" />-->
+    </target>
+
+    <target name="compile" depends="generate-source" description="--> Compiles source folder">
         <mkdir dir="${build.bin}"/>
         <javac srcdir="${dev.src}"
                destdir="${build.bin}"
@@ -159,7 +214,7 @@
                target="1.5" />
     </target>
 
-    <target name="compile-test" depends="compile" description="--> Compiles test folder">
+    <target name="compile-test" depends="generate-test-source,compile" description="--> Compiles test folder">
         <mkdir dir="${build.test.bin}"/>
 
         <javac srcdir="${dev.test}"
@@ -199,7 +254,7 @@
         <delete dir="${build.dir}" includes="*.mat"/>
     </target>
 
-    <target name="package" depends="compile" description="--> Creates a .jar package">
+    <target name="package" depends="compile,copy-resources" description="--> Creates a .jar package">
         <mkdir dir="${build.bin}/META-INF"/>
         <manifest file="${build.bin}/META-INF/MANIFEST.MF">
             <attribute name="Built-By" value="${user.name}"/>
