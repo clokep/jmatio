@@ -19,44 +19,47 @@ import com.jmatio.types.MLLogical;
 /**
  * The test suite for MLLogical.
  *
- * @author Patrick Cloke <pcloke@mitre.org>
+ * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
 public class MLLogicalTest {
-    private final boolean[] bools = new boolean[] {false, true};
-    private final MLLogical array = new MLLogical("arr", this.bools , 1);
-
-    public static junit.framework.Test suite() {
-        return new JUnit4TestAdapter(MLLogicalTest.class);
-    }
-
     @Test
-    public void testObject() throws Exception {
-        assertEquals(this.bools[0], this.array.get(0));
-        assertEquals(this.bools[1], this.array.get(1));
+    public void testLogical() throws Exception {
+        // The test file created in MATLAB that contains an array called "arr"
+        // which contains the minimum and maximum values for logical.
+        String fileName = "test/logical.mat";
+        String arrName = "arr";
+        MatFileReader mfr;
+
+        Boolean min = false;
+        Boolean max = true;
+
+        // Read array from file.
+        mfr = new MatFileReader(fileName);
+        MLLogical src = (MLLogical)mfr.getMLArray(arrName);
+        assertEquals("Test min. value from file: " + fileName + " array: " + arrName + ".",
+                     min, src.get(0, 0));
+        assertEquals("Test max. value from file:" + fileName + " array: " + arrName + ".",
+                     max, src.get(0, 1));
+
+        // Write the array out to a file.
+        fileName = "logicaltmp.mat";
+        new MatFileWriter(fileName, Arrays.asList((MLArray)src));
+
+        // Read the array in again.
+        mfr = new MatFileReader(fileName);
+        MLLogical dst = (MLLogical)mfr.getMLArray(arrName);
+        assertEquals("Test min. value from file: " + fileName + " array: " + arrName + ".",
+                     min, dst.get(0, 0));
+        assertEquals("Test max. value from file:" + fileName + " array: " + arrName + ".",
+                     max, dst.get(0, 1));
+
+        assertEquals("Test if array retrieved from " + fileName + " equals source array.",
+                     src, dst);
     }
 
-    @Test
-    public void testReadingNative() throws Exception {
-        // Test reading the MLLogical generated natively by Matlab R2012a.
-        MatFileReader reader = new MatFileReader();
-        MLLogical readLogical = (MLLogical) reader.read(new File("test/logical.mat")).get("arr");
-
-        assertEquals(this.array, readLogical);
-    }
-
-    @Test
-    public void testReadingAndWriting() throws Exception {
-        // Test writing the MLLogical.
-        MatFileWriter writer = new MatFileWriter();
-        writer.write("logicaltmp.mat", Arrays.asList((MLArray)this.array));
-
-        // Test reading the MLLogical.
-        MatFileReader reader = new MatFileReader();
-        MLLogical readLogical = (MLLogical)reader.read(new File("logicaltmp.mat")).get("arr");
-
-        assertEquals(this.array, readLogical);
-    }
-
+    /**
+     * Test a logical array that is not a mxINT8_CLASS array.
+     */
     @Test
     public void testReadingAndWritingNonUInt8() throws Exception {
         MLInt16 array = new MLInt16("arr", new int[]{1, 5}, MLArray.mxINT16_CLASS, MLArray.mtFLAG_LOGICAL);
@@ -65,11 +68,12 @@ public class MLLogicalTest {
 
         // Test writing the MLLogical.
         MatFileWriter writer = new MatFileWriter();
-        writer.write("logicaltmp2.mat", Arrays.asList((MLArray)logical));
+        String fileName = "logical-int16-tmp.mat";
+        writer.write(fileName, Arrays.asList((MLArray)logical));
 
         // Test reading the MLLogical.
         MatFileReader reader = new MatFileReader();
-        MLLogical readLogical = (MLLogical)reader.read(new File("logicaltmp2.mat")).get("arr");
+        MLLogical readLogical = (MLLogical)reader.read(new File(fileName)).get("arr");
 
         assertEquals(logical, readLogical);
     }

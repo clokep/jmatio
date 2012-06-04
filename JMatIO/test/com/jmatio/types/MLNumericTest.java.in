@@ -23,6 +23,8 @@ import com.jmatio.types.ML@matlabClassCamelCase@;
 public class ML@matlabClassCamelCase@Test {
     @Test
     public void test@matlabClassCamelCase@() throws Exception {
+        // The test file created in MATLAB that contains an array called "arr"
+        // which contains the minimum and maximum values for @matlabClass@.
         String fileName = "test/@matlabClass@.mat";
         String arrName = "arr";
         MatFileReader mfr;
@@ -38,11 +40,11 @@ public class ML@matlabClassCamelCase@Test {
         assertEquals("Test max. value from file:" + fileName + " array: " + arrName + ".",
                      max, src.get(0, 1));
 
-        // Write.
-        fileName = "@matlabClass@tmp.mat";
+        // Write the array out to a file.
+        fileName = "@matlabClass@-tmp.mat";
         new MatFileWriter(fileName, Arrays.asList((MLArray)src));
 
-        // Read again.
+        // Read the array in again.
         mfr = new MatFileReader(fileName);
         ML@matlabClassCamelCase@ dst = (ML@matlabClassCamelCase@)mfr.getMLArray(arrName);
         assertEquals("Test min. value from file: " + fileName + " array: " + arrName + ".",
@@ -61,14 +63,14 @@ public class ML@matlabClassCamelCase@Test {
      */
     @Test
     public void test@matlabClassCamelCase@Array() throws Exception {
-        // Array name
+        // Array name.
         String name = "arr";
         // File name in which array will be stored.
         String fileName = "@matlabClass@tmp.mat";
 
-        // Test column-packed vector
+        // Test column-packed vector.
         @primitive@[] src = new @primitive@[] {1, 2, 3, 4, 5, 6};
-        // Create 3x2 @matlabClass@ matrix
+        // Create 3x2 @matlabClass@ matrix.
         // [1, 4;
         //  2, 5;
         //  3, 6]
@@ -90,12 +92,12 @@ public class ML@matlabClassCamelCase@Test {
         ML@matlabClassCamelCase@ mlArrayRetrived = (ML@matlabClassCamelCase@)mfr.getMLArray(name);
 
         // Test if MLArray objects are equal
-        assertEquals("Test if value red from file equals value stored", array1D, mlArrayRetrived);
+        assertEquals("Test if value read from file equals value stored.", array1D, mlArrayRetrived);
 
         // Test if 2D array match
         for (int i = 0; i < src2D.length; ++i) {
             boolean result = Arrays.equals(src2D[i], mlArrayRetrived.getArray()[i]);
-            assertEquals("2D array match", true, result);
+            assertEquals("Test if the 2D arrays match.", true, result);
         }
     }
 }

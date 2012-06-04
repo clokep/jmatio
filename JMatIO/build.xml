@@ -275,7 +275,7 @@
     </target>
 
     <!-- Creates the API documentation. -->
-    <target name="javadoc" depends="init" description="Creates the API documentation">
+    <target name="javadoc" depends="init,generate-source" description="Creates the API documentation">
         <mkdir dir="${build.javadocs}"/>
         <javadoc packagenames="*" sourcepath="${dev.src}"
             destdir="${build.javadocs}" author="true" version="true" use="true"
