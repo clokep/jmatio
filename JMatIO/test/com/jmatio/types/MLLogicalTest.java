@@ -77,4 +77,17 @@ public class MLLogicalTest {
 
         assertEquals(logical, readLogical);
     }
+
+    /**
+     * Test whether the constuctor can handle an array with a length != a
+     * multiple of dsize BufferOverflowException was thrown before a fix in
+     * MLNumericArray.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testMLLogicalConstructor(){
+        int dsize = 2;
+        Boolean data[] = new Boolean[]{true};
+
+        new MLLogical("name", data, dsize);
+    }
 }

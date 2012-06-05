@@ -96,14 +96,16 @@ public class MLDoubleExtraTest {
                      (Double)Double.NaN, (Double)x.get(0, 0));
     }
 
-//    @Test
-//    public void testMLDoubleConstructor(){
-//        // Test whether the constuctor can handle an array with a length != a multiple of dsize
-//        // BufferOverflowException was thrown before a fix in MLNumericArray
-//        int dsize=2;
-//        List<Double> list = new ArrayList<Double>();
-//        list.add(1.0);
-//
-//        new MLDouble("name",(Double[])list.toArray(new Double[list.size()]), dsize);
-//    }
+    /**
+     * Test whether the constuctor can handle an array with a length != a
+     * multiple of dsize BufferOverflowException was thrown before a fix in
+     * MLNumericArray.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testMLDoubleConstructor(){
+        int dsize = 2;
+        Double data[] = new Double[]{1.0};
+
+        new MLDouble("name", data, dsize);
+    }
 }

@@ -44,12 +44,31 @@ public class MLLogical extends MLArray {
      * construct a 2D real matrix from a one-dimensional packed array
      *
      * @param name array name
+     * @param vals One-dimensional array of Boolean, packed by columns (ala Fortran).
+     * @param m Number of rows
+     */
+    public MLLogical(String name, Boolean[] vals, int m) {
+        this(name, new int[] {m, vals.length / m}, MLArray.mxUINT8_CLASS, MLArray.mtFLAG_LOGICAL);
+        if ((vals.length % m) != 0) {
+            throw new IllegalArgumentException("The number of values provided (" +
+                                               vals.length +
+                                               ") is not equally divisible by the number of rows ("
+                                               + m + ").");
+        }
+
+        this.set(vals);
+    }
+
+    /**
+     * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style:
+     * construct a matrix from a one-dimensional packed array
+     *
+     * @param name array name
      * @param vals One-dimensional array of boolean, packed by columns (ala Fortran).
      * @param m Number of rows
      */
     public MLLogical(String name, boolean[] vals, int m) {
-        this(name, new int[] {m, vals.length/m}, MLArray.mxUINT8_CLASS, MLArray.mtFLAG_LOGICAL);
-        this.set(vals);
+        this(name, MLLogical.castToObject(vals), m);
     }
 
     /**

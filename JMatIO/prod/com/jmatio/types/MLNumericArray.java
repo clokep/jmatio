@@ -49,11 +49,18 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
      *
      * @param name array name
      * @param type array type
-     * @param vals One-dimensional array of doubles, packed by columns (ala Fortran).
+     * @param vals One-dimensional array of T, packed by columns (ala Fortran).
      * @param m Number of rows
      */
     public MLNumericArray(String name, int type, T[] vals, int m) {
-        this(name, new int[] {m, vals.length/m}, type, 0);
+        this(name, new int[] {m, vals.length / m}, type, 0);
+        if ((vals.length % m) != 0) {
+            throw new IllegalArgumentException("The number of values provided (" +
+                                               vals.length +
+                                               ") is not equally divisible by the number of rows ("
+                                               + m + ").");
+        }
+
         this.setReal(vals);
     }
 
