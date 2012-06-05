@@ -50,18 +50,18 @@ import com.jmatio.types.MLUInt8;
  *
  * Usage:
  * <pre><code>
- * //read in the file
- * MatFileReader mfr = new MatFileReader( "mat_file.mat" );
+ * // Read in the file.
+ * MatFileReader mfr = new MatFileReader("mat_file.mat");
  *
- * //get array of a name "my_array" from file
- * MLArray mlArrayRetrived = mfr.getMLArray( "my_array" );
+ * // Get array of a name "my_array" from file.
+ * MLArray mlArrayRetrived = mfr.getMLArray("my_array");
  *
- * //or get the collection of all arrays that were stored in the file
+ * // Or get the collection of all arrays that were stored in the file.
  * Map content = mfr.getContent();
  * </pre></code>
  *
  * @see com.jmatio.io.MatFileFilter
- * @author Wojciech Gradkowski (<a href="mailto:wgradkowski@gmail.com">wgradkowski@gmail.com</a>)
+ * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
 public class MatFileReader {
     public static final int MEMORY_MAPPED_FILE = 1;

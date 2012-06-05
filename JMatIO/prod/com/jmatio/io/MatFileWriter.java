@@ -19,7 +19,7 @@ import com.jmatio.types.MLArray;
  * Usage:
  * <pre><code>
  * // 1. Create example arrays.
- * double[] src = new double[] {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+ * double[] src = new double[]{1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
  * MLDouble mlDouble = new MLDouble("double_arr", src, 3);
  * MLChar mlChar = new MLChar("char_arr", "I am dummy");
  *

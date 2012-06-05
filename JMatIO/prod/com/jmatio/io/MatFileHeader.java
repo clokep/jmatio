@@ -3,12 +3,12 @@ package com.jmatio.io;
 import java.util.Date;
 
 /**
- * MAT-file header
+ * Create a MAT-file header.
  *
- * Level 5 MAT-files begin with a 128-byte header made up of a 124 byte text field
- * and two, 16-bit flag fields
+ * Level 5 MAT-files begin with a 128-byte header made up of a 116 byte text
+ * field, 8 unused bytes and two, 16-bit flag fields.
  *
- * @author Wojciech Gradkowski (<a href="mailto:wgradkowski@gmail.com">wgradkowski@gmail.com</a>)
+ * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
 public class MatFileHeader {
     private static String DEFAULT_DESCRIPTIVE_TEXT = "MATLAB 5.0 MAT-file, Platform: "

@@ -50,8 +50,8 @@ public class MLDoubleExtraTest {
      *
      * Matlab code:
      * <pre><code>
-     * arr = [1.1, 4.4; 2.2, 5.5; 3.3, 6.6];
-     * save('matnativedouble2', arr);
+     * >> arr = [1.1, 4.4; 2.2, 5.5; 3.3, 6.6];
+     * >> save('double-regression2.mat', arr);
      * </code></pre>
      *
      * @throws Exception
@@ -78,8 +78,8 @@ public class MLDoubleExtraTest {
     /**
      * MATLAB code:
      * <pre><code>
-     * x = NaN;
-     * save('double-nan', 'x');
+     * >> x = NaN;
+     * >> save('double-nan.mat', 'x');
      * </code></pre>
      *
      * @throws Exception
