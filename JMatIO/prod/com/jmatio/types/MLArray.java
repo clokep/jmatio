@@ -386,14 +386,9 @@ public abstract class MLArray {
         // Write the actual data.
         this.writeData(dos);
 
-        dos = new DataOutputStream(os);
-
         // Write matrix tag.
-        dos.writeInt(MatDataTypes.miMATRIX);
-        // Write size of matrix.
-        dos.writeInt(baos.size());
-        // Write matrix data.
-        dos.write(baos.toByteArray());
+        OSMatTag tag = new OSMatTag(MatDataTypes.miMATRIX, baos.toByteArray());
+        tag.writeTo(os);
     }
 
     /**
@@ -402,7 +397,7 @@ public abstract class MLArray {
      * @param os <code>OutputStream</code>
      * @throws IOException
      */
-    private void writeFlags(DataOutputStream os) throws IOException {
+    private void writeFlags(OutputStream os) throws IOException {
         ByteBuffer buffer = ByteBuffer.allocate(4 * 2);
         buffer.putInt(this.getFlags());
 
@@ -420,7 +415,7 @@ public abstract class MLArray {
      * @param os <code>OutputStream</code>
      * @throws IOException
      */
-    private void writeDimensions(DataOutputStream os) throws IOException {
+    private void writeDimensions(OutputStream os) throws IOException {
         int[] dims = this.getDimensions();
         ByteBuffer buffer = ByteBuffer.allocate(4 * dims.length);
 
@@ -436,7 +431,7 @@ public abstract class MLArray {
      * @param os <code>OutputStream</code>
      * @throws IOException
      */
-    private void writeName(DataOutputStream os) throws IOException {
+    private void writeName(OutputStream os) throws IOException {
         if (!this.isChild && !VariableUtils.IsVarName(this.name))
             throw new MatlabIOException("Invalid variable name: " + this.name);
 
