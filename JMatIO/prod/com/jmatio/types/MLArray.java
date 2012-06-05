@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import com.jmatio.common.MatDataTypes;
-import com.jmatio.extra.VariableUtils;
+import com.jmatio.common.VariableUtils;
 import com.jmatio.io.OSMatTag;
 import com.jmatio.io.MatlabIOException;
 

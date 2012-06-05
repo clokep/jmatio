@@ -12,7 +12,7 @@ import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 
 import com.jmatio.common.MatDataTypes;
-import com.jmatio.extra.VariableUtils;
+import com.jmatio.common.VariableUtils;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.MLCell;
 import com.jmatio.types.MLChar;
