@@ -85,7 +85,14 @@
         <attribute name="NumberClass" />
         <attribute name="primitive" />
         <attribute name="matlabClass" />
+        <attribute name="dir" default="prod/com/jmatio/types" />
         <attribute name="template" default="MLNumeric" />
+        <!-- Used for generating test cases. -->
+        <attribute name="minValue" default="" />
+        <attribute name="maxValue" default="" />
+        <attribute name="suffix" default="" />
+        <attribute name="arrayValues" default="1, 2, 3, 4, 5, 6" />
+        <attribute name="matrixValues" default="{1, 4}, {2, 5}, {3, 6}" />
 
         <sequential>
             <script language="javascript"> <![CDATA[
@@ -110,56 +117,17 @@
                     primitiveCamelCase: camelCase("@{primitive}"),
                     matlabClass: "@{matlabClass}",
                     matlabClassCamelCase: camelCase("@{matlabClass}"),
-                    matlabArrayType: "@{matlabClass}".toUpperCase()
-                };
-
-                var callTask = project.createTask("generate-from-template");
-                callTask.setDynamicAttribute("dir", "prod/com/jmatio/types");
-                callTask.setDynamicAttribute("template.file", "@{template}");
-                callTask.setDynamicAttribute("dst.file", "ML" + params.matlabClassCamelCase);
-                callTask.addText(stringify(params));
-                callTask.perform();
-            ]]></script>
-        </sequential>
-    </macrodef>
-
-    <macrodef name="generate-MLNumericTest">
-        <attribute name="NumberClass" />
-        <attribute name="primitive" />
-        <attribute name="matlabClass" />
-        <attribute name="minValue" />
-        <attribute name="maxValue" />
-
-        <sequential>
-            <script language="javascript"> <![CDATA[
-                function camelCase(aStr) {
-                    if (aStr[0] == "u")
-                        return aStr.slice(0, 2).toUpperCase() + aStr.slice(2);
-                    return aStr[0].toUpperCase() + aStr.slice(1);
-                }
-
-                function stringify(aObj) {
-                    var str = "{";
-                    for (var param in aObj)
-                        str += param + ": '" + aObj[param] + "', ";
-                    // Remove the last ", " and add a closing brace.
-                    str = str.slice(0, -2) + "}";
-                    return str;
-                }
-
-                var params = {
-                    NumberClass: "@{NumberClass}",
-                    primitive: "@{primitive}",
-                    matlabClass: "@{matlabClass}",
-                    matlabClassCamelCase: camelCase("@{matlabClass}"),
+                    matlabArrayType: "@{matlabClass}".toUpperCase(),
                     minValue: "@{minValue}",
-                    maxValue: "@{maxValue}"
+                    maxValue: "@{maxValue}",
+                    arrayValues: "@{arrayValues}",
+                    matrixValues: "@{matrixValues}"
                 };
 
                 var callTask = project.createTask("generate-from-template");
-                callTask.setDynamicAttribute("dir", "test/com/jmatio/types");
-                callTask.setDynamicAttribute("template.file", "MLNumericTest");
-                callTask.setDynamicAttribute("dst.file", "ML" + params.matlabClassCamelCase + "Test");
+                callTask.setDynamicAttribute("dir", "@{dir}");
+                callTask.setDynamicAttribute("template.file", "@{template}");
+                callTask.setDynamicAttribute("dst.file", "ML" + params.matlabClassCamelCase + "@{suffix}");
                 callTask.addText(stringify(params));
                 callTask.perform();
             ]]></script>
@@ -181,17 +149,39 @@
     </target>
 
     <target name="generate-test-source" depends="init">
-        <generate-MLNumericTest NumberClass="Byte" primitive="byte" matlabClass="int8" minValue="Byte.MIN_VALUE" maxValue="Byte.MAX_VALUE" />
-        <generate-MLNumericTest NumberClass="Byte" primitive="byte" matlabClass="uint8" minValue="0" maxValue="-1" />
-        <generate-MLNumericTest NumberClass="Short" primitive="short" matlabClass="int16" minValue="Short.MIN_VALUE" maxValue="Short.MAX_VALUE" />
-        <generate-MLNumericTest NumberClass="Short" primitive="short" matlabClass="uint16" minValue="0" maxValue="-1" />
-        <generate-MLNumericTest NumberClass="Integer" primitive="int" matlabClass="int32" minValue="Integer.MIN_VALUE" maxValue="Integer.MAX_VALUE" />
-        <generate-MLNumericTest NumberClass="Integer" primitive="int" matlabClass="uint32" minValue="0" maxValue="-1" />
-        <generate-MLNumericTest NumberClass="Long" primitive="long" matlabClass="int64" minValue="Long.MIN_VALUE" maxValue="Long.MAX_VALUE" />
-        <generate-MLNumericTest NumberClass="Long" primitive="long" matlabClass="uint64" minValue="new Long(0)" maxValue="new Long(-1)" />
+        <generate-MLNumeric dir="test/com/jmatio/types" template="MLNumericTest" suffix="Test"
+                            NumberClass="Byte" primitive="byte" matlabClass="int8"
+                            minValue="Byte.MIN_VALUE" maxValue="Byte.MAX_VALUE" />
+        <generate-MLNumeric dir="test/com/jmatio/types" template="MLNumericTest" suffix="Test"
+                            NumberClass="Byte" primitive="byte" matlabClass="uint8"
+                            minValue="0" maxValue="-1" />
+        <generate-MLNumeric dir="test/com/jmatio/types" template="MLNumericTest" suffix="Test"
+                            NumberClass="Short" primitive="short" matlabClass="int16"
+                            minValue="Short.MIN_VALUE" maxValue="Short.MAX_VALUE" />
+        <generate-MLNumeric dir="test/com/jmatio/types" template="MLNumericTest" suffix="Test"
+                            NumberClass="Short" primitive="short" matlabClass="uint16"
+                            minValue="0" maxValue="-1" />
+        <generate-MLNumeric dir="test/com/jmatio/types" template="MLNumericTest" suffix="Test"
+                            NumberClass="Integer" primitive="int" matlabClass="int32"
+                            minValue="Integer.MIN_VALUE" maxValue="Integer.MAX_VALUE" />
+        <generate-MLNumeric dir="test/com/jmatio/types" template="MLNumericTest" suffix="Test"
+                            NumberClass="Integer" primitive="int" matlabClass="uint32"
+                            minValue="0" maxValue="-1" />
+        <generate-MLNumeric dir="test/com/jmatio/types" template="MLNumericTest" suffix="Test"
+                            NumberClass="Long" primitive="long" matlabClass="int64"
+                            minValue="Long.MIN_VALUE" maxValue="Long.MAX_VALUE" />
+        <generate-MLNumeric dir="test/com/jmatio/types" template="MLNumericTest" suffix="Test"
+                            NumberClass="Long" primitive="long" matlabClass="uint64"
+                            minValue="new Long(0)" maxValue="new Long(-1)" />
 
-        <!--<generate-MLNumericTest primitive="double" matlabClass="Double" />
-        <generate-MLNumericTest primitive="float" matlabClass="Single" />-->
+        <generate-MLNumeric dir="test/com/jmatio/types" template="MLNumericTest" suffix="Test"
+                            NumberClass="Double" primitive="double" matlabClass="double"
+                            minValue="-1.1" maxValue="1.1"
+                            arrayValues="1.1, 2.2, 3.3, 4.4, 5.5, 6.6" matrixValues="{1.1, 4.4}, {2.2, 5.5}, {3.3, 6.6}" />
+        <generate-MLNumeric dir="test/com/jmatio/types" template="MLNumericTest" suffix="Test"
+                            NumberClass="Float" primitive="float" matlabClass="single"
+                            minValue="-1.1f" maxValue="1.1f"
+                            arrayValues="1.1f, 2.2f, 3.3f, 4.4f, 5.5f, 6.6f" matrixValues="{1.1f, 4.4f}, {2.2f, 5.5f}, {3.3f, 6.6f}" />
     </target>
 
     <target name="compile" depends="generate-source" description="--> Compiles source folder">

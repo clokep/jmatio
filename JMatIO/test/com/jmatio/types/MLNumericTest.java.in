@@ -69,7 +69,7 @@ public class ML@matlabClassCamelCase@Test {
         String fileName = "@matlabClass@tmp.mat";
 
         // Test column-packed vector.
-        @primitive@[] src = new @primitive@[] {1, 2, 3, 4, 5, 6};
+        @primitive@[] src = new @primitive@[] {@arrayValues@};
         // Create 3x2 @matlabClass@ matrix.
         // [1, 4;
         //  2, 5;
@@ -77,7 +77,7 @@ public class ML@matlabClassCamelCase@Test {
         ML@matlabClassCamelCase@ array1D = new ML@matlabClassCamelCase@(name, src, 3);
 
         // Test 2D array coresponding to test vector
-        @primitive@[][] src2D = new @primitive@[][]{{1, 4}, {2, 5}, {3, 6}};
+        @primitive@[][] src2D = new @primitive@[][]{@matrixValues@};
         // Test 2D constructor.
         MLArray array2D = new ML@matlabClassCamelCase@(name, src2D);
 
