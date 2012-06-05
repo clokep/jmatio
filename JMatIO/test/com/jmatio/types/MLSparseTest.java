@@ -25,76 +25,84 @@ public class MLSparseTest {
     /**
      * Tests <code>MLSparse</code> reading and writing.
      *
-     * @throws IOException
+     * @throws Exception
      */
-    @Test public void testMLSparse() throws IOException
-    {
-        //array name
+    @Test public void testMLSparse() throws Exception {
+        // Array name.
         String name = "sparsearr";
-        //file name in which array will be storred
-        String fileName = "mlsparse.mat";
+        // File name in which array will be stored.
+        String fileName = "sparse-tmp.mat";
 
-        //test 2D array coresponding to test vector
-        double[][] referenceReal = new double[][] { { 1.3, 4.0 },
-                { 2.0, 0.0 },
-                { 0.0, 0.0 }
-            };
-        double[][] referenceImaginary = new double[][] { { 0.0, 0.0 },
-                { 2.0, 0.0 },
-                { 0.0, 6.0 }
-            };
+        // Test 2D array coresponding to test vector.
+        double[][] referenceReal = new double[][] {{1.3, 4.0},
+                                                   {2.0, 0.0},
+                                                   {0.0, 0.0}};
+        double[][] referenceImaginary = new double[][] {{0.0, 0.0},
+                                                        {2.0, 0.0},
+                                                        {0.0, 6.0}};
 
-        MLSparse mlSparse = new MLSparse(name, new int[] {3, 2}, MLArray.mtFLAG_COMPLEX, 5);
-        mlSparse.setReal(1.3, 0, 0);
-        mlSparse.setReal(4.0, 0, 1);
-        mlSparse.setReal(2.0, 1, 0);
-        mlSparse.setImaginary(2.0, 1, 0);
-        mlSparse.setImaginary(6.0, 2, 1);
+        MLSparse src = new MLSparse(name, new int[] {3, 2}, MLArray.mtFLAG_COMPLEX, 5);
+        src.setReal(1.3, 0, 0);
+        src.setReal(4.0, 0, 1);
+        src.setReal(2.0, 1, 0);
+        src.setImaginary(2.0, 1, 0);
+        src.setImaginary(6.0, 2, 1);
 
-        //write array to file
-        ArrayList<MLArray> list = new ArrayList<MLArray>();
-        list.add( mlSparse );
+        // Write arrays to file.
+        new MatFileWriter(fileName, Arrays.asList((MLArray)src));
 
-        //write arrays to file
-        new MatFileWriter( fileName, list );
+        // Read array from file.
+        MatFileReader mfr = new MatFileReader(fileName);
+        MLSparse ret = (MLSparse)mfr.getMLArray(name);
 
-        //read array form file
-        MatFileReader mfr = new MatFileReader( fileName );
-        MLArray mlArrayRetrived = mfr.getMLArray( name );
+        // Test if MLArray objects are equal.
+        assertEquals("Test if value read from file equals value stored.", src, ret);
 
-        //test if MLArray objects are equal
-        assertEquals("Test if value red from file equals value stored", mlSparse, mlArrayRetrived);
-
-        //test if 2D array match
-        for ( int i = 0; i < referenceReal.length; i++ )
-        {
-            for (int j = 0; j < referenceReal[i].length; j++) {
-                assertEquals( "2D array mismatch (real)", (Double)referenceReal[i][j], ((MLSparse)mlArrayRetrived).getReal(i,j));
-            }
+        // Test if 2D arrays match.
+        for (int i = 0; i < referenceReal.length; ++i) {
+            for (int j = 0; j < referenceReal[i].length; ++j)
+                assertEquals("2D array mismatch (real).", (Double)referenceReal[i][j], ret.getReal(i, j));
         }
-        for ( int i = 0; i < referenceImaginary.length; i++ )
-        {
-            for (int j = 0; j < referenceImaginary[i].length; j++) {
-                assertEquals( "2D array mismatch (imaginary)", (Double)referenceImaginary[i][j], ((MLSparse)mlArrayRetrived).getImaginary(i,j));
-            }
+        for (int i = 0; i < referenceImaginary.length; ++i) {
+            for (int j = 0; j < referenceImaginary[i].length; ++j)
+                assertEquals("2D array mismatch (imaginary).", (Double)referenceImaginary[i][j], ret.getImaginary(i, j));
         }
     }
 
-
     @Test
     public void testSparseFromMatlabCreatedFile() throws IOException {
-        //array name
+        // Array name
         File file = new File("test/sparse.mat");
-        MatFileReader reader = new MatFileReader( file );
-        MLArray mlArray = reader.getMLArray( "spa" );
+        String name = "spa";
+        MatFileReader reader = new MatFileReader(file);
+        MLArray src = reader.getMLArray(name);
 
-        List<MLArray> towrite =  Arrays.asList( mlArray );
+        String filename = "sparse-tmp.mat";
+        new MatFileWriter(filename, Arrays.asList((MLArray)src));
 
-        new MatFileWriter( "sparsecopy.mat", towrite );
+        reader = new MatFileReader(filename);
+        MLArray ret = reader.getMLArray(name);
 
-        reader = new MatFileReader("sparsecopy.mat");
-        MLArray mlArrayRetrieved = reader.getMLArray( "spa" );
+        assertEquals(src, ret);
+    }
 
-        assertEquals(mlArray, mlArrayRetrieved);
+    /**
+     * Test case that exposes the bug found by Julien C. from polymtl.ca.
+     * <p>
+     * The test file contains a sparse array on crashes the reader. The bug
+     * appeared when the {@link MLSparse} tried to allocate resources (very very
+     * big {@link ByteBuffer}) and {@link IllegalArgumentException} was thrown.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testBigSparseFile() throws Exception {
+        final File file = new File("test/sparse-big.mat");
+        // Read array form file.
+        MatFileReader mfr = new MatFileReader();
+
+        // Reader crashes on reading this file bug caused by sparse array
+        // allocation.
+        mfr.read(file, MatFileReader.DIRECT_BYTE_BUFFER);
     }
 }
