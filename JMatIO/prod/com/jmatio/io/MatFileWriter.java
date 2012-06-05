@@ -39,6 +39,7 @@ import com.jmatio.types.MLArray;
  */
 public class MatFileWriter {
     protected FileOutputStream fos;
+    protected boolean compress = true;
 
     /**
      * Creates the new <code>{@link MatFileWriter}</code> instance
@@ -123,12 +124,21 @@ public class MatFileWriter {
     }
 
     protected synchronized void writeMatrix(MLArray data) throws IOException {
+        // Write uncompressed data.
+        if (!this.compress) {
+            // Write MATRIX bytes into buffer.
+            data.writeMatrix(this.fos);
+            return;
+        }
+
+        // Write compressed data.
+
         // Prepare buffer for MATRIX data.
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream( baos );
+        DataOutputStream dos = new DataOutputStream(baos);
+
         // Write MATRIX bytes into buffer.
         data.writeMatrix(dos);
-
         byte[] compressed = this.deflate(baos.toByteArray());
 
         // Write COMPRESSED tag and compressed data into output channel.
@@ -191,5 +201,16 @@ public class MatFileWriter {
 
         // Write the endian indicator (2-bytes).
         dos.write(header.getEndianIndicator(), 0, 2);
+    }
+
+    /**
+     * Set whether to write compressed data or not.
+     */
+    public void setCompress(boolean compress) {
+        this.compress = compress;
+    }
+
+    public boolean getCompress() {
+        return this.compress;
     }
 }
