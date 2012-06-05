@@ -46,14 +46,14 @@ public class ML@matlabClassCamelCase@Test {
 
         // Read the array in again.
         mfr = new MatFileReader(fileName);
-        ML@matlabClassCamelCase@ dst = (ML@matlabClassCamelCase@)mfr.getMLArray(arrName);
+        ML@matlabClassCamelCase@ ret = (ML@matlabClassCamelCase@)mfr.getMLArray(arrName);
         assertEquals("Test min. value from file: " + fileName + " array: " + arrName + ".",
-                     min, dst.get(0, 0));
+                     min, ret.get(0, 0));
         assertEquals("Test max. value from file:" + fileName + " array: " + arrName + ".",
-                     max, dst.get(0, 1));
+                     max, ret.get(0, 1));
 
         assertEquals("Test if array retrieved from " + fileName + " equals source array.",
-                     src, dst);
+                     src, ret);
     }
 
     /**
@@ -66,14 +66,11 @@ public class ML@matlabClassCamelCase@Test {
         // Array name.
         String name = "arr";
         // File name in which array will be stored.
-        String fileName = "@matlabClass@tmp.mat";
+        String fileName = "@matlabClass@-tmp.mat";
 
         // Test column-packed vector.
-        @primitive@[] src = new @primitive@[] {@arrayValues@};
+        @primitive@[] src = new @primitive@[]{@arrayValues@};
         // Create 3x2 @matlabClass@ matrix.
-        // [1, 4;
-        //  2, 5;
-        //  3, 6]
         ML@matlabClassCamelCase@ array1D = new ML@matlabClassCamelCase@(name, src, 3);
 
         // Test 2D array coresponding to test vector
@@ -89,15 +86,38 @@ public class ML@matlabClassCamelCase@Test {
 
         // Read array from file.
         MatFileReader mfr = new MatFileReader(fileName);
-        ML@matlabClassCamelCase@ mlArrayRetrived = (ML@matlabClassCamelCase@)mfr.getMLArray(name);
+        ML@matlabClassCamelCase@ ret = (ML@matlabClassCamelCase@)mfr.getMLArray(name);
 
         // Test if MLArray objects are equal
-        assertEquals("Test if value read from file equals value stored.", array1D, mlArrayRetrived);
+        assertEquals("Test if value read from file equals value stored.", array1D, ret);
 
         // Test if 2D array match
-        for (int i = 0; i < src2D.length; ++i) {
-            boolean result = Arrays.equals(src2D[i], mlArrayRetrived.getArray()[i]);
-            assertEquals("Test if the 2D arrays match.", true, result);
-        }
+        for (int i = 0; i < src2D.length; ++i)
+            assertTrue("Test if the 2D arrays match.", Arrays.equals(src2D[i], ret.getArray()[i]));
+    }
+
+    @Test
+    public void test@matlabClassCamelCase@Benchmark() throws Exception {
+        final String fileName = "big-@matlabClass@-tmp.mat";
+        final String name = "big@matlabClass@";
+        final int SIZE = 1024;
+
+        ML@matlabClassCamelCase@ src = new ML@matlabClassCamelCase@(name, new int[]{SIZE, SIZE});
+
+        // Write the array to file.
+        new MatFileWriter(fileName, Arrays.asList((MLArray)src));
+
+        //read array form file
+        MatFileReader mfr = new MatFileReader(fileName);
+        ML@matlabClassCamelCase@ ret = (ML@matlabClassCamelCase@)mfr.getMLArray(name);
+
+        final long start = System.nanoTime();
+        for (int i = 0; i < ret.getSize(); ++i)
+            ret.get(i);
+        final long stop = System.nanoTime();
+        System.out.println("--> " + (stop - start) / 1e6 +  "[ns]");
+
+        // Test if MLArray objects are equal.
+        assertEquals("Test if value read from file equals the value stored.", src, ret);
     }
 }

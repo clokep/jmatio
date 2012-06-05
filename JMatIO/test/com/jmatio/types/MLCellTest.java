@@ -30,39 +30,35 @@ public class MLCellTest {
      */
     @Test
     public void testMLCell() throws IOException {
-        //array name
+        // Array names.
         String name = "doublearr";
         String name2 = "name";
-        //file name in which array will be storred
+        // File name in which array will be stored.
         String fileName = "mlcell.mat";
 
-        //test column-packed vector
-        double[] src = new double[] { 1.3, 2.0, 3.0, 4.0, 5.0, 6.0 };
+        // Test column-packed vector.
+        double[] src = new double[] {1.3, 2.0, 3.0, 4.0, 5.0, 6.0};
 
-        //create 3x2 double matrix
-        //[ 1.0 4.0 ;
-        //  2.0 5.0 ;
-        //  3.0 6.0 ]
-        MLDouble mlDouble = new MLDouble( name, src, 3 );
-        MLChar mlChar = new MLChar( name2, "none" );
+        // Create 3x2 double matrix.
+        // [1.0 4.0;
+        //  2.0 5.0;
+        //  3.0 6.0]
+        MLDouble mlDouble = new MLDouble(name, src, 3);
+        MLChar mlChar = new MLChar(name2, "none");
 
-
-        MLCell mlCell = new MLCell("cl", new int[] {2,1} );
+        name = "cl";
+        MLCell mlCell = new MLCell(name, new int[] {2,1});
         mlCell.set(mlChar, 0);
         mlCell.set(mlDouble, 1);
 
-        //write array to file
-        ArrayList<MLArray> list = new ArrayList<MLArray>();
-        list.add( mlCell );
+        // Write array to file.
+        new MatFileWriter(fileName, Arrays.asList((MLArray)mlCell));
 
-        //write arrays to file
-        new MatFileWriter( fileName, list );
+        // Read array from file.
+        MatFileReader mfr = new MatFileReader(fileName);
+        MLCell mlArrayRetrived = (MLCell)mfr.getMLArray(name);
 
-        //read array form file
-        MatFileReader mfr = new MatFileReader( fileName );
-        MLCell mlArrayRetrived = (MLCell)mfr.getMLArray( "cl" );
-
-        assertEquals(mlDouble, mlArrayRetrived.get(1) );
-        assertEquals(mlChar, mlArrayRetrived.get(0) );
+        assertEquals(mlDouble, mlArrayRetrived.get(1));
+        assertEquals(mlChar, mlArrayRetrived.get(0));
     }
 }
