@@ -1,57 +1,43 @@
 package com.jmatio.io;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.zip.DataFormatException;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
 
-import com.jmatio.common.MatDataTypes;
 import com.jmatio.types.MLArray;
-import com.jmatio.types.MLCell;
-import com.jmatio.types.MLChar;
-import com.jmatio.types.MLNumericArray;
-import com.jmatio.types.MLSparse;
-import com.jmatio.types.MLStructure;
 
 /**
- * MAT-file Incremental writer.
+ * MAT-file incremental writer.
  *
- * An updated writer which allows adding variables incrementally
- * for the life of the writer.  This is necessary to allow large
- * variables to be written without having to hold onto then longer
- * than is necessary.
+ * An updated writer which allows adding variables incrementally for the life
+ * of the writer. This is necessary to allow large variables to be written
+ * without having to hold onto then longer than is necessary.
  *
- * The writer internally maintains a list of the variable names
- * it has written so far, and will throw an exception if the same
- * variable name is submitted more than once to the same reader.
+ * The writer internally maintains a list of the variable names it has written
+ * so far, and will throw an exception if the same variable name is submitted
+ * more than once to the same reader.
  *
  * Usage:
  * <pre><code>
- * //1. First create example arrays
- * double[] src = new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
- * MLDouble mlDouble = new MLDouble( "double_arr", src, 3 );
- * MLChar mlChar = new MLChar( "char_arr", "I am dummy" );
+ * // 1. First create example arrays.
+ * double[] src = new double[] {1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+ * MLDouble mlDouble = new MLDouble( "double_arr", src, 3);
+ * MLChar mlChar = new MLChar("char_arr", "I am dummy");
  *
- * //2. write arrays to file
- * MatFileIncrementalWriter writer = new MatFileIncrementalWriter( new File("mat_file.mat"));
+ * // 2. Write arrays to file.
+ * MatFileIncrementalWriter writer = new MatFileIncrementalWriter("mat_file.mat");
  * writer.write(mlDouble);
  * writer.write(mlChar);
  *
  * writer.close();
- *
  * </code></pre>
  *
- * this is "equal" to Matlab commands:
+ * This is "equal" to Matlab commands:
  * <pre><code>
- * >> double_arr = [ 1 2; 3 4; 5 6];
+ * >> double_arr = [1 2; 3 4; 5 6];
  * >> char_arr = 'I am dummy';
  * >>
  * >> save('mat_file.mat', 'double_arr');
@@ -64,6 +50,7 @@ public class MatFileIncrementalWriter extends MatFileWriter {
     private boolean headerWritten = false;
     private boolean isStillValid = false;
     private Set<String> varNames = new TreeSet<String>();
+
     /**
      * Creates a writer to a file given the filename.
      *
@@ -90,36 +77,10 @@ public class MatFileIncrementalWriter extends MatFileWriter {
         String vName = data.getName();
         if (this.varNames.contains(vName))
             throw new IllegalArgumentException("Error: variable " + vName + " specified more than once for file input.");
+
         try {
-            // Write the header, but only once.
-            if (!this.headerWritten) {
-                this.writeHeader();
-                this.headerWritten = true;
-            }
-
-            // Prepare buffer for MATRIX data.
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            DataOutputStream dos = new DataOutputStream( baos );
-            // Write MATRIX bytes into buffer.
-            data.writeMatrix(dos);
-
-            // Compress data to save storage.
-            Deflater compresser = new Deflater();
-
-            byte[] input = baos.toByteArray();
-
-            ByteArrayOutputStream compressed = new ByteArrayOutputStream();
-            DataOutputStream dout = new DataOutputStream(new DeflaterOutputStream(compressed, compresser));
-
-            dout.write(input);
-
-            dout.close();
-            compressed.close();
-
-            // Write COMPRESSED tag and compressed data into output channel.
-            byte[] compressedBytes = compressed.toByteArray();
-            OSMatTag tag = new OSMatTag(MatDataTypes.miCOMPRESSED, compressedBytes);
-            tag.writeTo(this.fos);
+            this.writeHeader();
+            this.writeMatrix(data);
         } catch (IOException e) {
             throw e;
         } finally { }
@@ -144,6 +105,16 @@ public class MatFileIncrementalWriter extends MatFileWriter {
         } catch (IOException e) {
             throw e;
         }
+    }
+
+    @Override
+    protected void writeHeader() throws IOException {
+        // Write the header, but only once.
+        if (this.headerWritten)
+            return;
+
+        super.writeHeader();
+        this.headerWritten = true;
     }
 
     public synchronized void close() throws IOException {

@@ -15,11 +15,32 @@ public class MatFileHeader {
                                                    + System.getProperty("os.name")
                                                    + ", CREATED on: ";
     private static int DEFAULT_VERSION = 0x0100;
+    /**
+     * {@link ByteBuffer}s are always BIG_ENDIAN by default in Java. By default,
+     * we don't require byte swapping.
+     */
     private static byte[] DEFAULT_ENDIAN_INDICATOR = new byte[] {(byte)'M', (byte)'I'};
 
     private int version;
     private String description;
     private byte[] endianIndicator;
+
+    /**
+     * Creates a new <code>MatFileHeader</code> instance with default header
+     * values:
+     * <ul>
+     *   <li>MAT-file is 5.0 version</li>
+     *   <li>Version is set to 0x0100</li>
+     *   <li>No byte-swapping ("MI")</li>
+     * </ul>
+     *
+     * @return - new <code>MatFileHeader</code> instance
+     */
+    public MatFileHeader() {
+        this(MatFileHeader.DEFAULT_DESCRIPTIVE_TEXT + (new Date()).toString(),
+             MatFileHeader.DEFAULT_VERSION,
+             MatFileHeader.DEFAULT_ENDIAN_INDICATOR);
+    }
 
     /**
      * New MAT-file header
@@ -60,22 +81,6 @@ public class MatFileHeader {
      */
     public int getVersion() {
         return this.version;
-    }
-
-    /**
-     * A factory. Creates new <code>MatFileHeader</code> instance with default header values:
-     * <ul>
-     *  <li>MAT-file is 5.0 version</li>
-     *  <li>version is set to 0x0100</li>
-     *  <li>no byte-swapping ("IM")</li>
-     * </ul>
-     *
-     * @return - new <code>MatFileHeader</code> instance
-     */
-    public static MatFileHeader createHeader() {
-        return new MatFileHeader(MatFileHeader.DEFAULT_DESCRIPTIVE_TEXT + (new Date()).toString(),
-                                 MatFileHeader.DEFAULT_VERSION,
-                                 MatFileHeader.DEFAULT_ENDIAN_INDICATOR);
     }
 
     /* (non-Javadoc)

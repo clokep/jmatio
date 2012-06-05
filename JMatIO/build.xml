@@ -25,7 +25,6 @@
         <property name="build.test.bin" location="${build.dir}\test"/>
         <property name="build.resource" location="${build.dir}\"/>
         <property name="build.javadocs" location="${build.dir}\doc"/>
-
     </target>
 
     <!-- Copy the license and readme files. -->
@@ -230,7 +229,7 @@
             </batchtest>
         </junit>
 
-        <delete dir="${build.dir}" includes="*.mat"/>
+        <!--<delete dir="${build.dir}" includes="*.mat"/>-->
     </target>
 
     <target name="package" depends="compile,copy-resources" description="--> Creates a .jar package">
