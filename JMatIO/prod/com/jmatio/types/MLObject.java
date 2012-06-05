@@ -58,9 +58,9 @@ public class MLObject extends MLStructure {
     /* (non-Javadoc)
      * @see com.paradigmdesigner.matlab.types.MLArray#contentToString()
      */
-    /*public String contentToString() {
+    public String contentToString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(name + " = \n");
+        sb.append(this.name + " (" + this.className + ") = \n");
 
         if (this.getSize() == 1) {
             for (String key : this.keys)
@@ -68,12 +68,12 @@ public class MLObject extends MLStructure {
         } else {
             sb.append("\n");
             sb.append(this.getM() + "x" + this.getN());
-            sb.append(" struct array with fields: \n");
+            sb.append(" object with fields: \n");
             for (String key : this.keys)
                 sb.append("\t" + key + "\n");
         }
         return sb.toString();
-    }*/
+    }
 
     public void writeData(DataOutputStream dos) throws IOException {
         // Write the class name.

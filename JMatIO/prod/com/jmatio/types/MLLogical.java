@@ -157,6 +157,25 @@ public class MLLogical extends MLArray {
         this.bools = null;
     }
 
+    public String contentToString() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(this.name + " = \n");
+
+        if (this.getSize() > 1000) {
+            sb.append("Cannot display variables with more than 1000 elements.");
+            return sb.toString();
+        }
+        for (int m = 0; m < this.getM(); ++m) {
+           sb.append("\t");
+           for (int n = 0; n < this.getN(); ++n) {
+               sb.append(this.get(m, n));
+               sb.append("\t");
+           }
+           sb.append("\n");
+        }
+        return sb.toString();
+    }
+
     public void writeData(DataOutputStream dos) throws IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         DataOutputStream bufferDOS = new DataOutputStream(buffer);

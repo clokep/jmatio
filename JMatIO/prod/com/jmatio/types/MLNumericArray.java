@@ -254,15 +254,15 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
      */
     public String contentToString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(name + " = \n");
+        sb.append(this.name + " = \n");
 
         if (this.getSize() > 1000) {
             sb.append("Cannot display variables with more than 1000 elements.");
             return sb.toString();
         }
-        for (int m = 0; m < getM(); ++m) {
+        for (int m = 0; m < this.getM(); ++m) {
            sb.append("\t");
-           for (int n = 0; n < getN(); ++n) {
+           for (int n = 0; n < this.getN(); ++n) {
                sb.append(this.getReal(m, n));
                if (this.isComplex())
                    sb.append("+" + this.getImaginary(m, n) + "i");

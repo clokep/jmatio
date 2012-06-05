@@ -28,15 +28,15 @@ public class MLStructure extends MLArray {
     /**
      * A Set that keeps structure field names.
      */
-    private Set<String> keys;
+    protected Set<String> keys;
     /**
      * Array of structures.
      */
-    private List<Map<String, MLArray>> mlStructArray;
+    protected List<Map<String, MLArray>> mlStructArray;
     /**
      * Current structure pointer for bulk insert.
      */
-    private int currentIndex = 0;
+    protected int currentIndex = 0;
 
     public MLStructure(String name, int[] dims) {
         this(name, dims, MLArray.mxSTRUCT_CLASS, 0);
@@ -210,7 +210,7 @@ public class MLStructure extends MLArray {
      */
     public String contentToString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(name + " = \n");
+        sb.append(this.name + " = \n");
 
         if (this.getSize() == 1) {
             for (String key : this.keys)

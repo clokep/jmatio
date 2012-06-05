@@ -206,7 +206,7 @@ public class MLSparse extends MLNumericArray<Double> {
      */
     public String contentToString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(name + " = \n");
+        sb.append(this.name + " = \n");
 
         for (IndexMN i : this.indexSet) {
             sb.append("\t(");

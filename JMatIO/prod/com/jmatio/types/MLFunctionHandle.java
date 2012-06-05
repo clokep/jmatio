@@ -45,6 +45,10 @@ public class MLFunctionHandle extends MLArray {
             //this.data = null;
     }
 
+    public String contentToString() {
+        return null;
+    }
+
     public void writeData(DataOutputStream dos) throws IOException {
         //this.writeMatrix(dos);
     }

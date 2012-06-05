@@ -358,16 +358,12 @@ public abstract class MLArray {
         return sb.toString();
     }
 
-    public String contentToString() {
-        return "content cannot be displayed";
-    }
-
     abstract public void dispose();
 
     /**
      * Writes MATRIX into <code>OutputStream</code>.
      *
-     * @param output <code>OutputStream</code>
+     * @param os <code>OutputStream</code>
      * @throws IOException
      */
     public void writeMatrix(OutputStream os) throws IOException {
@@ -445,4 +441,6 @@ public abstract class MLArray {
      *
      */
     abstract public void writeData(DataOutputStream dos) throws IOException;
+
+    abstract public String contentToString();
 }
