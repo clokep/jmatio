@@ -33,6 +33,7 @@ import com.jmatio.types.MLInt16;
 import com.jmatio.types.MLInt32;
 import com.jmatio.types.MLInt64;
 import com.jmatio.types.MLInt8;
+import com.jmatio.types.MLJavaObject;
 import com.jmatio.types.MLLogical;
 import com.jmatio.types.MLNumericArray;
 import com.jmatio.types.MLObject;
@@ -690,6 +691,9 @@ public class MatFileReader {
                 opaque.set(((MLNumericArray<?>)opaquematrix).getRealByteBuffer());
             } else
                 opaque.set(ByteBuffer.allocate(0));
+
+            if (opaque.isJavaObject())
+                opaque = new MLJavaObject(opaque);
 
             mlArray = opaque;
         //} else if (type == MLArray.mxFUNCTION_CLASS) {

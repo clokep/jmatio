@@ -19,9 +19,18 @@ import com.jmatio.types.MLUInt8;
  * @author Patrick Cloke <pcloke@mitre.org>
  */
 public class MLOpaque extends MLArray {
-    private ByteBuffer data;
-    private String className;
-    private String classType;
+    protected ByteBuffer data;
+    /**
+     * For Java objects, the canonical class name.
+     */
+    protected String className;
+    protected String classType;
+
+    // Some known types are listed below:
+    /** A serialized Java object. */
+    public static final String JAVA_OBJECT_TYPE = "java";
+    /** A containers.Map object. */
+    public static final String CONTAINERS_MAP_TYPE = "CMOS";
 
     public MLOpaque(String name, String classType, String className) {
         super(name, new int[]{1}, MLArray.mxOPAQUE_CLASS, 0);
@@ -35,23 +44,20 @@ public class MLOpaque extends MLArray {
         this.data = data;
     }
 
-    public Object get() throws MatlabIOException, IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        if (!this.classType.equals("java"))
-            throw new MatlabIOException("Unsupported opaque class: " + this.classType);
+    public ByteBuffer get() {
+        return this.data;
+    }
 
-        // Unserialize the object.
-        ByteArrayInputStream bais = new ByteArrayInputStream(this.data.array());
-        ObjectInputStream ois = new ObjectInputStream(bais);
-        Object ret = ois.readObject();
-        ois.close();
+    public String getClassName() {
+        return this.className;
+    }
 
-        // Ensure the class equals the expected class.
-        /*Class clazz = Class.forName(this.className);
-        if (!ret.getClass().equals(clazz))
-            throw new MatlabIOException("An error occurred unserializing: " + this.classType);
-        */
+    public String getClassType() {
+        return this.classType;
+    }
 
-        return ret;
+    public boolean isJavaObject() {
+        return this.classType.equals(MLOpaque.JAVA_OBJECT_TYPE);
     }
 
     public ByteBuffer getBuffer() {

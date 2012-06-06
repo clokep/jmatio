@@ -18,6 +18,7 @@ import com.jmatio.io.MatFileReader;
 import com.jmatio.io.MatFileWriter;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.MLOpaque;
+import com.jmatio.types.MLJavaObject;
 
 /**
  * @author Patrick Cloke <pcloke@mitre.org>
@@ -28,7 +29,7 @@ public class MLOpaqueTest {
         // Test reading the MLArray generated natively by Matlab.
         MatFileReader reader = new MatFileReader("test/containers.Map.mat");
         //MatFileReader reader = new MatFileReader("test/containers.Map2.mat");
-        MLArray readArray = reader.getContent().get("arr");
+        MLArray src = reader.getContent().get("arr");
     }
 
     @Test
@@ -37,10 +38,10 @@ public class MLOpaqueTest {
         String fileName = "test/opaque-java.lang.Integer.mat";
         String arrName = "arr";
         MatFileReader reader = new MatFileReader(fileName);
-        MLOpaque src = (MLOpaque)reader.getContent().get(arrName);
+        MLJavaObject src = (MLJavaObject)reader.getContent().get(arrName);
 
         // Check the contents are what is expected.
-        Integer ret = (Integer)src.get();
+        Integer ret = (Integer)src.getObject();
         assertEquals(new Integer(10), ret);
 
         // Write the array out to a file.
@@ -49,9 +50,9 @@ public class MLOpaqueTest {
 
         // Read the array in again.
         reader = new MatFileReader(fileName);
-        MLOpaque dst = (MLOpaque)reader.getMLArray(arrName);
+        MLJavaObject dst = (MLJavaObject)reader.getMLArray(arrName);
         assertEquals("Test if array contents retrieved from " + fileName + " equals source array contents.",
-                     src.get(), dst.get());
+                     src.getObject(), dst.getObject());
         assertEquals("Test if array retrieved from " + fileName + " equals source array.",
                      src, dst);
     }
@@ -59,9 +60,9 @@ public class MLOpaqueTest {
     @Test
     public void testOpaqueIntegerArray() throws Exception {
         MatFileReader reader = new MatFileReader("test/opaque-java.lang.Integer-array.mat");
-        MLOpaque readArray = (MLOpaque)reader.getContent().get("arr");
+        MLJavaObject src = (MLJavaObject)reader.getContent().get("arr");
 
-        Integer[] ret = (Integer[])readArray.get();
+        Integer[] ret = (Integer[])src.getObject();
         Integer[] expected = new Integer[2];
         expected[0] = Integer.MIN_VALUE;
         expected[1] = Integer.MAX_VALUE;
