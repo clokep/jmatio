@@ -667,20 +667,19 @@ public class MatFileReader {
             }
             mlArray = sparse;
         } else if (type == MLArray.mxOPAQUE_CLASS) {
-            // Read the class name.
-            tag = new ISMatTag(buf);
-            String className = tag.readToString();
-
             // The "name" field is actually used by MATLAB to store the class
-            // type (or something like that); e.g. java or MCOS
-            // (containers.Map).
+            // type; e.g. java or MCOS (containers.Map).
             String classType = name;
 
-            // The dims is used to store the variable name.
+            // The dimensions field is used to store the variable name.
             byte[] nn = new byte[dims.length];
             for (int i = 0; i < dims.length; ++i)
                 nn[i] = (byte)dims[i];
             name = new String(nn);
+
+            // Read the class name.
+            tag = new ISMatTag(buf);
+            String className = tag.readToString();
 
             MLOpaque opaque = new MLOpaque(name, classType, className);
 
@@ -688,9 +687,9 @@ public class MatFileReader {
             tag = new ISMatTag(buf);
             if (tag.size > 0) {
                 MLArray opaquematrix = this.readMatrix(buf, false);
-                opaque.set(opaquematrix);
+                opaque.set(((MLNumericArray<?>)opaquematrix).getRealByteBuffer());
             } else
-                opaque.set(new MLEmptyArray());
+                opaque.set(ByteBuffer.allocate(0));
 
             mlArray = opaque;
         //} else if (type == MLArray.mxFUNCTION_CLASS) {

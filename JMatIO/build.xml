@@ -7,7 +7,7 @@
     <!-- Set up paths and variables. -->
     <target name="init" description="--> initialization">
         <property name="name" value="jmatio"/>
-        <property name="version" value="0.5"/>
+        <property name="version" value="0.6pre"/>
         <property name="author" value="Wojciech Gradkowski, Patrick Cloke"/>
         <property name="year" value="2007 - 2012"/>
 

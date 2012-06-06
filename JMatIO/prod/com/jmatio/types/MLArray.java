@@ -109,15 +109,6 @@ public abstract class MLArray {
         return this.type & MLArray.mtFLAG_TYPE | this.attributes & 0xffffff00;
     }
 
-    /**
-     * Gets the array name as an array of bytes.
-     *
-     * @return array name as bytes
-     */
-    public byte[] getNameToByteArray() {
-        return this.name.getBytes();
-    }
-
     public int[] getDimensions() {
         int ai[] = null;
         if (dims != null) {
@@ -393,7 +384,7 @@ public abstract class MLArray {
      * @param os <code>OutputStream</code>
      * @throws IOException
      */
-    private void writeFlags(OutputStream os) throws IOException {
+    protected void writeFlags(OutputStream os) throws IOException {
         ByteBuffer buffer = ByteBuffer.allocate(4 * 2);
         buffer.putInt(this.getFlags());
 
@@ -427,11 +418,21 @@ public abstract class MLArray {
      * @param os <code>OutputStream</code>
      * @throws IOException
      */
-    private void writeName(OutputStream os) throws IOException {
+    protected void writeName(OutputStream os) throws IOException {
         if (!this.isChild && !VariableUtils.IsVarName(this.name))
             throw new MatlabIOException("Invalid variable name: " + this.name);
+        this.writeString(os, this.name);
+    }
 
-        byte[] nameByteArray = this.getNameToByteArray();
+    /**
+     * Writes a String into <code>OutputStream</code>.
+     *
+     * @param os <code>OutputStream</code>
+     * @param data <code>String</code>
+     * @throws IOException
+     */
+    protected void writeString(OutputStream os, String data) throws IOException {
+        byte[] nameByteArray = data.getBytes();
         OSMatTag tag = new OSMatTag(MatDataTypes.miINT8, nameByteArray);
         tag.writeTo(os);
     }

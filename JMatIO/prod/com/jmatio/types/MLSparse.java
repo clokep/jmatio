@@ -8,6 +8,7 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.Arrays;
 
 import com.jmatio.common.MatDataTypes;
 import com.jmatio.io.OSMatTag;
@@ -102,7 +103,7 @@ public class MLSparse extends MLNumericArray<Double> {
     /* (non-Javadoc)
      * @see com.jmatio.types.MLNumericArray#getReal(int)
      */
-    public Double getReal (int index) {
+    public Double getReal(int index) {
         throw new IllegalArgumentException("Can't get Sparse array elements by index. " +
         "Please use getReal(int index) instead.");
     }
@@ -239,7 +240,7 @@ public class MLSparse extends MLNumericArray<Double> {
          * @see java.lang.Comparable#compareTo(java.lang.Object)
          */
         public int compareTo(IndexMN anOtherIndex) {
-            return getIndex(m,n) - getIndex(anOtherIndex.m,anOtherIndex.n);
+            return getIndex(m, n) - getIndex(anOtherIndex.m, anOtherIndex.n);
         }
 
         /* (non-Javadoc)
@@ -247,7 +248,7 @@ public class MLSparse extends MLNumericArray<Double> {
          */
         public boolean equals(Object o) {
             if (o instanceof IndexMN)
-                return m == ((IndexMN)o).m && n == ((IndexMN)o).n;
+                return this.m == ((IndexMN)o).m && this.n == ((IndexMN)o).n;
             return super.equals(o);
         }
 
@@ -286,6 +287,24 @@ public class MLSparse extends MLNumericArray<Double> {
         ByteBuffer buff = ByteBuffer.allocate(this.getBytesAllocated());
         buff.putDouble(value);
         return buff.array();
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof  MLSparse) {
+            // Check if the indices and real values are equal.
+            boolean result = Arrays.equals(this.getIR(), ((MLSparse)o).getIR()) &&
+                             Arrays.equals(this.getJC(), ((MLSparse)o).getJC()) &&
+                             Arrays.equals(this.exportReal(), ((MLSparse)o).exportReal());
+
+            if (this.isComplex() && result)
+                result &= Arrays.equals(this.exportImaginary(), ((MLSparse)o).exportImaginary());
+            return result;
+        }
+        return super.equals(o);
     }
 
     public void writeData(DataOutputStream dos) throws IOException {

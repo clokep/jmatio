@@ -77,13 +77,9 @@ public class MLObject extends MLStructure {
 
     public void writeData(DataOutputStream dos) throws IOException {
         // Write the class name.
-        byte[] nameByteArray = this.getClassNameToByteArray();
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        DataOutputStream bufferDOS = new DataOutputStream(buffer);
-        bufferDOS.write(nameByteArray);
-        OSMatTag tag = new OSMatTag(MatDataTypes.miINT8, buffer.toByteArray());
-        tag.writeTo(dos);
+        this.writeString(dos, this.className);
 
+        // Write the structure representation.
         super.writeData(dos);
     }
 }

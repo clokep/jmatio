@@ -279,43 +279,13 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     @Override
     public boolean equals(Object o) {
         if (o instanceof  MLNumericArray<?>) {
-            boolean result = directByteBufferEquals(this.real, ((MLNumericArray<?>)o).real)
-                                   && Arrays.equals(this.dims, ((MLNumericArray<?>)o).dims);
+            boolean result = this.real.rewind().equals(((MLNumericArray<?>)o).real.rewind()) &&
+                             Arrays.equals(this.dims, ((MLArray)o).dims);
             if (this.isComplex() && result)
-                result &= directByteBufferEquals(this.imaginary, ((MLNumericArray<?>)o).imaginary);
+                result &= this.imaginary.rewind().equals(((MLNumericArray<?>)o).imaginary.rewind());
             return result;
         }
         return super.equals(o);
-    }
-
-    /**
-     * Equals implementation for direct <code>ByteBuffer</code>
-     *
-     * @param buffa the source buffer to be compared
-     * @param buffb the destination buffer to be compared
-     * @return <code>true</code> if buffers are equal in terms of content
-     */
-    private static boolean directByteBufferEquals(ByteBuffer buffa, ByteBuffer buffb) {
-        if (buffa == buffb)
-            return true;
-
-        if (buffa == null || buffb == null)
-            return false;
-
-        buffa.rewind();
-        buffb.rewind();
-
-        int length = buffa.remaining();
-
-        if (buffb.remaining() != length)
-            return false;
-
-        for (int i = 0; i < length; i++) {
-            if (buffa.get() != buffb.get())
-                return false;
-        }
-
-        return true;
     }
 
     public void dispose() {
@@ -361,7 +331,6 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
             default:
                 type = MatDataTypes.miUNKNOWN;
         }
-
 
         // Write real part.
         OSMatTag tag = new OSMatTag(type, this.getRealByteBuffer());
