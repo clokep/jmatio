@@ -85,6 +85,13 @@ public class MatFileReader {
      * Array name filter
      */
     private MatFileFilter filter;
+
+    /**
+     * If an mxOPAQUE_CLASS type matrix is found, then there is an extra data
+     * matrix at the end.
+     */
+    private boolean hasOpaque = false;
+
     /**
      * Creates instance of <code>MatFileReader</code> and reads MAT-file
      * from location given as <code>fileName</code>.
@@ -236,7 +243,7 @@ public class MatFileReader {
             // The bug disables re-opening the memory mapped files for writing
             // or deleting until the VM stops working. In real life I need to open
             // and update files
-            switch ( policy ) {
+            switch (policy) {
                 case MatFileReader.DIRECT_BYTE_BUFFER:
                     buf = ByteBuffer.allocateDirect((int)roChannel.size());
                     roChannel.read(buf, 0);
@@ -282,7 +289,19 @@ public class MatFileReader {
             while (buf.remaining() > 0)
                 this.readData(buf);
 
-            return getContent();
+            if (this.hasOpaque) {
+                // XXX We need to figure out and parse this data.
+                MLArray extra = this.data.get("@");
+                System.out.println(MLArray.typeToString(extra.getType()));
+                ByteBuffer data = ((MLNumericArray<?>)extra).getRealByteBuffer();
+                while (data.hasRemaining())
+                    System.out.printf("%02X ", data.get());
+                System.out.println();
+
+                this.data.remove("@");
+            }
+
+            return this.getContent();
         } catch (IOException e) {
             throw e;
         } finally {
@@ -305,8 +324,8 @@ public class MatFileReader {
                     long start = System.currentTimeMillis();
                     while (bufferWeakRef.get() != null) {
                         if (System.currentTimeMillis() - start > GC_TIMEOUT_MS) {
-                            break; // A hell cannot be unmapped - hopefully GC will
-                                   // Do it's job later
+                            break; // A hell cannot be unmapped - hopefully GC
+                                   // will do it's job later.
                         }
                         System.gc();
                         Thread.yield();
@@ -454,7 +473,7 @@ public class MatFileReader {
             throw new MatlabIOException("Compressed buffer length miscalculated!");
 
         // Instead of standard Inflater class instance I use an inflater input
-        // stream... gives a great boost to the performance..
+        // stream... gives a great boost to the performance.
         InflaterInputStream iis = new InflaterInputStream(new _InputStreamFromBuffer(buf, numOfBytes));
 
         // Process data decompression.
@@ -581,8 +600,8 @@ public class MatFileReader {
                 ((MLObject)struct).setClassName(className);
             }
 
-            // Maximum field name length. This subelement always uses the compressed
-            // data element format when created by Matlab.
+            // Maximum field name length. This subelement always uses the
+            // compressed data element format when created by Matlab.
             tag = new ISMatTag(buf);
             int maxlen = tag.readToIntArray()[0];
 
@@ -668,6 +687,8 @@ public class MatFileReader {
             }
             mlArray = sparse;
         } else if (type == MLArray.mxOPAQUE_CLASS) {
+            this.hasOpaque = true;
+
             // The "name" field is actually used by MATLAB to store the class
             // type; e.g. java or MCOS (containers.Map).
             String classType = name;
@@ -684,16 +705,28 @@ public class MatFileReader {
 
             MLOpaque opaque = new MLOpaque(name, classType, className);
 
+            MLArray opaquematrix;
             // Opaque contains one other miMATRIX.
             tag = new ISMatTag(buf);
+            System.out.println("Size: " + tag.size + " Type: " + tag.type);
             if (tag.size > 0) {
-                MLArray opaquematrix = this.readMatrix(buf, false);
+                opaquematrix = this.readMatrix(buf, false);
+                System.out.println(MLArray.typeToString(opaquematrix.getType()));
                 opaque.set(((MLNumericArray<?>)opaquematrix).getRealByteBuffer());
             } else
                 opaque.set(ByteBuffer.allocate(0));
 
             if (opaque.isJavaObject())
                 opaque = new MLJavaObject(opaque);
+
+            System.out.println(buf.remaining());
+            //if (opaque.getClassType().equals(MLOpaque.CONTAINERS_MAP_TYPE)) {
+                //tag = new ISMatTag(buf);
+                //System.out.println("Size: " + tag.size + " Type: " + tag.type);
+                //opaquematrix = this.readMatrix(buf, false);
+                //System.out.println("Type: " + MLArray.typeToString(opaquematrix.getType()));
+                //System.out.println(opaquematrix);
+            //}
 
             mlArray = opaque;
         //} else if (type == MLArray.mxFUNCTION_CLASS) {

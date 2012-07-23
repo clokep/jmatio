@@ -39,7 +39,7 @@ import com.jmatio.types.MLArray;
  */
 public class MatFileWriter {
     protected FileOutputStream fos;
-    protected boolean compress = true;
+    protected boolean compress = false;
 
     /**
      * Creates the new <code>{@link MatFileWriter}</code> instance

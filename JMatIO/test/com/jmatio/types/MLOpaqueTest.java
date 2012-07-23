@@ -27,9 +27,16 @@ public class MLOpaqueTest {
     @Test
     public void testInt8() throws Exception {
         // Test reading the MLArray generated natively by Matlab.
-        MatFileReader reader = new MatFileReader("test/containers.Map.mat");
-        //MatFileReader reader = new MatFileReader("test/containers.Map2.mat");
+        //String fileName = "test/containers.Map2.mat";
+        String fileName = "test/opaque-containers.Map.mat";
+        //String fileName = "../opaque-mixed.mat";
+        MatFileReader reader = new MatFileReader(fileName);
         MLArray src = reader.getContent().get("arr");
+        MLOpaque x = (MLOpaque)src;
+
+        // Write the array out to a file.
+        fileName = "opaque-containers.Map-tmp.mat";
+        new MatFileWriter(fileName, Arrays.asList((MLArray)src));
     }
 
     @Test
