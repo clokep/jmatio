@@ -8,3 +8,5 @@ JMatIO/prod/com/jmatio/types/ML*Int64.java
 JMatIO/prod/com/jmatio/types/MLInt*.java
 JMatIO/test/com/jmatio/types/MLSingleTest.java
 JMatIO/test/com/jmatio/types/MLDoubleTest.java
+*.hex
+matfile_format*.pdf
