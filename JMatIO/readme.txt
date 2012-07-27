@@ -1,5 +1,4 @@
-JMatIO is a JAVA library to read/write/manipulate with Matlab binary
-MAT-files.
+JMatIO is a JAVA library to read/write/manipulate with Matlab binary MAT-files.
 
 If you would like to comment, improve, critisize the project please
 email me: wgradkowski@gmail.com
@@ -25,8 +24,15 @@ TODO:
 - Organize JUnit tests
 - Refactor exceptions
 - Make structures and cell arrays more user friendly
+- Support R/W for v4 format
 
 CHANGE LOG:
+[06.05.2012]
++ Initial support for MLObject, MLFunctionHandle and MLOpaque classes.
++ Allow writing of uncompressed data.
++ Offloading of writing of an object's data to each class.
++ Major clean up of tests.
+
 [05.25.2012]
 + Generate Numeric classes from a template file.
 + Rewrite MLLogical to internally handle data different.

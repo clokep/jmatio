@@ -47,7 +47,7 @@ import com.jmatio.types.MLUInt64;
 import com.jmatio.types.MLUInt8;
 
 /**
- * MAT-file reader. Reads MAT-file into <code>MLArray</code> objects.
+ * Reads Level 5 MAT-files into <code>MLArray</code> objects.
  *
  * Usage:
  * <pre><code>
@@ -70,11 +70,11 @@ public class MatFileReader {
     public static final int HEAP_BYTE_BUFFER   = 4;
 
     /**
-     * MAT-file header
+     * The MAT-file header.
      */
     private MatFileHeader matFileHeader;
     /**
-     * Container for read <code>MLArray</code>s
+     * Container for read <code>MLArray</code>s.
      */
     private Map<String, MLArray> data;
     /**
@@ -82,21 +82,21 @@ public class MatFileReader {
      */
     private ByteOrder byteOrder;
     /**
-     * Array name filter
+     * Array name filter.
      */
     private MatFileFilter filter;
 
     /**
      * If an mxOPAQUE_CLASS type matrix is found, then there is an extra data
-     * matrix at the end.
+     * matrix at the end that must be read.
      */
     private boolean hasOpaque = false;
 
     /**
-     * Creates instance of <code>MatFileReader</code> and reads MAT-file
-     * from location given as <code>fileName</code>.
+     * Creates an instance of <code>MatFileReader</code> and reads MAT-file
+     * from the location given as <code>fileName</code>.
      *
-     * This method reads MAT-file without filtering.
+     * This method reads a MAT-file without filtering.
      *
      * @param fileName the MAT-file path <code>String</code>
      * @throws IOException when error occurred while processing the file.
@@ -920,6 +920,13 @@ public class MatFileReader {
         // Header values.
         int version;
         byte[] endianIndicator = new byte[2];
+
+        // If any of the first four bytes are a 0, consider it a Level 4
+        // matfile.
+        if (buf.get(0) == 0 || buf.get(1) == 0 || buf.get(2) == 0 ||
+            buf.get(3) == 0) {
+            throw new MatlabIOException("Cannot read Level 4 MAT-files.");
+        }
 
         // Descriptive text 116 bytes.
         byte[] descriptionBuffer = new byte[116];
