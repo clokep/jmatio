@@ -267,13 +267,13 @@ public class MatFileLevel4Reader extends MatFileReader {
 
         if (type == MatLevel4DataTypes.mxNUMERIC_CLASS) {
             // Numeric matrix.
-            mlArray = new MLDouble(name, dims, type, attributes);
+            mlArray = new MLDouble(name, dims);
         } else if (type == MatLevel4DataTypes.mxTEXT_CLASS) {
             // Text matrix.
-            mlArray = new MLChar(name, dims, type, attributes);
+            mlArray = new MLChar(name, dims);
         } else if (type == MatLevel4DataTypes.mxSPARSE_CLASS) {
             // Sparse matrix.
-            //mlArray = new MLSparse(name, dims, attributes, nzmax);
+            //mlArray = new MLSparse(name, dims, nzmax);
             mlArray = new MLEmptyArray();
         } else
             throw new MatlabIOException("Unsupported matlab array class: " + MatLevel4DataTypes.typeToString(type));

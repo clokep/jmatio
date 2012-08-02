@@ -39,11 +39,11 @@ public class MLStructure extends MLArray {
     protected int currentIndex = 0;
 
     public MLStructure(String name, int[] dims) {
-        this(name, dims, MatLevel5DataTypes.mxSTRUCT_CLASS, 0);
+        this(name, dims, false);
     }
 
-    public MLStructure(String name, int[] dims, int type, int attributes) {
-        super(name, dims, type, attributes);
+    public MLStructure(String name, int[] dims, boolean global) {
+        super(name, dims, global);
 
         mlStructArray = new ArrayList<Map<String, MLArray>>(this.getSize());
         keys = new LinkedHashSet<String>();

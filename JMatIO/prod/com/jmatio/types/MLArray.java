@@ -12,23 +12,21 @@ import com.jmatio.io.OSMatTag;
 import com.jmatio.io.MatlabIOException;
 
 public abstract class MLArray {
-    protected boolean complex = false;
     protected boolean global = false;
+    protected boolean complex = false;
     protected boolean logical = false;
 
     /** The dimensions of the array. */
     protected int dims[];
     /** The array name. */
     public String name;
-    /** The attributes of the array (e.g. complex, global, logical). */
-    protected int attributes;
-    /** The type of data stored in the array. */
-    protected int type;
+    /** The array type. */
+    protected String type = "unknown";
 
     /** This is true for sub-elements of structs & cells where name does not matter. */
     public boolean isChild = false;
 
-    public MLArray(String name, int[] dims, int type, int attributes) {
+    public MLArray(String name, int[] dims, boolean global) {
         // MATLAB arrays must always have two dimensions. If only one is given, assume 2D with the other dimension equal to 1.
         if (dims.length == 1) {
             // Since we have a vector but don't know the real dimensions, just assume it's a column vector
@@ -45,8 +43,7 @@ public abstract class MLArray {
         else
             this.name = "@"; //default name
 
-        this.type = type;
-        this.attributes = attributes;
+        this.global = global;
     }
 
     /**
@@ -59,14 +56,32 @@ public abstract class MLArray {
     }
 
     /**
+     * Gets whether the array is stored globally.
+     *
+     * @return whether the array is stored globally
+     */
+    public boolean isGlobal() {
+        return this.global;
+    }
+    
+    /**
      * Gets whether the elements are complex.
      *
      * @return whether the array is complex
      */
-    public boolean getIsComplex() {
+    public boolean isComplex() {
         return this.complex;
     }
 
+    /**
+     * Gets whether the elements are logical (boolean).
+     *
+     * @return whether the array is logical
+     */
+    public boolean isLogical() {
+        return this.logical;
+    }
+    
     public int[] getDimensions() {
         int ai[] = null;
         if (dims != null) {
@@ -118,7 +133,7 @@ public abstract class MLArray {
         return this.getM() * this.getN();
     }
 
-    public int getType() {
+    public String getType() {
         return this.type;
     }
 
@@ -126,24 +141,21 @@ public abstract class MLArray {
         return this.getN() == 0;
     }
 
-    public boolean isCell() {
+    /*public boolean isCell() {
         return this.type == MatLevel5DataTypes.mxCELL_CLASS;
     }
 
     public boolean isChar() {
         return this.type == MatLevel5DataTypes.mxCHAR_CLASS;
-    }
-
-    public boolean isComplex() {
-        return this.complex;
-        //return (this.attributes & MatLevel5DataTypes.mtFLAG_COMPLEX) != 0;
-    }
+    }*/
 
     public boolean isSparse() {
-        return this.type == MatLevel5DataTypes.mxSPARSE_CLASS;
+        //return this.type == MatLevel5DataTypes.mxSPARSE_CLASS;
+        // XXX
+        return false;
     }
 
-    public boolean isStruct() {
+    /*public boolean isStruct() {
         return this.type == MatLevel5DataTypes.mxSTRUCT_CLASS;
     }
 
@@ -195,18 +207,13 @@ public abstract class MLArray {
         return this.type == MatLevel5DataTypes.mxOPAQUE_CLASS;
     }
 
-    public boolean isLogical() {
-        //return (this.attributes & MatLevel5DataTypes.mtFLAG_LOGICAL) != 0;
-        return this.logical;
-    }
-
     public boolean isFunctionObject() {
         return this.type == MatLevel5DataTypes.mxFUNCTION_CLASS;
     }
 
     public boolean isUnknown() {
         return this.type == MatLevel5DataTypes.mxUNKNOWN_CLASS;
-    }
+    }*/
 
     protected int getIndex(int m, int n) {
         return m + n * this.getM();
@@ -230,7 +237,7 @@ public abstract class MLArray {
                 }
             }
             sb.append("  ");
-            sb.append(MatLevel5DataTypes.matrixTypeToString(this.type));
+            sb.append(this.type);
             sb.append(" array");
             if (this.isSparse()) {
                 sb.append(" (sparse");
@@ -282,9 +289,9 @@ public abstract class MLArray {
      */
     protected void writeFlags(OutputStream os) throws IOException {
         ByteBuffer buffer = ByteBuffer.allocate(4 * 2);
-        int flags = (this.complex ? MatLevel5DataTypes.mtFLAG_COMPLEX : 0) |
-                    (this.global ? MatLevel5DataTypes.mtFLAG_GLOBAL : 0) |
-                    (this.logical ? MatLevel5DataTypes.mtFLAG_LOGICAL : 0);
+        int flags = (this.isComplex() ? MatLevel5DataTypes.mtFLAG_COMPLEX : 0) |
+                    (this.isGlobal() ? MatLevel5DataTypes.mtFLAG_GLOBAL : 0) |
+                    (this.isLogical() ? MatLevel5DataTypes.mtFLAG_LOGICAL : 0);
         buffer.putInt(flags);
 
         if (this.isSparse())

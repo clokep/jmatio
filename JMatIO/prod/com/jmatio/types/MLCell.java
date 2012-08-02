@@ -12,11 +12,11 @@ public class MLCell extends MLArray {
     private ArrayList<MLArray> cells;
 
     public MLCell(String name, int[] dims) {
-        this(name, dims, MatLevel5DataTypes.mxCELL_CLASS, 0);
+        this(name, dims, false);
     }
 
-    public MLCell(String name, int[] dims, int type, int attributes) {
-        super(name, dims, type, attributes);
+    public MLCell(String name, int[] dims, boolean global) {
+        super(name, dims, global);
 
         int length = this.getSize();
         cells = new ArrayList<MLArray>(length);

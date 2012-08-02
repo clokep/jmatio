@@ -24,12 +24,20 @@ public class MLSparse extends MLNumericArray<Double> {
     /**
      * @param name
      * @param dims
-     * @param attributes
      * @param nzmax
      */
-    public MLSparse(String name, int[] dims, int attributes, int nzmax) {
-        super(name, dims, MatLevel5DataTypes.mxSPARSE_CLASS, attributes);
+    public MLSparse(String name, int[] dims, int nzmax, boolean complex, boolean global, boolean logical) {
+        super(name, dims, complex, global, logical);
         this.nzmax = nzmax;
+    }
+
+    /**
+     * @param name
+     * @param dims
+     * @param nzmax
+     */
+    public MLSparse(String name, int[] dims, int nzmax) {
+        this(name, dims, nzmax, false, false, false);
     }
 
     protected void allocate() {

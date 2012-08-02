@@ -32,8 +32,8 @@ public class MLOpaque extends MLArray {
     /** A containers.Map object. */
     public static final String CONTAINERS_MAP_TYPE = "CMOS";
 
-    public MLOpaque(String name, String classType, String className) {
-        super(name, new int[]{1}, MatLevel5DataTypes.mxOPAQUE_CLASS, 0);
+    public MLOpaque(String name, String classType, String className, boolean global) {
+        super(name, new int[]{1}, global);
 
         this.name = name;
         this.className = className;

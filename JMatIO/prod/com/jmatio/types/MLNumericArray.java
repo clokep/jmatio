@@ -11,6 +11,8 @@ import com.jmatio.io.OSMatTag;
 /**
  * Abstract class for numeric arrays.
  *
+ * XXX This should have no knowledge of logicals.
+ *
  * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  *
  * @param <T>
@@ -22,18 +24,37 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     private ByteBuffer imaginary;
     /** The buffer for creating Number from bytes */
     private byte[] bytes;
+    
+    protected int matDataType = MatLevel5DataTypes.miUNKNOWN;
 
     /**
      * Normally this constructor is used only by MatFileReader and MatFileWriter
      *
      * @param name array name
      * @param dims array dimensions
-     * @param type array type
-     * @param attributes array flags
+     * @param whether the array is complex
+     * @param whether the array is global
+     * @param whether the array is logical
      */
-    public MLNumericArray(String name, int[] dims, int type, int attributes) {
-        super(name, dims, type, attributes);
+    public MLNumericArray(String name, int[] dims, boolean complex, boolean global, boolean logical) {
+        super(name, dims, global);
+        this.complex = complex;
+        this.logical = logical;
+
         this.allocate();
+    }
+    
+    /**
+     * Normally this constructor is used only by MatFileReader and MatFileWriter
+     *
+     * @param name array name
+     * @param dims array dimensions
+     * @param whether the array is complex
+     * @param whether the array is global
+     * @param whether the array is logical
+     */
+    public MLNumericArray(String name, int[] dims) {
+        this(name, dims, false, false, false);
     }
 
     protected void allocate() {
@@ -48,12 +69,11 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
      * construct a 2D real matrix from a one-dimensional packed array
      *
      * @param name array name
-     * @param type array type
      * @param vals One-dimensional array of T, packed by columns (ala Fortran).
      * @param m Number of rows
      */
-    public MLNumericArray(String name, int type, T[] vals, int m) {
-        this(name, new int[] {m, vals.length / m}, type, 0);
+    public MLNumericArray(String name, T[] vals, int m) {
+        this(name, new int[] {m, vals.length / m});
         if ((vals.length % m) != 0) {
             throw new IllegalArgumentException("The number of values provided (" +
                                                vals.length +
@@ -296,49 +316,13 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     }
 
     public void writeData(DataOutputStream dos) throws IOException {
-        int type;
-        switch (this.type) {
-            case MatLevel5DataTypes.mxDOUBLE_CLASS:
-                type = MatLevel5DataTypes.miDOUBLE;
-                break;
-            case MatLevel5DataTypes.mxSINGLE_CLASS:
-                type = MatLevel5DataTypes.miSINGLE;
-                break;
-            case MatLevel5DataTypes.mxINT8_CLASS:
-                type = MatLevel5DataTypes.miINT8;
-                break;
-            case MatLevel5DataTypes.mxUINT8_CLASS:
-                type = MatLevel5DataTypes.miUINT8;
-                break;
-            case MatLevel5DataTypes.mxINT16_CLASS:
-                type = MatLevel5DataTypes.miINT16;
-                break;
-            case MatLevel5DataTypes.mxUINT16_CLASS:
-                type = MatLevel5DataTypes.miUINT16;
-                break;
-            case MatLevel5DataTypes.mxINT32_CLASS:
-                type = MatLevel5DataTypes.miINT32;
-                break;
-            case MatLevel5DataTypes.mxUINT32_CLASS:
-                type = MatLevel5DataTypes.miUINT32;
-                break;
-            case MatLevel5DataTypes.mxINT64_CLASS:
-                type = MatLevel5DataTypes.miINT64;
-                break;
-            case MatLevel5DataTypes.mxUINT64_CLASS:
-                type = MatLevel5DataTypes.miUINT64;
-                break;
-            default:
-                type = MatLevel5DataTypes.miUNKNOWN;
-        }
-
         // Write real part.
-        OSMatTag tag = new OSMatTag(type, this.getRealByteBuffer());
+        OSMatTag tag = new OSMatTag(this.matDataType, this.getRealByteBuffer());
         tag.writeTo(dos);
 
         // Write imaginary part.
         if (this.isComplex()) {
-            tag = new OSMatTag(type, this.getImaginaryByteBuffer());
+            tag = new OSMatTag(this.matDataType, this.getImaginaryByteBuffer());
             tag.writeTo(dos);
         }
     }

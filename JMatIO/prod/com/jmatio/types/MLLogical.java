@@ -15,17 +15,18 @@ import com.jmatio.io.OSMatTag;
  */
 public class MLLogical extends MLArray {
     Boolean[] bools;
+    protected boolean logical = true;
 
     /**
-     * Normally this constructor is used only by MatFileReader and MatFileWriter
+     * The full constructor.
      *
      * @param name array name
      * @param dims array dimensions
-     * @param type array type: here <code>mxUINT8_CLASS</code>
-     * @param attributes array flags: here <code>mtFLAG_LOGICAL</code>
+     * @param whether the array is global
      */
-    public MLLogical(String name, int[] dims, int type, int attributes) {
-        super(name, dims, type, attributes);
+    public MLLogical(String name, int[] dims, boolean global) {
+        // MLLogicals can't be complex and are logical.
+        super(name, dims, global);
         this.allocate();
     }
     /**
@@ -36,7 +37,7 @@ public class MLLogical extends MLArray {
      * @param dims array dimensions
      */
     public MLLogical(String name, int[] dims) {
-        this(name, dims, MatLevel5DataTypes.mxUINT8_CLASS, MatLevel5DataTypes.mtFLAG_LOGICAL);
+        this(name, dims, false);
     }
 
     /**
@@ -48,7 +49,7 @@ public class MLLogical extends MLArray {
      * @param m Number of rows
      */
     public MLLogical(String name, Boolean[] vals, int m) {
-        this(name, new int[] {m, vals.length / m}, MatLevel5DataTypes.mxUINT8_CLASS, MatLevel5DataTypes.mtFLAG_LOGICAL);
+        this(name, new int[] {m, vals.length / m}, false);
         if ((vals.length % m) != 0) {
             throw new IllegalArgumentException("The number of values provided (" +
                                                vals.length +
@@ -77,7 +78,7 @@ public class MLLogical extends MLArray {
      * @param array A numeric array that is actually logical.
      */
     public MLLogical(MLNumericArray<?> array) {
-        this(array.name, array.dims, array.type, array.attributes);
+        this(array.name, array.dims, array.isGlobal());
 
         for (int i = 0; i < this.getSize(); ++i)
             this.set((Number)array.get(i), i);
@@ -177,6 +178,7 @@ public class MLLogical extends MLArray {
     }
 
     public void writeData(DataOutputStream dos) throws IOException {
+        // XXX we need to write that it's logical somehow!
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         DataOutputStream bufferDOS = new DataOutputStream(buffer);
         for (int i = 0; i < this.bools.length; ++i)

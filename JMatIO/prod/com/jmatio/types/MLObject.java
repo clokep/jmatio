@@ -20,11 +20,11 @@ public class MLObject extends MLStructure {
     private String className;
 
     public MLObject(String name, int[] dims) {
-        this(name, dims, MatLevel5DataTypes.mxOBJECT_CLASS, 0);
+        this(name, dims, false);
     }
 
-    public MLObject(String name, int[] dims, int type, int attributes) {
-        super(name, dims, type, attributes);
+    public MLObject(String name, int[] dims, boolean global) {
+        super(name, dims, global);
     }
 
     public String getClassName() {

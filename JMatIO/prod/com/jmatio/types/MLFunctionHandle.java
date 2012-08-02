@@ -21,11 +21,11 @@ public class MLFunctionHandle extends MLArray {
     private String type;
 
     public MLFunctionHandle(String name, int[] dims) {
-        super(name, dims, MatLevel5DataTypes.mxFUNCTION_CLASS, 0);
+        super(name, dims, false);
     }
 
-    public MLFunctionHandle(String name, int[] dims, int type, int attributes) {
-        super(name, dims, type, attributes);
+    public MLFunctionHandle(String name, int[] dims, boolean global) {
+        super(name, dims, global);
     }
 
     public void set(MLStructure data) {

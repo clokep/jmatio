@@ -340,6 +340,7 @@ public class MatFileLevel5Reader extends MatFileReader {
         // Read flags.
         int[] flags = this.readFlags(buf);
         int attributes = (flags.length != 0) ? flags[0] : 0;
+        boolean global = MatLevel5DataTypes.global(attributes);
         int nzmax = (flags.length != 0) ? flags[1] : 0;
         int type = attributes & 0xff;
 
@@ -359,10 +360,10 @@ public class MatFileLevel5Reader extends MatFileReader {
             MLStructure struct;
 
             if (type == MatLevel5DataTypes.mxSTRUCT_CLASS)
-                struct = new MLStructure(name, dims, type, attributes);
+                struct = new MLStructure(name, dims, global);
             else {
                 // A MLObject has an additional field: the class name.
-                struct = new MLObject(name, dims, type, attributes);
+                struct = new MLObject(name, dims, global);
 
                 // Read the class name.
                 tag = new ISMatTag(buf);
@@ -402,7 +403,7 @@ public class MatFileLevel5Reader extends MatFileReader {
             }
             mlArray = struct;
         } else if (type == MatLevel5DataTypes.mxCELL_CLASS) {
-            MLCell cell = new MLCell(name, dims, type, attributes);
+            MLCell cell = new MLCell(name, dims, global);
             for (int i = 0; i < cell.getSize(); ++i) {
                 tag = new ISMatTag(buf);
                 if (tag.size > 0) {
@@ -414,7 +415,7 @@ public class MatFileLevel5Reader extends MatFileReader {
             }
             mlArray = cell;
         } else if (type == MatLevel5DataTypes.mxCHAR_CLASS) {
-            MLChar mlchar = new MLChar(name, dims, type, attributes);
+            MLChar mlchar = new MLChar(name, dims, global);
 
             // Read the characters.
             tag = new ISMatTag(buf);
@@ -422,40 +423,6 @@ public class MatFileLevel5Reader extends MatFileReader {
             for ( int i = 0; i < ac.length; i++ )
                 mlchar.setChar(ac[i], i);
             mlArray = mlchar;
-        } else if (type == MatLevel5DataTypes.mxSPARSE_CLASS) {
-            MLSparse sparse = new MLSparse(name, dims, attributes, nzmax);
-            // Read ir (row indices).
-            tag = new ISMatTag(buf);
-            int[] ir = tag.readToIntArray();
-            // Read jc (column count).
-            tag = new ISMatTag(buf);
-            int[] jc = tag.readToIntArray();
-
-            // Read pr (real part).
-            tag = new ISMatTag(buf);
-            double[] ad1 = tag.readToDoubleArray();
-            int count = 0;
-            for (int column = 0; column < sparse.getN(); column++) {
-                while(count < jc[column + 1]) {
-                    sparse.setReal(ad1[count], ir[count], column);
-                    ++count;
-                }
-            }
-
-            // Read pi (imaginary part)
-            if (sparse.isComplex()) {
-                tag = new ISMatTag(buf);
-                double[] ad2 = tag.readToDoubleArray();
-
-                count = 0;
-                for (int column = 0; column < sparse.getN(); column++) {
-                    while(count < jc[column+1]) {
-                        sparse.setImaginary(ad2[count], ir[count], column);
-                        ++count;
-                    }
-                }
-            }
-            mlArray = sparse;
         } else if (type == MatLevel5DataTypes.mxOPAQUE_CLASS) {
             this.hasOpaque = true;
 
@@ -473,7 +440,7 @@ public class MatFileLevel5Reader extends MatFileReader {
             tag = new ISMatTag(buf);
             String className = tag.readToString();
 
-            MLOpaque opaque = new MLOpaque(name, classType, className);
+            MLOpaque opaque = new MLOpaque(name, classType, className, global);
 
             MLArray opaquematrix;
             // Opaque contains one other miMATRIX.
@@ -481,7 +448,7 @@ public class MatFileLevel5Reader extends MatFileReader {
             System.out.println("Size: " + tag.size + " Type: " + tag.type);
             if (tag.size > 0) {
                 opaquematrix = this.readMatrix(buf, false);
-                System.out.println(MatLevel5DataTypes.matrixTypeToString(opaquematrix.getType()));
+                //System.out.println(MatLevel5DataTypes.matrixTypeToString(opaquematrix.getType()));
                 opaque.set(((MLNumericArray<?>)opaquematrix).getRealByteBuffer());
             } else
                 opaque.set(ByteBuffer.allocate(0));
@@ -500,7 +467,7 @@ public class MatFileLevel5Reader extends MatFileReader {
 
             mlArray = opaque;
         //} else if (type == MatLevel5DataTypes.mxFUNCTION_CLASS) {
-        //    MLFunctionHandle function = new MLFunctionHandle(name, dims, type, attributes);
+        //    MLFunctionHandle function = new MLFunctionHandle(name, dims, global);
         //
         //    // Function handles contains one other miMATRIX.
         //    tag = new ISMatTag(buf);
@@ -560,55 +527,94 @@ public class MatFileLevel5Reader extends MatFileReader {
         //
         //    mlArray = null;
         } else {
-            // At this point we should have a numeric class.
-            switch (type) {
-                case MatLevel5DataTypes.mxDOUBLE_CLASS:
-                    mlArray = new MLDouble(name, dims, type, attributes);
-                    break;
-                case MatLevel5DataTypes.mxSINGLE_CLASS:
-                    mlArray = new MLSingle(name, dims, type, attributes);
-                    break;
-                case MatLevel5DataTypes.mxUINT8_CLASS:
-                    mlArray = new MLUInt8(name, dims, type, attributes);
-                    break;
-                case MatLevel5DataTypes.mxINT8_CLASS:
-                    mlArray = new MLInt8(name, dims, type, attributes);
-                    break;
-                case MatLevel5DataTypes.mxUINT16_CLASS:
-                    mlArray = new MLUInt16(name, dims, type, attributes);
-                    break;
-                case MatLevel5DataTypes.mxINT16_CLASS:
-                    mlArray = new MLInt16(name, dims, type, attributes);
-                    break;
-                case MatLevel5DataTypes.mxUINT32_CLASS:
-                    mlArray = new MLUInt32(name, dims, type, attributes);
-                    break;
-                case MatLevel5DataTypes.mxINT32_CLASS:
-                    mlArray = new MLInt32(name, dims, type, attributes);
-                    break;
-                case MatLevel5DataTypes.mxINT64_CLASS:
-                    mlArray = new MLInt64(name, dims, type, attributes);
-                    break;
-                case MatLevel5DataTypes.mxUINT64_CLASS:
-                    mlArray = new MLUInt64(name, dims, type, attributes);
-                    break;
-                default:
-                    throw new MatlabIOException("Unsupported matlab array class: " + MatLevel5DataTypes.matrixTypeToString(type));
-            }
-
-            // Read real.
-            tag = new ISMatTag(buf);
-            tag.readToByteBuffer(((MLNumericArray<?>) mlArray).getRealByteBuffer(),
-                                 (MLNumericArray<?>) mlArray);
-            // Read complex.
-            if (mlArray.isComplex()) {
+            boolean complex = MatLevel5DataTypes.complex(attributes);
+            boolean logical = MatLevel5DataTypes.logical(attributes);
+            
+            if (type == MatLevel5DataTypes.mxSPARSE_CLASS) {
+                MLSparse sparse = new MLSparse(name, dims, nzmax, complex, global, logical);
+                // Read ir (row indices).
                 tag = new ISMatTag(buf);
-                tag.readToByteBuffer(((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
+                int[] ir = tag.readToIntArray();
+                // Read jc (column count).
+                tag = new ISMatTag(buf);
+                int[] jc = tag.readToIntArray();
+    
+                // Read pr (real part).
+                tag = new ISMatTag(buf);
+                double[] ad1 = tag.readToDoubleArray();
+                int count = 0;
+                for (int column = 0; column < sparse.getN(); column++) {
+                    while(count < jc[column + 1]) {
+                        sparse.setReal(ad1[count], ir[count], column);
+                        ++count;
+                    }
+                }
+    
+                // Read pi (imaginary part)
+                if (sparse.isComplex()) {
+                    tag = new ISMatTag(buf);
+                    double[] ad2 = tag.readToDoubleArray();
+    
+                    count = 0;
+                    for (int column = 0; column < sparse.getN(); column++) {
+                        while(count < jc[column+1]) {
+                            sparse.setImaginary(ad2[count], ir[count], column);
+                            ++count;
+                        }
+                    }
+                }
+                mlArray = sparse;
+            } else {
+                // At this point we should have a numeric class.
+                switch (type) {
+                    case MatLevel5DataTypes.mxDOUBLE_CLASS:
+                        mlArray = new MLDouble(name, dims, complex, global, logical);
+                        break;
+                    case MatLevel5DataTypes.mxSINGLE_CLASS:
+                        mlArray = new MLSingle(name, dims, complex, global, logical);
+                        break;
+                    case MatLevel5DataTypes.mxUINT8_CLASS:
+                        mlArray = new MLUInt8(name, dims, complex, global, logical);
+                        break;
+                    case MatLevel5DataTypes.mxINT8_CLASS:
+                        mlArray = new MLInt8(name, dims, complex, global, logical);
+                        break;
+                    case MatLevel5DataTypes.mxUINT16_CLASS:
+                        mlArray = new MLUInt16(name, dims, complex, global, logical);
+                        break;
+                    case MatLevel5DataTypes.mxINT16_CLASS:
+                        mlArray = new MLInt16(name, dims, complex, global, logical);
+                        break;
+                    case MatLevel5DataTypes.mxUINT32_CLASS:
+                        mlArray = new MLUInt32(name, dims, complex, global, logical);
+                        break;
+                    case MatLevel5DataTypes.mxINT32_CLASS:
+                        mlArray = new MLInt32(name, dims, complex, global, logical);
+                        break;
+                    case MatLevel5DataTypes.mxINT64_CLASS:
+                        mlArray = new MLInt64(name, dims, complex, global, logical);
+                        break;
+                    case MatLevel5DataTypes.mxUINT64_CLASS:
+                        mlArray = new MLUInt64(name, dims, complex, global, logical);
+                        break;
+                    default:
+                        throw new MatlabIOException("Unsupported matlab array class: " + MatLevel5DataTypes.matrixTypeToString(type));
+                }
+    
+                // Read real.
+                tag = new ISMatTag(buf);
+                tag.readToByteBuffer(((MLNumericArray<?>) mlArray).getRealByteBuffer(),
                                      (MLNumericArray<?>) mlArray);
-            } else if (mlArray.isLogical()) {
-                // If it's not complex and is logical, convert it to a logical
-                // array.
-                mlArray = new MLLogical((MLNumericArray<?>)mlArray);
+                // Read complex.
+                if (mlArray.isComplex()) {
+                    tag = new ISMatTag(buf);
+                    tag.readToByteBuffer(((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
+                                         (MLNumericArray<?>) mlArray);
+                } else if (mlArray.isLogical()) {
+                    // If it's not complex and is logical, convert it to a logical
+                    // array.
+                    mlArray = new MLLogical((MLNumericArray<?>)mlArray);
+                }
             }
         }
 
