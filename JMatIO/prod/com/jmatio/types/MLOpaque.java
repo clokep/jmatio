@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 
 import com.jmatio.io.OSMatTag;
 import com.jmatio.io.MatlabIOException;
-import com.jmatio.common.MatDataTypes;
+import com.jmatio.common.MatLevel5DataTypes;
 import com.jmatio.types.MLUInt8;
 
 /**
@@ -33,7 +33,7 @@ public class MLOpaque extends MLArray {
     public static final String CONTAINERS_MAP_TYPE = "CMOS";
 
     public MLOpaque(String name, String classType, String className) {
-        super(name, new int[]{1}, MLArray.mxOPAQUE_CLASS, 0);
+        super(name, new int[]{1}, MatLevel5DataTypes.mxOPAQUE_CLASS, 0);
 
         this.name = name;
         this.className = className;
@@ -118,7 +118,7 @@ public class MLOpaque extends MLArray {
         this.writeData(dos);
 
         // Write matrix tag.
-        OSMatTag tag = new OSMatTag(MatDataTypes.miMATRIX, baos.toByteArray());
+        OSMatTag tag = new OSMatTag(MatLevel5DataTypes.miMATRIX, baos.toByteArray());
         tag.writeTo(os);
     }
 

@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.jmatio.common.MatLevel5DataTypes;
 import com.jmatio.io.OSMatTag;
 import com.jmatio.io.MatlabIOException;
 
@@ -11,7 +12,7 @@ public class MLCell extends MLArray {
     private ArrayList<MLArray> cells;
 
     public MLCell(String name, int[] dims) {
-        this(name, dims, MLArray.mxCELL_CLASS, 0);
+        this(name, dims, MatLevel5DataTypes.mxCELL_CLASS, 0);
     }
 
     public MLCell(String name, int[] dims, int type, int attributes) {

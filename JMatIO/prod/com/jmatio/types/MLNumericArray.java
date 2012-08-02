@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-import com.jmatio.common.MatDataTypes;
+import com.jmatio.common.MatLevel5DataTypes;
 import com.jmatio.io.OSMatTag;
 
 /**
@@ -298,38 +298,38 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     public void writeData(DataOutputStream dos) throws IOException {
         int type;
         switch (this.type) {
-            case MLArray.mxDOUBLE_CLASS:
-                type = MatDataTypes.miDOUBLE;
+            case MatLevel5DataTypes.mxDOUBLE_CLASS:
+                type = MatLevel5DataTypes.miDOUBLE;
                 break;
-            case MLArray.mxSINGLE_CLASS:
-                type = MatDataTypes.miSINGLE;
+            case MatLevel5DataTypes.mxSINGLE_CLASS:
+                type = MatLevel5DataTypes.miSINGLE;
                 break;
-            case MLArray.mxINT8_CLASS:
-                type = MatDataTypes.miINT8;
+            case MatLevel5DataTypes.mxINT8_CLASS:
+                type = MatLevel5DataTypes.miINT8;
                 break;
-            case MLArray.mxUINT8_CLASS:
-                type = MatDataTypes.miUINT8;
+            case MatLevel5DataTypes.mxUINT8_CLASS:
+                type = MatLevel5DataTypes.miUINT8;
                 break;
-            case MLArray.mxINT16_CLASS:
-                type = MatDataTypes.miINT16;
+            case MatLevel5DataTypes.mxINT16_CLASS:
+                type = MatLevel5DataTypes.miINT16;
                 break;
-            case MLArray.mxUINT16_CLASS:
-                type = MatDataTypes.miUINT16;
+            case MatLevel5DataTypes.mxUINT16_CLASS:
+                type = MatLevel5DataTypes.miUINT16;
                 break;
-            case MLArray.mxINT32_CLASS:
-                type = MatDataTypes.miINT32;
+            case MatLevel5DataTypes.mxINT32_CLASS:
+                type = MatLevel5DataTypes.miINT32;
                 break;
-            case MLArray.mxUINT32_CLASS:
-                type = MatDataTypes.miUINT32;
+            case MatLevel5DataTypes.mxUINT32_CLASS:
+                type = MatLevel5DataTypes.miUINT32;
                 break;
-            case MLArray.mxINT64_CLASS:
-                type = MatDataTypes.miINT64;
+            case MatLevel5DataTypes.mxINT64_CLASS:
+                type = MatLevel5DataTypes.miINT64;
                 break;
-            case MLArray.mxUINT64_CLASS:
-                type = MatDataTypes.miUINT64;
+            case MatLevel5DataTypes.mxUINT64_CLASS:
+                type = MatLevel5DataTypes.miUINT64;
                 break;
             default:
-                type = MatDataTypes.miUNKNOWN;
+                type = MatLevel5DataTypes.miUNKNOWN;
         }
 
         // Write real part.

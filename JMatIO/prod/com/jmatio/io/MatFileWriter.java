@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 
-import com.jmatio.common.MatDataTypes;
+import com.jmatio.common.MatLevel5DataTypes;
 import com.jmatio.common.VariableUtils;
 import com.jmatio.types.MLArray;
 
@@ -142,7 +142,7 @@ public class MatFileWriter {
         byte[] compressed = this.deflate(baos.toByteArray());
 
         // Write COMPRESSED tag and compressed data into output channel.
-        OSMatTag tag = new OSMatTag(MatDataTypes.miCOMPRESSED, compressed);
+        OSMatTag tag = new OSMatTag(MatLevel5DataTypes.miCOMPRESSED, compressed);
         tag.writeTo(this.fos);
     }
 

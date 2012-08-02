@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.jmatio.common.MatDataTypes;
+import com.jmatio.common.MatLevel5DataTypes;
 import com.jmatio.io.OSMatTag;
 
 /**
@@ -39,7 +39,7 @@ public class MLStructure extends MLArray {
     protected int currentIndex = 0;
 
     public MLStructure(String name, int[] dims) {
-        this(name, dims, MLArray.mxSTRUCT_CLASS, 0);
+        this(name, dims, MatLevel5DataTypes.mxSTRUCT_CLASS, 0);
     }
 
     public MLStructure(String name, int[] dims, int type, int attributes) {
@@ -233,11 +233,11 @@ public class MLStructure extends MLArray {
 
     public void writeData(DataOutputStream dos) throws IOException {
         // Field name length.
-        OSMatTag tag = new OSMatTag(MatDataTypes.miINT32, this.getMaxFieldLengthToByteArray());
+        OSMatTag tag = new OSMatTag(MatLevel5DataTypes.miINT32, this.getMaxFieldLengthToByteArray());
         tag.writeTo(dos);
 
         // Get field names.
-        tag = new OSMatTag(MatDataTypes.miINT8, this.getKeySetToByteArray());
+        tag = new OSMatTag(MatLevel5DataTypes.miINT8, this.getKeySetToByteArray());
         tag.writeTo(dos);
 
         // Don't check the name for fields

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import com.jmatio.io.OSMatTag;
-import com.jmatio.common.MatDataTypes;
+import com.jmatio.common.MatLevel5DataTypes;
 
 public class MLChar extends MLArray implements GenericArrayCreator<Character> {
     Character[] chars;
@@ -19,7 +19,7 @@ public class MLChar extends MLArray implements GenericArrayCreator<Character> {
      * @param value the String
      */
     public MLChar(String name, String value) {
-        this(name, new int[] {1, value.length()} , MLArray.mxCHAR_CLASS, 0);
+        this(name, new int[] {1, value.length()} , MatLevel5DataTypes.mxCHAR_CLASS, 0);
         this.set(value);
     }
 
@@ -30,7 +30,7 @@ public class MLChar extends MLArray implements GenericArrayCreator<Character> {
      * @param values the array of {@link String}s
      */
     public MLChar(String name, String[] values) {
-        this(name, new int[] {values.length, values.length > 0 ? MLChar.getMaxLength(values) : 0} , MLArray.mxCHAR_CLASS, 0);
+        this(name, new int[] {values.length, values.length > 0 ? MLChar.getMaxLength(values) : 0} , MatLevel5DataTypes.mxCHAR_CLASS, 0);
 
         for (int i = 0; i < values.length; ++i)
             this.set(values[i], i);
@@ -59,7 +59,7 @@ public class MLChar extends MLArray implements GenericArrayCreator<Character> {
      * @param maxlen
      */
     public MLChar(String name, String[] values, int maxlen) {
-        this(name, new int[] {values.length, maxlen}, MLArray.mxCHAR_CLASS, 0);
+        this(name, new int[] {values.length, maxlen}, MatLevel5DataTypes.mxCHAR_CLASS, 0);
         int idx = 0;
         for (String v : values) {
             this.set(v, idx);
@@ -165,7 +165,7 @@ public class MLChar extends MLArray implements GenericArrayCreator<Character> {
         for (int i = 0; i < ac.length; ++i)
             bufferDOS.writeByte((byte)ac[i].charValue());
 
-        OSMatTag tag = new OSMatTag(MatDataTypes.miUTF8, buffer.toByteArray());
+        OSMatTag tag = new OSMatTag(MatLevel5DataTypes.miUTF8, buffer.toByteArray());
         tag.writeTo(dos);
     }
 }

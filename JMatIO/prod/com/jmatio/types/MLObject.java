@@ -5,7 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import com.jmatio.common.MatDataTypes;
+import com.jmatio.common.MatLevel5DataTypes;
 import com.jmatio.io.OSMatTag;
 
 /**
@@ -20,7 +20,7 @@ public class MLObject extends MLStructure {
     private String className;
 
     public MLObject(String name, int[] dims) {
-        this(name, dims, MLArray.mxOBJECT_CLASS, 0);
+        this(name, dims, MatLevel5DataTypes.mxOBJECT_CLASS, 0);
     }
 
     public MLObject(String name, int[] dims, int type, int attributes) {

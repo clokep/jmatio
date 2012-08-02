@@ -2,6 +2,8 @@ package com.jmatio.types;
 
 import java.nio.ByteBuffer;
 
+import com.jmatio.common.MatLevel5DataTypes;
+
 /**
  * Class represents @matlabClass@ (@primitive@) array (matrix).
  *
@@ -28,7 +30,7 @@ public class ML@matlabClassCamelCase@ extends MLNumericArray<@NumberClass@> {
      * @param dims array dimensions
      */
     public ML@matlabClassCamelCase@(String name, int[] dims) {
-        super(name, dims, MLArray.mx@matlabArrayType@_CLASS, 0);
+        super(name, dims, MatLevel5DataTypes.mx@matlabArrayType@_CLASS, 0);
     }
 
     /**
@@ -40,7 +42,7 @@ public class ML@matlabClassCamelCase@ extends MLNumericArray<@NumberClass@> {
      * @param m Number of rows
      */
     public ML@matlabClassCamelCase@(String name, @NumberClass@[] vals, int m) {
-        super(name, MLArray.mx@matlabArrayType@_CLASS, vals, m);
+        super(name, MatLevel5DataTypes.mx@matlabArrayType@_CLASS, vals, m);
     }
 
     /**

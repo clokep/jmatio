@@ -6,57 +6,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
-import com.jmatio.common.MatDataTypes;
+import com.jmatio.common.MatLevel5DataTypes;
 import com.jmatio.common.VariableUtils;
 import com.jmatio.io.OSMatTag;
 import com.jmatio.io.MatlabIOException;
 
 public abstract class MLArray {
-    /* Matlab Array Types (Classes) */
-    /** This is undocumented. */
-    public static final int mxUNKNOWN_CLASS     = 0;
-    /** Cell array. */
-    public static final int mxCELL_CLASS        = 1;
-    /** Structure. */
-    public static final int mxSTRUCT_CLASS      = 2;
-    /** Object. */
-    public static final int mxOBJECT_CLASS      = 3;
-    /** Character array. */
-    public static final int mxCHAR_CLASS        = 4;
-    /** Sparse array. */
-    public static final int mxSPARSE_CLASS      = 5;
-    /** Double precision array. */
-    public static final int mxDOUBLE_CLASS      = 6;
-    /** Single precision array. */
-    public static final int mxSINGLE_CLASS      = 7;
-    /** 8-bit, signed integer. */
-    public static final int mxINT8_CLASS        = 8;
-    /** 8-bit, unsigned integer. */
-    public static final int mxUINT8_CLASS       = 9;
-    /** 16-bit, signed integer. */
-    public static final int mxINT16_CLASS       = 10;
-    /** 16-bit, unsigned integer. */
-    public static final int mxUINT16_CLASS      = 11;
-    /** 32-bit, signed integer. */
-    public static final int mxINT32_CLASS       = 12;
-    /** 32-bit, unsigned integer. */
-    public static final int mxUINT32_CLASS      = 13;
-    /** 64-bit, signed integer. */
-    public static final int mxINT64_CLASS       = 14;
-    /** 64-bit, unsigned integer. */
-    public static final int mxUINT64_CLASS      = 15;
-    /** This is undocumented. */
-    public static final int mxFUNCTION_CLASS    = 16;
-    /** This is undocumented. */
-    public static final int mxOPAQUE_CLASS      = 17;
-
-    /** The data element includes an imaginary part (pi). */
-    public static final int mtFLAG_COMPLEX      = 0x0800;
-    /** MATLAB loads the data element as a global variable in the base workspace. */
-    public static final int mtFLAG_GLOBAL       = 0x0400;
-    /** The array is used for logical indexing. */
-    public static final int mtFLAG_LOGICAL      = 0x0200;
-    public static final int mtFLAG_TYPE         = 0xff;
+    protected boolean complex = false;
+    protected boolean global = false;
+    protected boolean logical = false;
 
     /** The dimensions of the array. */
     protected int dims[];
@@ -101,12 +59,12 @@ public abstract class MLArray {
     }
 
     /**
-     * Gets the array flags.
+     * Gets whether the elements are complex.
      *
-     * @return array flags
+     * @return whether the array is complex
      */
-    public int getFlags() {
-        return this.type & MLArray.mtFLAG_TYPE | this.attributes & 0xffffff00;
+    public boolean getIsComplex() {
+        return this.complex;
     }
 
     public int[] getDimensions() {
@@ -168,148 +126,86 @@ public abstract class MLArray {
         return this.getN() == 0;
     }
 
-    public static final String typeToString(int type) {
-        String s;
-        switch (type) {
-            case mxUNKNOWN_CLASS:
-                s = "unknown";
-                break;
-            case mxCELL_CLASS:
-                s = "cell";
-                break;
-            case mxSTRUCT_CLASS:
-                s = "struct";
-                break;
-            case mxCHAR_CLASS:
-                s = "char";
-                break;
-            case mxSPARSE_CLASS:
-                s = "sparse";
-                break;
-            case mxDOUBLE_CLASS:
-                s = "double";
-                break;
-            case mxSINGLE_CLASS:
-                s = "single";
-                break;
-            case mxINT8_CLASS:
-                s = "int8";
-                break;
-            case mxUINT8_CLASS:
-                s = "uint8";
-                break;
-            case mxINT16_CLASS:
-                s = "int16";
-                break;
-            case mxUINT16_CLASS:
-                s = "uint16";
-                break;
-            case mxINT32_CLASS:
-                s = "int32";
-                break;
-            case mxUINT32_CLASS:
-                s = "uint32";
-                break;
-            case mxINT64_CLASS:
-                s = "int64";
-                break;
-            case mxUINT64_CLASS:
-                s = "uint64";
-                break;
-            case mxFUNCTION_CLASS:
-                s = "function_handle";
-                break;
-            case mxOPAQUE_CLASS:
-                s = "opaque";
-                break;
-            case mxOBJECT_CLASS:
-                s = "object";
-                break;
-            default:
-                s = "unknown";
-                break;
-        }
-        return s;
-    }
-
     public boolean isCell() {
-        return this.type == MLArray.mxCELL_CLASS;
+        return this.type == MatLevel5DataTypes.mxCELL_CLASS;
     }
 
     public boolean isChar() {
-        return this.type == MLArray.mxCHAR_CLASS;
+        return this.type == MatLevel5DataTypes.mxCHAR_CLASS;
     }
 
     public boolean isComplex() {
-        return (this.attributes & MLArray.mtFLAG_COMPLEX) != 0;
+        return this.complex;
+        //return (this.attributes & MatLevel5DataTypes.mtFLAG_COMPLEX) != 0;
     }
 
     public boolean isSparse() {
-        return this.type == MLArray.mxSPARSE_CLASS;
+        return this.type == MatLevel5DataTypes.mxSPARSE_CLASS;
     }
 
     public boolean isStruct() {
-        return this.type == MLArray.mxSTRUCT_CLASS;
+        return this.type == MatLevel5DataTypes.mxSTRUCT_CLASS;
     }
 
     public boolean isDouble() {
-        return this.type == MLArray.mxDOUBLE_CLASS;
+        return this.type == MatLevel5DataTypes.mxDOUBLE_CLASS;
     }
 
     public boolean isSingle() {
-        return this.type == MLArray.mxSINGLE_CLASS;
+        return this.type == MatLevel5DataTypes.mxSINGLE_CLASS;
     }
 
     public boolean isInt8() {
-        return this.type == MLArray.mxINT8_CLASS;
+        return this.type == MatLevel5DataTypes.mxINT8_CLASS;
     }
 
     public boolean isUint8() {
-        return this.type == MLArray.mxUINT8_CLASS;
+        return this.type == MatLevel5DataTypes.mxUINT8_CLASS;
     }
 
     public boolean isInt16() {
-        return this.type == MLArray.mxINT16_CLASS;
+        return this.type == MatLevel5DataTypes.mxINT16_CLASS;
     }
 
     public boolean isUint16() {
-        return this.type == MLArray.mxUINT16_CLASS;
+        return this.type == MatLevel5DataTypes.mxUINT16_CLASS;
     }
 
     public boolean isInt32() {
-        return this.type == MLArray.mxINT32_CLASS;
+        return this.type == MatLevel5DataTypes.mxINT32_CLASS;
     }
 
     public boolean isUint32() {
-        return this.type == MLArray.mxUINT32_CLASS;
+        return this.type == MatLevel5DataTypes.mxUINT32_CLASS;
     }
 
     public boolean isInt64(){
-        return this.type == MLArray.mxINT64_CLASS;
+        return this.type == MatLevel5DataTypes.mxINT64_CLASS;
     }
 
     public boolean isUint64() {
-        return this.type == MLArray.mxUINT64_CLASS;
+        return this.type == MatLevel5DataTypes.mxUINT64_CLASS;
     }
 
     public boolean isObject() {
-        return this.type == MLArray.mxOBJECT_CLASS;
+        return this.type == MatLevel5DataTypes.mxOBJECT_CLASS;
     }
 
     public boolean isOpaque() {
-        return this.type == MLArray.mxOPAQUE_CLASS;
+        return this.type == MatLevel5DataTypes.mxOPAQUE_CLASS;
     }
 
     public boolean isLogical() {
-        return (this.attributes & MLArray.mtFLAG_LOGICAL) != 0;
+        //return (this.attributes & MatLevel5DataTypes.mtFLAG_LOGICAL) != 0;
+        return this.logical;
     }
 
     public boolean isFunctionObject() {
-        return this.type == MLArray.mxFUNCTION_CLASS;
+        return this.type == MatLevel5DataTypes.mxFUNCTION_CLASS;
     }
 
     public boolean isUnknown() {
-        return this.type == MLArray.mxUNKNOWN_CLASS;
+        return this.type == MatLevel5DataTypes.mxUNKNOWN_CLASS;
     }
 
     protected int getIndex(int m, int n) {
@@ -334,7 +230,7 @@ public abstract class MLArray {
                 }
             }
             sb.append("  ");
-            sb.append(this.typeToString(this.type));
+            sb.append(MatLevel5DataTypes.matrixTypeToString(this.type));
             sb.append(" array");
             if (this.isSparse()) {
                 sb.append(" (sparse");
@@ -374,7 +270,7 @@ public abstract class MLArray {
         this.writeData(dos);
 
         // Write matrix tag.
-        OSMatTag tag = new OSMatTag(MatDataTypes.miMATRIX, baos.toByteArray());
+        OSMatTag tag = new OSMatTag(MatLevel5DataTypes.miMATRIX, baos.toByteArray());
         tag.writeTo(os);
     }
 
@@ -386,13 +282,16 @@ public abstract class MLArray {
      */
     protected void writeFlags(OutputStream os) throws IOException {
         ByteBuffer buffer = ByteBuffer.allocate(4 * 2);
-        buffer.putInt(this.getFlags());
+        int flags = (this.complex ? MatLevel5DataTypes.mtFLAG_COMPLEX : 0) |
+                    (this.global ? MatLevel5DataTypes.mtFLAG_GLOBAL : 0) |
+                    (this.logical ? MatLevel5DataTypes.mtFLAG_LOGICAL : 0);
+        buffer.putInt(flags);
 
         if (this.isSparse())
             buffer.putInt(((MLSparse)this).getMaxNZ());
         else
             buffer.putInt(0);
-        OSMatTag tag = new OSMatTag(MatDataTypes.miUINT32, buffer);
+        OSMatTag tag = new OSMatTag(MatLevel5DataTypes.miUINT32, buffer);
         tag.writeTo(os);
     }
 
@@ -408,7 +307,7 @@ public abstract class MLArray {
 
         for (int i = 0; i < dims.length; ++i)
             buffer.putInt(dims[i]);
-        OSMatTag tag = new OSMatTag(MatDataTypes.miINT32, buffer);
+        OSMatTag tag = new OSMatTag(MatLevel5DataTypes.miINT32, buffer);
         tag.writeTo(os);
     }
 
@@ -433,7 +332,7 @@ public abstract class MLArray {
      */
     protected void writeString(OutputStream os, String data) throws IOException {
         byte[] nameByteArray = data.getBytes();
-        OSMatTag tag = new OSMatTag(MatDataTypes.miINT8, nameByteArray);
+        OSMatTag tag = new OSMatTag(MatLevel5DataTypes.miINT8, nameByteArray);
         tag.writeTo(os);
     }
 

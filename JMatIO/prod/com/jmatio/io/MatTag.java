@@ -2,7 +2,7 @@ package com.jmatio.io;
 
 import java.nio.ByteBuffer;
 
-import com.jmatio.common.MatDataTypes;
+import com.jmatio.common.MatLevel5DataTypes;
 
 /**
  *
@@ -10,7 +10,7 @@ import com.jmatio.common.MatDataTypes;
  */
 public abstract class MatTag {
     /**
-     * The data type, see <code>MatDataTypes</code>.
+     * The data type, see <code>MatLevel5DataTypes</code>.
      */
     protected int type;
     /**
@@ -22,7 +22,7 @@ public abstract class MatTag {
      */
     protected boolean compressed;
     /**
-     * The number of bytes of padding (note that this is unused for <code>type</type> of <code>MatDataTypes.miCOMPRESSED</code>.
+     * The number of bytes of padding (note that this is unused for <code>type</type> of <code>MatLevel5DataTypes.miCOMPRESSED</code>.
      */
     protected int padding;
 
@@ -50,7 +50,7 @@ public abstract class MatTag {
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        String s = "[tag: " + MatDataTypes.typeToString(type) + " size: " + size + "]";
+        String s = "[tag: " + MatLevel5DataTypes.matrixTypeToString(type) + " size: " + size + "]";
         return s;
     }
 
@@ -60,7 +60,7 @@ public abstract class MatTag {
      * @return number of bytes for single data
      */
     public int sizeOf() {
-        return MatDataTypes.sizeOf(type);
+        return MatLevel5DataTypes.sizeOf(type);
     }
 
     public int getNElements() {

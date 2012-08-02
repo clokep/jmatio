@@ -2,6 +2,8 @@ package com.jmatio.types;
 
 import java.nio.ByteBuffer;
 
+import com.jmatio.common.MatLevel5DataTypes;
+
 /**
  * Class represents uint8 (byte) array (matrix).
  *
@@ -28,7 +30,7 @@ public class MLUInt8 extends MLNumericArray<Byte> {
      * @param dims array dimensions
      */
     public MLUInt8(String name, int[] dims) {
-        super(name, dims, MLArray.mxUINT8_CLASS, 0);
+        super(name, dims, MatLevel5DataTypes.mxUINT8_CLASS, 0);
     }
 
     /**
@@ -40,7 +42,7 @@ public class MLUInt8 extends MLNumericArray<Byte> {
      * @param m Number of rows
      */
     public MLUInt8(String name, Byte[] vals, int m) {
-        super(name, MLArray.mxUINT8_CLASS, vals, m);
+        super(name, MatLevel5DataTypes.mxUINT8_CLASS, vals, m);
     }
 
     /**

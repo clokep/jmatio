@@ -5,8 +5,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
+import com.jmatio.common.MatLevel5DataTypes;
 import com.jmatio.io.OSMatTag;
-import com.jmatio.common.MatDataTypes;
 
 /**
  * Class represents Logical (boolean) array (matrix).
@@ -36,7 +36,7 @@ public class MLLogical extends MLArray {
      * @param dims array dimensions
      */
     public MLLogical(String name, int[] dims) {
-        this(name, dims, MLArray.mxUINT8_CLASS, MLArray.mtFLAG_LOGICAL);
+        this(name, dims, MatLevel5DataTypes.mxUINT8_CLASS, MatLevel5DataTypes.mtFLAG_LOGICAL);
     }
 
     /**
@@ -48,7 +48,7 @@ public class MLLogical extends MLArray {
      * @param m Number of rows
      */
     public MLLogical(String name, Boolean[] vals, int m) {
-        this(name, new int[] {m, vals.length / m}, MLArray.mxUINT8_CLASS, MLArray.mtFLAG_LOGICAL);
+        this(name, new int[] {m, vals.length / m}, MatLevel5DataTypes.mxUINT8_CLASS, MatLevel5DataTypes.mtFLAG_LOGICAL);
         if ((vals.length % m) != 0) {
             throw new IllegalArgumentException("The number of values provided (" +
                                                vals.length +
@@ -182,7 +182,7 @@ public class MLLogical extends MLArray {
         for (int i = 0; i < this.bools.length; ++i)
             bufferDOS.writeByte(this.bools[i] ? 1 : 0);
 
-        OSMatTag tag = new OSMatTag(MatDataTypes.miUINT8, buffer.toByteArray());
+        OSMatTag tag = new OSMatTag(MatLevel5DataTypes.miUINT8, buffer.toByteArray());
         tag.writeTo(dos);
     }
 }

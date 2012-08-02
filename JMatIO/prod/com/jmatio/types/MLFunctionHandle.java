@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import com.jmatio.io.OSMatTag;
-import com.jmatio.common.MatDataTypes;
+import com.jmatio.common.MatLevel5DataTypes;
 import com.jmatio.types.MLEmptyArray;
 
 /**
@@ -21,7 +21,7 @@ public class MLFunctionHandle extends MLArray {
     private String type;
 
     public MLFunctionHandle(String name, int[] dims) {
-        super(name, dims, MLArray.mxFUNCTION_CLASS, 0);
+        super(name, dims, MatLevel5DataTypes.mxFUNCTION_CLASS, 0);
     }
 
     public MLFunctionHandle(String name, int[] dims, int type, int attributes) {

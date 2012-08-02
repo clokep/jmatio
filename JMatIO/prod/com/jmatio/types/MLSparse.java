@@ -10,7 +10,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Arrays;
 
-import com.jmatio.common.MatDataTypes;
+import com.jmatio.common.MatLevel5DataTypes;
 import com.jmatio.io.OSMatTag;
 
 public class MLSparse extends MLNumericArray<Double> {
@@ -28,7 +28,7 @@ public class MLSparse extends MLNumericArray<Double> {
      * @param nzmax
      */
     public MLSparse(String name, int[] dims, int attributes, int nzmax) {
-        super(name, dims, MLArray.mxSPARSE_CLASS, attributes);
+        super(name, dims, MatLevel5DataTypes.mxSPARSE_CLASS, attributes);
         this.nzmax = nzmax;
     }
 
@@ -316,7 +316,7 @@ public class MLSparse extends MLNumericArray<Double> {
         ai = this.getIR();
         for (int i : ai)
             bufferDOS.writeInt(i);
-        OSMatTag tag = new OSMatTag(MatDataTypes.miINT32, buffer.toByteArray() );
+        OSMatTag tag = new OSMatTag(MatLevel5DataTypes.miINT32, buffer.toByteArray() );
         tag.writeTo(dos);
 
         // Write jc.
@@ -325,7 +325,7 @@ public class MLSparse extends MLNumericArray<Double> {
         ai = this.getJC();
         for (int i : ai)
             bufferDOS.writeInt(i);
-        tag = new OSMatTag(MatDataTypes.miINT32, buffer.toByteArray());
+        tag = new OSMatTag(MatLevel5DataTypes.miINT32, buffer.toByteArray());
         tag.writeTo(dos);
 
         // Write real part.
@@ -334,7 +334,7 @@ public class MLSparse extends MLNumericArray<Double> {
         Double[] ad = this.exportReal();
         for (int i = 0; i < ad.length; ++i)
             bufferDOS.writeDouble(ad[i].doubleValue());
-        tag = new OSMatTag(MatDataTypes.miDOUBLE, buffer.toByteArray());
+        tag = new OSMatTag(MatLevel5DataTypes.miDOUBLE, buffer.toByteArray());
         tag.writeTo(dos);
 
         // Write imaginary part.
@@ -344,7 +344,7 @@ public class MLSparse extends MLNumericArray<Double> {
             ad = this.exportImaginary();
             for (int i = 0; i < ad.length; ++i)
                 bufferDOS.writeDouble(ad[i].doubleValue());
-            tag = new OSMatTag(MatDataTypes.miDOUBLE, buffer.toByteArray() );
+            tag = new OSMatTag(MatLevel5DataTypes.miDOUBLE, buffer.toByteArray() );
             tag.writeTo(dos);
         }
     }

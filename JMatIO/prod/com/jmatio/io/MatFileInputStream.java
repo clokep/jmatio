@@ -3,7 +3,7 @@ package com.jmatio.io;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import com.jmatio.common.MatDataTypes;
+import com.jmatio.common.MatLevel5DataTypes;
 import com.jmatio.types.ByteStorageSupport;
 
 /**
@@ -20,7 +20,7 @@ class MatFileInputStream {
      *
      * @param is input stream
      * @param type type of data in the stream
-     * @see com.jmatio.common.MatDataTypes
+     * @see com.jmatio.common.MatLevel5DataTypes
      */
     public MatFileInputStream(ByteBuffer buf, int type) {
         this.type = type;
@@ -36,28 +36,28 @@ class MatFileInputStream {
      */
     public byte readByte() throws IOException {
         switch (this.type) {
-            case MatDataTypes.miUINT8:
+            case MatLevel5DataTypes.miUINT8:
                 return (byte)(buf.get() & 0xFF);
-            case MatDataTypes.miINT8:
+            case MatLevel5DataTypes.miINT8:
                 return (byte)buf.get();
-            case MatDataTypes.miUINT16:
+            case MatLevel5DataTypes.miUINT16:
                 return (byte)(buf.getShort() & 0xFFFF);
-            case MatDataTypes.miINT16:
+            case MatLevel5DataTypes.miINT16:
                 return (byte)buf.getShort();
-            case MatDataTypes.miUINT32:
+            case MatLevel5DataTypes.miUINT32:
                 return (byte)(buf.getInt() & 0xFFFFFFFF);
-            case MatDataTypes.miINT32:
+            case MatLevel5DataTypes.miINT32:
                 return (byte)buf.getInt();
-            case MatDataTypes.miSINGLE:
+            case MatLevel5DataTypes.miSINGLE:
                 return (byte)buf.getFloat();
-            case MatDataTypes.miDOUBLE:
+            case MatLevel5DataTypes.miDOUBLE:
                 return (byte)buf.getDouble();
-            case MatDataTypes.miUINT64:
+            case MatLevel5DataTypes.miUINT64:
                 return (byte)buf.getLong();
-            case MatDataTypes.miINT64:
+            case MatLevel5DataTypes.miINT64:
                 return (byte)buf.getLong();
             default:
-                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type) + " (" + type + ").");
+                throw new IllegalArgumentException("Unknown data type: " + MatLevel5DataTypes.matrixTypeToString(type) + " (" + type + ").");
         }
     }
 
@@ -70,28 +70,28 @@ class MatFileInputStream {
      */
     public short readShort() throws IOException {
         switch (this.type) {
-            case MatDataTypes.miUINT8:
+            case MatLevel5DataTypes.miUINT8:
                 return (short)(buf.get() & 0xFF);
-            case MatDataTypes.miINT8:
+            case MatLevel5DataTypes.miINT8:
                 return (short)buf.get();
-            case MatDataTypes.miUINT16:
+            case MatLevel5DataTypes.miUINT16:
                 return (short)(buf.getShort() & 0xFFFF);
-            case MatDataTypes.miINT16:
+            case MatLevel5DataTypes.miINT16:
                 return (short)buf.getShort();
-            case MatDataTypes.miUINT32:
+            case MatLevel5DataTypes.miUINT32:
                 return (short)(buf.getInt() & 0xFFFFFFFF);
-            case MatDataTypes.miINT32:
+            case MatLevel5DataTypes.miINT32:
                 return (short)buf.getInt();
-            case MatDataTypes.miSINGLE:
+            case MatLevel5DataTypes.miSINGLE:
                 return (short)buf.getFloat();
-            case MatDataTypes.miDOUBLE:
+            case MatLevel5DataTypes.miDOUBLE:
                 return (short)buf.getDouble();
-            case MatDataTypes.miUINT64:
+            case MatLevel5DataTypes.miUINT64:
                 return (short)buf.getLong();
-            case MatDataTypes.miINT64:
+            case MatLevel5DataTypes.miINT64:
                 return (short)buf.getLong();
             default:
-                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type) + " (" + type + ").");
+                throw new IllegalArgumentException("Unknown data type: " + MatLevel5DataTypes.matrixTypeToString(type) + " (" + type + ").");
         }
     }
 
@@ -104,30 +104,30 @@ class MatFileInputStream {
      */
     public char readChar() throws IOException {
         switch (this.type) {
-            case MatDataTypes.miUINT8:
+            case MatLevel5DataTypes.miUINT8:
                 return (char)(buf.get() & 0xFF);
-            case MatDataTypes.miINT8:
+            case MatLevel5DataTypes.miINT8:
                 return (char)buf.get();
-            case MatDataTypes.miUINT16:
+            case MatLevel5DataTypes.miUINT16:
                 return (char)(buf.getShort() & 0xFFFF);
-            case MatDataTypes.miINT16:
+            case MatLevel5DataTypes.miINT16:
                 return (char)buf.getShort();
-            case MatDataTypes.miUINT32:
+            case MatLevel5DataTypes.miUINT32:
                 return (char)(buf.getInt() & 0xFFFFFFFF);
-            case MatDataTypes.miINT32:
+            case MatLevel5DataTypes.miINT32:
                 return (char)buf.getInt();
-            case MatDataTypes.miSINGLE:
+            case MatLevel5DataTypes.miSINGLE:
                 return (char)buf.getFloat();
-            case MatDataTypes.miDOUBLE:
+            case MatLevel5DataTypes.miDOUBLE:
                 return (char)buf.getDouble();
-            case MatDataTypes.miUINT64:
+            case MatLevel5DataTypes.miUINT64:
                 return (char)buf.getLong();
-            case MatDataTypes.miINT64:
+            case MatLevel5DataTypes.miINT64:
                 return (char)buf.getLong();
-            case MatDataTypes.miUTF8:
+            case MatLevel5DataTypes.miUTF8:
                 return (char)buf.get();
             default:
-                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type) + " (" + type + ").");
+                throw new IllegalArgumentException("Unknown data type: " + MatLevel5DataTypes.matrixTypeToString(type) + " (" + type + ").");
         }
     }
 
@@ -140,82 +140,82 @@ class MatFileInputStream {
      */
     public int readInt() throws IOException  {
         switch (this.type) {
-            case MatDataTypes.miUINT8:
+            case MatLevel5DataTypes.miUINT8:
                 return (int)(buf.get() & 0xFF);
-            case MatDataTypes.miINT8:
+            case MatLevel5DataTypes.miINT8:
                 return (int)buf.get();
-            case MatDataTypes.miUINT16:
+            case MatLevel5DataTypes.miUINT16:
                 return (int)(buf.getShort() & 0xFFFF);
-            case MatDataTypes.miINT16:
+            case MatLevel5DataTypes.miINT16:
                 return (int)buf.getShort();
-            case MatDataTypes.miUINT32:
+            case MatLevel5DataTypes.miUINT32:
                 return (int)(buf.getInt() & 0xFFFFFFFF);
-            case MatDataTypes.miINT32:
+            case MatLevel5DataTypes.miINT32:
                 return (int)buf.getInt();
-            case MatDataTypes.miSINGLE:
+            case MatLevel5DataTypes.miSINGLE:
                 return (int)buf.getFloat();
-            case MatDataTypes.miDOUBLE:
+            case MatLevel5DataTypes.miDOUBLE:
                 return (int)buf.getDouble();
-            case MatDataTypes.miUINT64:
+            case MatLevel5DataTypes.miUINT64:
                 return (int)buf.getLong();
-            case MatDataTypes.miINT64:
+            case MatLevel5DataTypes.miINT64:
                 return (int)buf.getLong();
             default:
-                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type) + " (" + type + ").");
+                throw new IllegalArgumentException("Unknown data type: " + MatLevel5DataTypes.matrixTypeToString(type) + " (" + type + ").");
         }
     }
 
     private long readLong() {
         switch (this.type) {
-            case MatDataTypes.miUINT8:
+            case MatLevel5DataTypes.miUINT8:
                 return (long)(buf.get() & 0xFF);
-            case MatDataTypes.miINT8:
+            case MatLevel5DataTypes.miINT8:
                 return (long)buf.get();
-            case MatDataTypes.miUINT16:
+            case MatLevel5DataTypes.miUINT16:
                 return (long)(buf.getShort() & 0xFFFF);
-            case MatDataTypes.miINT16:
+            case MatLevel5DataTypes.miINT16:
                 return (long)buf.getShort();
-            case MatDataTypes.miUINT32:
+            case MatLevel5DataTypes.miUINT32:
                 return (long)(buf.getInt() & 0xFFFFFFFF);
-            case MatDataTypes.miINT32:
+            case MatLevel5DataTypes.miINT32:
                 return (long)buf.getInt();
-            case MatDataTypes.miSINGLE:
+            case MatLevel5DataTypes.miSINGLE:
                 return (long)buf.getFloat();
-            case MatDataTypes.miDOUBLE:
+            case MatLevel5DataTypes.miDOUBLE:
                 return (long)buf.getDouble();
-            case MatDataTypes.miUINT64:
+            case MatLevel5DataTypes.miUINT64:
                 return (long)buf.getLong();
-            case MatDataTypes.miINT64:
+            case MatLevel5DataTypes.miINT64:
                 return (long)buf.getLong();
             default:
-                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type) + " (" + type + ").");
+                throw new IllegalArgumentException("Unknown data type: " + MatLevel5DataTypes.matrixTypeToString(type) + " (" + type + ").");
         }
     }
 
     private float readFloat() {
         switch (this.type) {
-            case MatDataTypes.miUINT8:
+            case MatLevel5DataTypes.miUINT8:
                 return (float)(buf.get() & 0xFF);
-            case MatDataTypes.miINT8:
+            case MatLevel5DataTypes.miINT8:
                 return (float)buf.get();
-            case MatDataTypes.miUINT16:
+            case MatLevel5DataTypes.miUINT16:
                 return (float)(buf.getShort() & 0xFFFF);
-            case MatDataTypes.miINT16:
+            case MatLevel5DataTypes.miINT16:
                 return (float)buf.getShort();
-            case MatDataTypes.miUINT32:
+            case MatLevel5DataTypes.miUINT32:
                 return (float)(buf.getInt() & 0xFFFFFFFF);
-            case MatDataTypes.miINT32:
+            case MatLevel5DataTypes.miINT32:
                 return (float)buf.getInt();
-            case MatDataTypes.miSINGLE:
+            case MatLevel5DataTypes.miSINGLE:
                 return (float)buf.getFloat();
-            case MatDataTypes.miDOUBLE:
+            case MatLevel5DataTypes.miDOUBLE:
                 return (float)buf.getDouble();
-            case MatDataTypes.miUINT64:
+            case MatLevel5DataTypes.miUINT64:
                 return (float)buf.getLong();
-            case MatDataTypes.miINT64:
+            case MatLevel5DataTypes.miINT64:
                 return (float)buf.getLong();
             default:
-                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type) + " (" + type + ").");
+                throw new IllegalArgumentException("Unknown data type: " + MatLevel5DataTypes.matrixTypeToString(type) + " (" + type + ").");
         }
     }
 
@@ -228,28 +228,28 @@ class MatFileInputStream {
      */
     public double readDouble() throws IOException {
         switch (this.type) {
-            case MatDataTypes.miUINT8:
+            case MatLevel5DataTypes.miUINT8:
                 return (double)(buf.get() & 0xFF);
-            case MatDataTypes.miINT8:
+            case MatLevel5DataTypes.miINT8:
                 return (double)buf.get();
-            case MatDataTypes.miUINT16:
+            case MatLevel5DataTypes.miUINT16:
                 return (double)(buf.getShort() & 0xFFFF);
-            case MatDataTypes.miINT16:
+            case MatLevel5DataTypes.miINT16:
                 return (double)buf.getShort();
-            case MatDataTypes.miUINT32:
+            case MatLevel5DataTypes.miUINT32:
                 return (double)(buf.getInt() & 0xFFFFFFFF);
-            case MatDataTypes.miINT32:
+            case MatLevel5DataTypes.miINT32:
                 return (double)buf.getInt();
-            case MatDataTypes.miSINGLE:
+            case MatLevel5DataTypes.miSINGLE:
                 return (double)buf.getFloat();
-            case MatDataTypes.miDOUBLE:
+            case MatLevel5DataTypes.miDOUBLE:
                 return (double)buf.getDouble();
-            case MatDataTypes.miUINT64:
+            case MatLevel5DataTypes.miUINT64:
                 return (double)buf.getLong();
-            case MatDataTypes.miINT64:
+            case MatLevel5DataTypes.miINT64:
                 return (double)buf.getLong();
             default:
-                throw new IllegalArgumentException("Unknown data type: " + MatDataTypes.typeToString(type) + " (" + type + ").");
+                throw new IllegalArgumentException("Unknown data type: " + MatLevel5DataTypes.matrixTypeToString(type) + " (" + type + ").");
         }
     }
 
@@ -273,7 +273,7 @@ class MatFileInputStream {
         int size = elements * storage.getBytesAllocated();
 
         // Direct buffer copy.
-        if (MatDataTypes.sizeOf(this.type) == bytesAllocated && buf.order().equals(dest.order())) {
+        if (MatLevel5DataTypes.sizeOf(this.type) == bytesAllocated && buf.order().equals(dest.order())) {
             int bufMaxSize = 1024;
             int bufSize = Math.min(buf.remaining(), bufMaxSize);
             int bufPos = this.buf.position();

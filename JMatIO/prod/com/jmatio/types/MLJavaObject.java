@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 
 import com.jmatio.io.OSMatTag;
 import com.jmatio.io.MatlabIOException;
-import com.jmatio.common.MatDataTypes;
+import com.jmatio.common.MatLevel5DataTypes;
 
 /**
  * Class represents Java Object wrapped in an opaque array (matrix).
