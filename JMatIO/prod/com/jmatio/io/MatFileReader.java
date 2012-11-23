@@ -16,7 +16,6 @@ import java.nio.channels.FileChannel;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.zip.InflaterInputStream;
@@ -28,6 +27,7 @@ import com.jmatio.types.MLCell;
 import com.jmatio.types.MLChar;
 import com.jmatio.types.MLDouble;
 import com.jmatio.types.MLEmptyArray;
+import com.jmatio.types.MLInt16;
 import com.jmatio.types.MLInt64;
 import com.jmatio.types.MLInt8;
 import com.jmatio.types.MLNumericArray;
@@ -633,9 +633,6 @@ public class MatFileReader
                 //calculate number of fields
                 int numOfFields = tag.size/maxlen;
                 
-                //padding after field names
-                int padding = (tag.size%8) != 0 ? 8-(tag.size%8) : 0;
-
                 String[] fieldNames = new String[numOfFields];
                 for ( int i = 0; i < numOfFields; i++ )
                 {
@@ -643,7 +640,7 @@ public class MatFileReader
                     buf.get(names);
                     fieldNames[i] = zeroEndByteArrayToString(names);
                 }
-                buf.position( buf.position() + padding );
+                buf.position( buf.position() + tag.padding );
                 //read fields
                 for ( int index = 0; index < struct.getM()*struct.getN(); index++ )
                 {
@@ -726,6 +723,20 @@ public class MatFileReader
                 break;
             case MLArray.mxINT8_CLASS:
                 mlArray = new MLInt8(name, dims, type, attributes);
+                //read real
+                tag = new ISMatTag(buf);
+                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
+                                            (MLNumericArray<?>) mlArray );
+                //read complex
+                if ( mlArray.isComplex() )
+                {
+                    tag = new ISMatTag(buf);
+                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
+                            (MLNumericArray<?>) mlArray );
+                }
+                break;
+            case MLArray.mxINT16_CLASS:
+                mlArray = new MLInt16(name, dims, type, attributes);
                 //read real
                 tag = new ISMatTag(buf);
                 tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
@@ -1014,6 +1025,7 @@ public class MatFileReader
     {
         public ByteBuffer buf;
         private int padding;
+		private boolean compressed;
         
         public ISMatTag(ByteBuffer buf) throws IOException
         {
@@ -1022,7 +1034,6 @@ public class MatFileReader
             this.buf = buf;
             int tmp = buf.getInt();
             
-            boolean compressed;
             //data not packed in the tag
             if ( tmp >> 16 == 0 )
             {    
