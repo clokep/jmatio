@@ -271,9 +271,10 @@ public class MatFileWriter
                 buffer = new ByteArrayOutputStream();
                 bufferDOS = new DataOutputStream(buffer);
                 Character[] ac = ((MLChar)array).exportChar();
-                for ( int i = 0; i < ac.length; i++ )
+                for( int i = 0; i < ac.length; i++ )
                 {
-                    bufferDOS.writeByte( (byte)ac[i].charValue() );
+                	String temp = new StringBuffer().append(ac[i].charValue()).toString();
+                	bufferDOS.write(temp.getBytes("UTF-8"));
                 }
                 tag = new OSArrayTag(MatDataTypes.miUTF8, buffer.toByteArray() );
                 tag.writeTo( dos );

@@ -284,6 +284,30 @@ public class MatIOTest
         assertEquals("Test if non existent value is null", null, mlCharRetrived);
     }
     
+    @Test
+    public void testMLCharUnicode() throws Exception
+    {
+        //array name
+        String name = "chararr";
+        //file name in which array will be storred
+        String fileName = "mlcharUTF.mat";
+        //temp
+        String valueS;
+
+        //create MLChar array of a name "chararr" containig one
+        //string value "dummy"
+        MLChar mlChar = new MLChar(name, "\u017C\u00F3\u0142w");
+        MatFileWriter writer = new MatFileWriter();
+        writer.write(new File(fileName), Arrays.asList( (MLArray) mlChar ) );
+        
+        MatFileReader reader = new MatFileReader( new File(fileName) );
+        MLChar mlChar2 = (MLChar) reader.getMLArray(name);
+
+
+        assertEquals("\u017C\u00F3\u0142w", mlChar2.getString(0) );
+        
+    }
+    
     /**
      * Tests <code>MLDouble</code> reading and writing.
      * 

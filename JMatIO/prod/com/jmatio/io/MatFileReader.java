@@ -16,6 +16,7 @@ import java.nio.channels.FileChannel;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.zip.InflaterInputStream;
@@ -782,11 +783,13 @@ public class MatFileReader
                 
                 //read real
                 tag = new ISMatTag(buf);
-                char[] ac = tag.readToCharArray();
-                for ( int i = 0; i < ac.length; i++ )
-                {
-                    mlchar.setChar( ac[i], i );
-                }
+//                char[] ac = tag.readToCharArray();
+                String str = tag.readToString();
+                mlchar.set(str);
+//                for ( int i = 0; i < ac.length; i++ )
+//                {
+//                    mlchar.setChar( ac[i], i );
+//                }
                 mlArray = mlchar;
                 break;
             case MLArray.mxSPARSE_CLASS:
@@ -1120,6 +1123,15 @@ public class MatFileReader
             }
             return ai;
         }
+        public String readToString() throws IOException
+        {
+            //
+            byte[] bytes = readToByteArray();
+            
+            return new String( bytes, "UTF-8" );
+        	
+        }
+        
         public char[] readToCharArray() throws IOException
         {
             //allocate memory for array elements
