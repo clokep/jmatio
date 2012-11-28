@@ -296,16 +296,16 @@ public class MatIOTest
 
         //create MLChar array of a name "chararr" containig one
         //string value "dummy"
-        MLChar mlChar = new MLChar(name, "\u017C\u00F3\u0142w");
+        MLChar mlChar = new MLChar(name, new String[] { "\u017C\u00F3\u0142w", "\u017C\u00F3\u0142i"} );
         MatFileWriter writer = new MatFileWriter();
         writer.write(new File(fileName), Arrays.asList( (MLArray) mlChar ) );
         
         MatFileReader reader = new MatFileReader( new File(fileName) );
         MLChar mlChar2 = (MLChar) reader.getMLArray(name);
 
-
+        assertEquals("\u017C\u00F3\u0142w", mlChar.getString(0) );
         assertEquals("\u017C\u00F3\u0142w", mlChar2.getString(0) );
-        
+        assertEquals("\u017C\u00F3\u0142i", mlChar2.getString(1) );        
     }
     
     /**

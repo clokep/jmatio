@@ -13,8 +13,8 @@ import com.jmatio.types.ByteStorageSupport;
  */
 class MatFileInputStream
 {
-    private int type;
-    private ByteBuffer buf;
+    private final int type;
+    private final ByteBuffer buf;
     
     /**
      * Attach MAT-file input stream to <code>InputStream</code>
@@ -277,6 +277,11 @@ class MatFileInputStream
                 throw new IllegalArgumentException("Unknown data type: " + type);
         }
     }
+
+	public void skip(int padding) 
+	{
+		buf.position( buf.position() + padding );
+	}
     
 
 }

@@ -785,11 +785,11 @@ public class MatFileReader
                 tag = new ISMatTag(buf);
 //                char[] ac = tag.readToCharArray();
                 String str = tag.readToString();
-                mlchar.set(str);
-//                for ( int i = 0; i < ac.length; i++ )
-//                {
-//                    mlchar.setChar( ac[i], i );
-//                }
+
+                for ( int i = 0; i < str.length(); i++ )
+                {
+                    mlchar.setChar( str.charAt(i), i );
+                }
                 mlArray = mlchar;
                 break;
             case MLArray.mxSPARSE_CLASS:
@@ -1026,15 +1026,14 @@ public class MatFileReader
      */
     private static class ISMatTag extends MatTag
     {
-        public ByteBuffer buf;
-        private int padding;
-		private boolean compressed;
+        private final MatFileInputStream mfis;
+        private final int padding;
+		private final boolean compressed;
         
         public ISMatTag(ByteBuffer buf) throws IOException
         {
             //must call parent constructor
             super(0,0);
-            this.buf = buf;
             int tmp = buf.getInt();
             
             //data not packed in the tag
@@ -1051,17 +1050,15 @@ public class MatFileReader
                 compressed = true;
             }
             padding = getPadding(size, compressed);
+            mfis = new MatFileInputStream(buf, type);
         } 
+        
+        
         public void readToByteBuffer( ByteBuffer buff, ByteStorageSupport<?> storage ) throws IOException
         {
-            MatFileInputStream mfis = new MatFileInputStream( buf, type );
             int elements = size/sizeOf();
             mfis.readToByteBuffer( buff, elements, storage );
-            //skip padding
-            if ( padding > 0 )
-            {
-                buf.position( buf.position() + padding );
-            }
+            mfis.skip( padding );
         }
         public byte[] readToByteArray() throws IOException
         {
@@ -1069,18 +1066,13 @@ public class MatFileReader
             int elements = size/sizeOf();
             byte[] ab = new byte[elements];
             
-            MatFileInputStream mfis = new MatFileInputStream( buf, type );
-
             for ( int i = 0; i < elements; i++ )
             {
                 ab[i] = mfis.readByte();
             }
             
             //skip padding
-            if ( padding > 0 )
-            {
-                buf.position( buf.position() + padding );
-            }
+            mfis.skip( padding );
             return ab;
         }
         public double[] readToDoubleArray() throws IOException
@@ -1089,18 +1081,13 @@ public class MatFileReader
             int elements = size/sizeOf();
             double[] ad = new double[elements];
             
-            MatFileInputStream mfis = new MatFileInputStream( buf, type );
-
             for ( int i = 0; i < elements; i++ )
             {
                 ad[i] = mfis.readDouble();
             }
             
             //skip padding
-            if ( padding > 0 )
-            {
-                buf.position( buf.position() + padding );
-            }
+            mfis.skip( padding );
             return ad;
         }
         public int[] readToIntArray() throws IOException
@@ -1109,18 +1096,13 @@ public class MatFileReader
             int elements = size/sizeOf();
             int[] ai = new int[elements];
             
-            MatFileInputStream mfis = new MatFileInputStream( buf, type );
-
             for ( int i = 0; i < elements; i++ )
             {
                 ai[i] = mfis.readInt();
             }
             
             //skip padding
-            if ( padding > 0 )
-            {
-                buf.position( buf.position() + padding );
-            }
+            mfis.skip( padding );
             return ai;
         }
         public String readToString() throws IOException
@@ -1138,18 +1120,13 @@ public class MatFileReader
             int elements = size/sizeOf();
             char[] ac = new char[elements];
             
-            MatFileInputStream mfis = new MatFileInputStream( buf, type );
-
             for ( int i = 0; i < elements; i++ )
             {
                 ac[i] = mfis.readChar();
             }
             
             //skip padding
-            if ( padding > 0 )
-            {
-                buf.position( buf.position() + padding );
-            }
+            mfis.skip( padding );
             return ac;
         }
     }
