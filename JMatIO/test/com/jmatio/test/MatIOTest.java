@@ -3,8 +3,10 @@ package com.jmatio.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +18,8 @@ import junit.framework.JUnit4TestAdapter;
 
 import org.junit.Test;
 
+import sun.org.mozilla.javascript.internal.UintMap;
+
 import com.jmatio.io.MatFileFilter;
 import com.jmatio.io.MatFileIncrementalWriter;
 import com.jmatio.io.MatFileReader;
@@ -26,6 +30,7 @@ import com.jmatio.types.MLChar;
 import com.jmatio.types.MLDouble;
 import com.jmatio.types.MLInt64;
 import com.jmatio.types.MLInt8;
+import com.jmatio.types.MLJavaObject;
 import com.jmatio.types.MLNumericArray;
 import com.jmatio.types.MLSingle;
 import com.jmatio.types.MLSparse;
@@ -1062,5 +1067,17 @@ public class MatIOTest
         assertEquals( expected[1], mlchar.getString(1) );
         assertEquals( expected[2], mlchar.getString(2) );
         assertEquals( expected[3], mlchar.getString(3) );
+    }
+    
+    @Test
+    public void testJavaObject() throws Exception
+    {
+        MatFileReader mfr = new MatFileReader();
+        Map<String, MLArray> content = mfr.read( new File("test/java.mat") );
+        
+        MLJavaObject mlJavaObject = (MLJavaObject) content.get( "f" );
+        
+        assertEquals( "java.io.File", mlJavaObject.getClassName() );
+        assertEquals( new File("c:/temp"), mlJavaObject.getObject() );
     }
 }
