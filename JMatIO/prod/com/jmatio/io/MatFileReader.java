@@ -943,14 +943,11 @@ public class MatFileReader
      */
     private String zeroEndByteArrayToString(byte[] bytes) throws IOException
     {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream( baos );
+        int i = 0;
         
-        for ( int i = 0; i < bytes.length && bytes[i] != 0; i++ )
-        {
-            dos.writeByte(bytes[i]);
-        }
-        return baos.toString();
+        for ( i = 0; i < bytes.length && bytes[i] != 0; i++ );
+        
+        return new String( bytes, 0, i );
         
     }
     /**
@@ -998,13 +995,9 @@ public class MatFileReader
      */
     private String readName(ByteBuffer buf) throws IOException
     {
-        String s;
-        
         ISMatTag tag = new ISMatTag(buf);
-        char[] ac = tag.readToCharArray();
-        s = new String(ac);
 
-        return s;
+        return tag.readToString();
     }
     /**
      * Reads MAT-file header.
