@@ -28,6 +28,7 @@ import com.jmatio.types.MLArray;
 import com.jmatio.types.MLCell;
 import com.jmatio.types.MLChar;
 import com.jmatio.types.MLDouble;
+import com.jmatio.types.MLInt32;
 import com.jmatio.types.MLInt64;
 import com.jmatio.types.MLInt8;
 import com.jmatio.types.MLJavaObject;
@@ -1094,4 +1095,30 @@ public class MatIOTest
         assertTrue( mlObject.getObject().getFieldNames().contains( "expr" ) );
 //        System.out.println(mlObject.getObject().getFieldNames());
     }
+    @Test 
+    public void testInt32() throws IOException
+    {
+        //array name
+        String name = "a";
+        //file name in which array will be stored
+        String fileName = "test/int32.mat";
+
+        //test column-packed vector
+        int[] src = new int[] { 1, 2, 3, 4 };
+        MLInt32 mlDouble = new MLInt32( name, src, 1 );
+        
+        //read array form file
+        MatFileReader mfr = new MatFileReader( fileName );
+        MLArray mlArrayRetrived = mfr.getMLArray( name );
+        
+        //test if MLArray objects are equal
+        assertEquals("Test if value red from file equals value stored", mlDouble, mlArrayRetrived);
+    }
+    @Test
+    public void testMat() throws IOException
+    {
+        MatFileReader mfr = new MatFileReader( new File( "c:/tmp/SPMsiemensmowa.mat" ) );
+        Map<String, MLArray> content = mfr.read( new File("test/object.mat") );
+    }
+    
 }

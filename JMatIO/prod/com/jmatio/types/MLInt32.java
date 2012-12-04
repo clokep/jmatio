@@ -138,7 +138,7 @@ public class MLInt32 extends MLNumericArray<Integer>
     }
     public int getBytesAllocated()
     {
-        return Long.SIZE >> 3;
+        return Integer.SIZE >> 3;
     }
     
     public Class<Integer> getStorageClazz()
