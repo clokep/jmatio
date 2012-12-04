@@ -1114,11 +1114,4 @@ public class MatIOTest
         //test if MLArray objects are equal
         assertEquals("Test if value red from file equals value stored", mlDouble, mlArrayRetrived);
     }
-    @Test
-    public void testMat() throws IOException
-    {
-        MatFileReader mfr = new MatFileReader( new File( "c:/tmp/SPMsiemensmowa.mat" ) );
-        Map<String, MLArray> content = mfr.read( new File("test/object.mat") );
-    }
-    
 }
