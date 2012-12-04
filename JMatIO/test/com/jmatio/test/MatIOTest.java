@@ -32,6 +32,7 @@ import com.jmatio.types.MLInt64;
 import com.jmatio.types.MLInt8;
 import com.jmatio.types.MLJavaObject;
 import com.jmatio.types.MLNumericArray;
+import com.jmatio.types.MLObject;
 import com.jmatio.types.MLSingle;
 import com.jmatio.types.MLSparse;
 import com.jmatio.types.MLStructure;
@@ -1079,5 +1080,18 @@ public class MatIOTest
         
         assertEquals( "java.io.File", mlJavaObject.getClassName() );
         assertEquals( new File("c:/temp"), mlJavaObject.getObject() );
+    }
+    @Test
+    public void testObject() throws Exception
+    {
+        MatFileReader mfr = new MatFileReader();
+        Map<String, MLArray> content = mfr.read( new File("test/object.mat") );
+        
+        MLObject mlObject = (MLObject) content.get( "X" );
+        
+        assertEquals( "inline", mlObject.getClassName() );
+        assertTrue( mlObject.getObject() instanceof MLStructure );
+        assertTrue( mlObject.getObject().getFieldNames().contains( "expr" ) );
+//        System.out.println(mlObject.getObject().getFieldNames());
     }
 }

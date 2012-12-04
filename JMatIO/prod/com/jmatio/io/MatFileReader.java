@@ -31,13 +31,16 @@ import com.jmatio.types.MLChar;
 import com.jmatio.types.MLDouble;
 import com.jmatio.types.MLEmptyArray;
 import com.jmatio.types.MLInt16;
+import com.jmatio.types.MLInt32;
 import com.jmatio.types.MLInt64;
 import com.jmatio.types.MLInt8;
 import com.jmatio.types.MLJavaObject;
 import com.jmatio.types.MLNumericArray;
+import com.jmatio.types.MLObject;
 import com.jmatio.types.MLSingle;
 import com.jmatio.types.MLSparse;
 import com.jmatio.types.MLStructure;
+import com.jmatio.types.MLUInt32;
 import com.jmatio.types.MLUInt64;
 import com.jmatio.types.MLUInt8;
 
@@ -611,6 +614,7 @@ public class MatFileReader
                     {
                         //read matrix recursively
                         tag = new ISMatTag(buf);
+                        
                         if ( tag.size > 0 )
                         {
                             MLArray fieldValue = readMatrix( buf, false);
@@ -701,6 +705,34 @@ public class MatFileReader
                 break;
             case MLArray.mxINT16_CLASS:
                 mlArray = new MLInt16(name, dims, type, attributes);
+                //read real
+                tag = new ISMatTag(buf);
+                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
+                                            (MLNumericArray<?>) mlArray );
+                //read complex
+                if ( mlArray.isComplex() )
+                {
+                    tag = new ISMatTag(buf);
+                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
+                            (MLNumericArray<?>) mlArray );
+                }
+                break;
+            case MLArray.mxINT32_CLASS:                
+                mlArray = new MLInt32(name, dims, type, attributes);
+                //read real
+                tag = new ISMatTag(buf);
+                tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
+                                            (MLNumericArray<?>) mlArray );
+                //read complex
+                if ( mlArray.isComplex() )
+                {
+                    tag = new ISMatTag(buf);
+                    tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
+                            (MLNumericArray<?>) mlArray );
+                }
+                break;
+            case MLArray.mxUINT32_CLASS:                
+                mlArray = new MLUInt32(name, dims, type, attributes);
                 //read real
                 tag = new ISMatTag(buf);
                 tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getRealByteBuffer(),
@@ -841,6 +873,57 @@ public class MatFileReader
                 {
                     throw new IOException("Unexpected java object content");
                 }
+                break;
+            case MLArray.mxOBJECT_CLASS:
+                //read class name
+                tag = new ISMatTag(buf);
+                
+                // class name
+                className = tag.readToString();
+                
+                // TODO: currently copy pasted from structure
+                
+                struct = new MLStructure(name, dims, type, attributes);
+                
+                //field name lenght - this subelement always uses the compressed data element format
+                tag = new ISMatTag(buf);
+                maxlen = buf.getInt(); //maximum field length
+                
+                //////  read fields data as Int8
+                tag = new ISMatTag(buf);
+                //calculate number of fields
+                numOfFields = tag.size/maxlen;
+                
+                fieldNames = new String[numOfFields];
+                for ( int i = 0; i < numOfFields; i++ )
+                {
+                    byte[] names = new byte[maxlen];
+                    buf.get(names);
+                    fieldNames[i] = zeroEndByteArrayToString(names);
+                }
+    
+                buf.position( buf.position() + tag.padding );
+                //read fields
+                for ( int index = 0; index < 1; index++ )
+                {
+                    for ( int i = 0; i < numOfFields; i++ )
+                    {
+                        //read matrix recursively
+                        tag = new ISMatTag(buf);
+
+                        if ( tag.size > 0 )
+                        {
+                            MLArray fieldValue = readMatrix( buf, false);
+                            struct.setField( fieldNames[i], fieldValue, index );
+                        }
+                        else
+                        {
+                            struct.setField(fieldNames[i], new MLEmptyArray(), index);
+                        }
+                    }
+                }
+                
+                mlArray = new MLObject( name, className, struct );
                 break;
             default:
                 throw new MatlabIOException("Incorrect matlab array class: " + MLArray.typeToString(type) );
