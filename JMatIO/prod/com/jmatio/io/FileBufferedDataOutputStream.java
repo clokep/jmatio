@@ -97,11 +97,13 @@ class FileBufferedDataOutputStream extends OutputStream implements DataOutputStr
     @Override
     public void close() throws IOException
     {
+        flush();
+        
         buf = null;
         
         if ( rwChannel.isOpen() )
         {
-            flush();
+
             rwChannel.close();
         }
         
@@ -114,7 +116,7 @@ class FileBufferedDataOutputStream extends OutputStream implements DataOutputStr
     @Override
     public void flush() throws IOException
     {
-        if ( buf.position() > 0 )
+        if ( buf != null && buf.position() > 0 )
         {    
             buf.flip();
             rwChannel.write( buf );
