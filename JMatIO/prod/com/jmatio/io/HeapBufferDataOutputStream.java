@@ -10,8 +10,7 @@ public class HeapBufferDataOutputStream extends ByteArrayOutputStream implements
     
     public ByteBuffer getByteBuffer() throws IOException
     {
-        byte[] bytes = super.toByteArray();
-        return ByteBuffer.wrap( bytes);
+        return ByteBuffer.wrap( super.buf );
     }
 
     public void write(ByteBuffer byteBuffer) throws IOException
