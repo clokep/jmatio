@@ -16,7 +16,9 @@ import java.util.Map;
 
 import junit.framework.JUnit4TestAdapter;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import sun.org.mozilla.javascript.internal.UintMap;
 
@@ -47,6 +49,11 @@ import com.jmatio.types.MLUInt8;
  */
 public class MatIOTest
 {
+    
+    @Rule
+    public TemporaryFolder temp = new TemporaryFolder();
+    
+    
     public static junit.framework.Test suite()
     {
         return new JUnit4TestAdapter( MatIOTest.class );
@@ -94,6 +101,7 @@ public class MatIOTest
     {
         final String fileName = "bigbyte.mat";
         final String name = "bigbyte";
+        File outFile = temp.newFile( fileName );
         final int SIZE = 1024;    
         
         
@@ -104,10 +112,10 @@ public class MatIOTest
         list.add( mluint8 );
         
         //write arrays to file
-        new MatFileWriter( fileName, list );
+        new MatFileWriter( outFile, list );
         
         //read array form file
-        MatFileReader mfr = new MatFileReader( fileName );
+        MatFileReader mfr = new MatFileReader( outFile );
         MLArray mlArrayRetrived = mfr.getMLArray( name );
         
         final long start = System.nanoTime();
@@ -132,9 +140,11 @@ public class MatIOTest
         
         List<MLArray> towrite =  Arrays.asList( mlArray );
         
-        MatFileWriter  writer = new MatFileWriter( "cellcopy.mat", towrite );
+        File outFile = temp.newFile( "cellcopy.mat" );
+        
+        MatFileWriter  writer = new MatFileWriter( outFile, towrite );
     
-        reader = new MatFileReader("cellcopy.mat");
+        reader = new MatFileReader( outFile );
         MLArray mlArrayRetrieved = reader.getMLArray( "cel" );
         
         //assertEquals( ((MLCell)mlArray).get(0), ((MLCell)mlArrayRetrieved).get(0));
@@ -154,7 +164,8 @@ public class MatIOTest
         String name2 = "dummy";
         //file name in which array will be storred
         String fileName = "filter.mat";
-
+        File outFile = temp.newFile( fileName );
+        
         double[] src = new double[] { 1.3, 2.0, 3.0, 4.0, 5.0, 6.0 };
         MLDouble mlDouble = new MLDouble( name, src, 3 );
         MLChar mlChar = new MLChar( name2, "I am dummy" );
@@ -163,14 +174,14 @@ public class MatIOTest
         ArrayList<MLArray> list = new ArrayList<MLArray>();
         list.add( mlDouble );
         list.add( mlChar );
-        new MatFileWriter( fileName, list );
+        new MatFileWriter( outFile, list );
         
         //3. create new filter instance
         MatFileFilter filter = new MatFileFilter();
         filter.addArrayName( name );
         
         //4. read array form file
-        MatFileReader mfr = new MatFileReader( fileName, filter );
+        MatFileReader mfr = new MatFileReader( outFile, filter );
         
         //check size of
         Map<String, MLArray> content = mfr.getContent();
@@ -213,6 +224,7 @@ public class MatIOTest
         String name2 = "name";
         //file name in which array will be storred
         String fileName = "mlcell.mat";
+        File outFile = temp.newFile( fileName );
 
         //test column-packed vector
         double[] src = new double[] { 1.3, 2.0, 3.0, 4.0, 5.0, 6.0 };
@@ -234,10 +246,10 @@ public class MatIOTest
         list.add( mlCell );
         
         //write arrays to file
-        new MatFileWriter( fileName, list );
+        new MatFileWriter( outFile, list );
         
         //read array form file
-        MatFileReader mfr = new MatFileReader( fileName );
+        MatFileReader mfr = new MatFileReader( outFile );
         MLCell mlArrayRetrived = (MLCell)mfr.getMLArray( "cl" );
         
         assertEquals(mlDouble, mlArrayRetrived.get(1) );
@@ -258,6 +270,7 @@ public class MatIOTest
         String name = "chararr";
         //file name in which array will be storred
         String fileName = "mlchar.mat";
+        File   outFile = temp.newFile( fileName );
         //temp
         String valueS;
 
@@ -278,10 +291,10 @@ public class MatIOTest
         list.add( mlChar );
         
         //write arrays to file
-        new MatFileWriter( fileName, list );
+        new MatFileWriter( outFile, list );
         
         //read array form file
-        MatFileReader mfr = new MatFileReader( fileName );
+        MatFileReader mfr = new MatFileReader( outFile );
         MLArray mlCharRetrived = mfr.getMLArray( name );
         
         assertEquals("Test if value red from file equals value stored", mlChar, mlCharRetrived);
@@ -298,6 +311,7 @@ public class MatIOTest
         String name = "chararr";
         //file name in which array will be storred
         String fileName = "mlcharUTF.mat";
+        File outFile = temp.newFile( fileName );
         //temp
         String valueS;
 
@@ -305,9 +319,9 @@ public class MatIOTest
         //string value "dummy"
         MLChar mlChar = new MLChar(name, new String[] { "\u017C\u00F3\u0142w", "\u017C\u00F3\u0142i"} );
         MatFileWriter writer = new MatFileWriter();
-        writer.write(new File(fileName), Arrays.asList( (MLArray) mlChar ) );
+        writer.write(outFile, Arrays.asList( (MLArray) mlChar ) );
         
-        MatFileReader reader = new MatFileReader( new File(fileName) );
+        MatFileReader reader = new MatFileReader( outFile );
         MLChar mlChar2 = (MLChar) reader.getMLArray(name);
 
         assertEquals("\u017C\u00F3\u0142w", mlChar.getString(0) );
@@ -327,7 +341,8 @@ public class MatIOTest
         String name = "doublearr";
         //file name in which array will be storred
         String fileName = "mldouble.mat";
-
+        File outFile = temp.newFile( fileName );
+        
         //test column-packed vector
         double[] src = new double[] { 1.3, 2.0, 3.0, 4.0, 5.0, 6.0 };
         //test 2D array coresponding to test vector
@@ -347,10 +362,10 @@ public class MatIOTest
         list.add( mlDouble );
         
         //write arrays to file
-        new MatFileWriter( fileName, list );
+        new MatFileWriter( outFile, list );
         
         //read array form file
-        MatFileReader mfr = new MatFileReader( fileName );
+        MatFileReader mfr = new MatFileReader( outFile );
         MLArray mlArrayRetrived = mfr.getMLArray( name );
         
         //System.out.println( mlDouble.contentToString() );
@@ -381,6 +396,7 @@ public class MatIOTest
         //array name
         //file name in which array will be storred
         String fileName = "mlstruct.mat";
+        File outFile = temp.newFile( fileName );
 
         //test column-packed vector
         double[] src = new double[] { 1.3, 2.0, 3.0, 4.0, 5.0, 6.0 };
@@ -402,10 +418,10 @@ public class MatIOTest
         list.add( mlStruct );
         
         //write arrays to file
-        new MatFileWriter( fileName, list );
+        new MatFileWriter( outFile, list );
         
         //read array form file
-        MatFileReader mfr = new MatFileReader( fileName );
+        MatFileReader mfr = new MatFileReader( outFile );
         MLStructure mlArrayRetrived = (MLStructure)mfr.getMLArray( "str" );
         
         assertEquals(mlDouble, mlArrayRetrived.getField("f1") );
@@ -453,7 +469,8 @@ public class MatIOTest
         String name = "arr";
         //file name in which array will be storred
         String fileName = "mluint8tst.mat";
-
+        File outFile = temp.newFile( fileName );
+        
         //test column-packed vector
         byte[] src = new byte[] { 1, 2, 3, 4, 5, 6 };
         //test 2D array coresponding to test vector
@@ -473,10 +490,10 @@ public class MatIOTest
         list.add( mluint8 );
         
         //write arrays to file
-        new MatFileWriter( fileName, list );
+        new MatFileWriter( outFile, list );
         
         //read array form file
-        MatFileReader mfr = new MatFileReader( fileName );
+        MatFileReader mfr = new MatFileReader( outFile );
         MLArray mlArrayRetrived = mfr.getMLArray( name );
         
         //test if MLArray objects are equal
@@ -506,7 +523,9 @@ public class MatIOTest
         String name = "sparsearr";
         //file name in which array will be storred
         String fileName = "mlsparse.mat";
-
+        File outFile = temp.newFile( fileName );
+        
+        
         //test 2D array coresponding to test vector
         double[][] referenceReal = new double[][] { { 1.3, 4.0 },
                 { 2.0, 0.0 },
@@ -529,10 +548,10 @@ public class MatIOTest
         list.add( mlSparse );
         
         //write arrays to file
-        new MatFileWriter( fileName, list );
+        new MatFileWriter( outFile, list );
         
         //read array form file
-        MatFileReader mfr = new MatFileReader( fileName );
+        MatFileReader mfr = new MatFileReader( outFile );
         MLArray mlArrayRetrived = mfr.getMLArray( name );
         
         //test if MLArray objects are equal
@@ -614,14 +633,16 @@ public class MatIOTest
     {
         //array name
         File file = new File("test/sparse.mat");
+        File outFile = temp.newFile( "sparsecopy.mat" );
+        
         MatFileReader reader = new MatFileReader( file );
         MLArray mlArray = reader.getMLArray( "spa" );
         
         List<MLArray> towrite =  Arrays.asList( mlArray );
         
-        new MatFileWriter( "sparsecopy.mat", towrite );
+        new MatFileWriter( outFile, towrite );
     
-        reader = new MatFileReader("sparsecopy.mat");
+        reader = new MatFileReader(outFile);
         MLArray mlArrayRetrieved = reader.getMLArray( "spa" );
         
         assertEquals(mlArray, mlArrayRetrieved);
@@ -633,14 +654,15 @@ public class MatIOTest
     {
         //array name
         File file = new File("test/simplestruct.mat");
+        File outFile = temp.newFile( "simplestructcopy.mat" );
         MatFileReader reader = new MatFileReader( file );
         MLArray mlArray = reader.getMLArray( "structure" );
         
         List<MLArray> towrite =  Arrays.asList( mlArray );
         
-        new MatFileWriter( "simplestructcopy.mat", towrite );
+        new MatFileWriter( outFile, towrite );
     
-        reader = new MatFileReader("simplestructcopy.mat");
+        reader = new MatFileReader(outFile);
         MLArray mlArrayRetrieved = reader.getMLArray( "structure" );
     }
     
@@ -653,7 +675,8 @@ public class MatIOTest
     public void testWritingManyArraysInFile() throws IOException
     {
         final String fileName = "multi.mat";
-
+        File outFile = temp.newFile( fileName ); 
+        
         //test column-packed vector
         double[] src = new double[] { 1.3, 2.0, 3.0, 4.0, 5.0, 6.0 };
         double[] src2 = new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
@@ -673,10 +696,10 @@ public class MatIOTest
         list.add( m3);
         
         //write arrays to file
-        new MatFileWriter( fileName, list );
+        new MatFileWriter( outFile, list );
         
         //read array form file
-        MatFileReader mfr = new MatFileReader( fileName );
+        MatFileReader mfr = new MatFileReader( outFile );
         
         //test if MLArray objects are equal
         assertEquals("Test if value red from file equals value stored", m1, mfr.getMLArray( "m1" ));
@@ -694,6 +717,7 @@ public class MatIOTest
     public void testIncrementalWrite() throws IOException
     {
         final String fileName = "multi.mat";
+        File outFile = temp.newFile( fileName );
 
         //test column-packed vector
         double[] src = new double[] { 1.3, 2.0, 3.0, 4.0, 5.0, 6.0 };
@@ -714,14 +738,14 @@ public class MatIOTest
         list.add( m3);
         
         //write arrays to file
-        MatFileIncrementalWriter writer = new MatFileIncrementalWriter( fileName );
+        MatFileIncrementalWriter writer = new MatFileIncrementalWriter( outFile );
         writer.write(m1);
         writer.write(m2);
         writer.write(m3);
         writer.close();
         
         //read array from file
-        MatFileReader mfr = new MatFileReader( fileName );
+        MatFileReader mfr = new MatFileReader( outFile );
         
         //test if MLArray objects are equal
         assertEquals("Test if value red from file equals value stored", m1, mfr.getMLArray( "m1" ));
@@ -756,6 +780,7 @@ public class MatIOTest
     public void testUInt8() throws Exception
     {
         String fileName = "test/uint8.mat";
+        File outFile = temp.newFile( "uint8out.mat" );
         String arrName = "arr";
         MatFileReader mfr;
         MLArray src;
@@ -773,13 +798,12 @@ public class MatIOTest
         src = mfr.getMLArray( arrName );
         
         //write
-        fileName = "uint8out.mat";
         ArrayList<MLArray> towrite = new ArrayList<MLArray>();
         towrite.add( mfr.getMLArray( arrName ) ); 
-        new MatFileWriter(fileName, towrite );
+        new MatFileWriter(outFile, towrite );
     
         //read again
-        mfr = new MatFileReader( fileName );
+        mfr = new MatFileReader( outFile );
         assertEquals("Test min. value from file:" + fileName + " array: " + arrName, 
                      (byte)0, 
                      (byte) ((MLUInt8)mfr.getMLArray( arrName )).get(0,0), 0.001 );
@@ -799,6 +823,7 @@ public class MatIOTest
     {
         String fileName = "test/int8.mat";
         String arrName = "arr";
+        File outFile = temp.newFile( "int8out.mat" );
         MatFileReader mfr;
         MLArray src;
         
@@ -816,13 +841,12 @@ public class MatIOTest
         src = mfr.getMLArray( "arr" );
         
         //write
-        fileName = "int8out.mat";
         ArrayList<MLArray> towrite = new ArrayList<MLArray>();
         towrite.add( mfr.getMLArray( arrName ) ); 
-        new MatFileWriter(fileName, towrite );
+        new MatFileWriter(outFile, towrite );
     
         //read again
-        mfr = new MatFileReader( fileName );
+        mfr = new MatFileReader( outFile );
         assertEquals("Test min. value from file:" + fileName + " array: " + arrName, 
                      (byte)-128, 
                      (byte) ((MLInt8)mfr.getMLArray( arrName )).get(0,0), 0.001 );
@@ -845,6 +869,7 @@ public class MatIOTest
     {
         String fileName = "test/int64.mat";
         String arrName = "arr";
+        File outFile = temp.newFile( "int64out.mat" );
         MatFileReader mfr;
         MLArray src;
         
@@ -865,13 +890,12 @@ public class MatIOTest
         src = mfr.getMLArray( "arr" );
         
         //write
-        fileName = "int64out.mat";
         ArrayList<MLArray> towrite = new ArrayList<MLArray>();
         towrite.add( mfr.getMLArray( arrName ) ); 
-        new MatFileWriter(fileName, towrite );
+        new MatFileWriter(outFile, towrite );
     
         //read again
-        mfr = new MatFileReader( fileName );
+        mfr = new MatFileReader( outFile );
         assertEquals("Test min. value from file:" + fileName + " array: " + arrName, 
                      min, 
                      ((MLInt64)mfr.getMLArray( arrName )).get(0,0) );
@@ -890,6 +914,7 @@ public class MatIOTest
     public void testUInt64() throws Exception
     {
         String fileName = "test/uint64.mat";
+        File   outFile  = temp.newFile( "uint64out.mat" );
         String arrName = "arr";
         MatFileReader mfr;
         MLArray src;
@@ -912,13 +937,12 @@ public class MatIOTest
         src = mfr.getMLArray( "arr" );
         
         //write
-        fileName = "uint64out.mat";
         ArrayList<MLArray> towrite = new ArrayList<MLArray>();
         towrite.add( mfr.getMLArray( arrName ) ); 
-        new MatFileWriter(fileName, towrite );
+        new MatFileWriter( outFile, towrite );
     
         //read again
-        mfr = new MatFileReader( fileName );
+        mfr = new MatFileReader( outFile );
         assertEquals("Test min. value from file:" + fileName + " array: " + arrName, 
                      min, 
                      ((MLUInt64)mfr.getMLArray( arrName )).get(0,0) );
@@ -938,7 +962,8 @@ public class MatIOTest
     public void testWritingMethods() throws IOException
     {
         final String fileName = "nwrite.mat";
-        final File f = new File(fileName);
+        final File f = temp.newFile(fileName);
+        
         //test column-packed vector
         double[] src = new double[] { 1.3, 2.0, 3.0, 4.0, 5.0, 6.0 };
 
@@ -954,6 +979,7 @@ public class MatIOTest
         MatFileWriter writer = new MatFileWriter();
         
         writer.write(f, list);
+
         
         assertTrue("Test if file was created", f.exists() );
         
@@ -968,7 +994,7 @@ public class MatIOTest
         //try to delete the file
         assertTrue("Test if file can be deleted", f.delete() );
         
-        writer.write(fileName, list);
+        writer.write(f, list);
         
         assertTrue("Test if file was created", f.exists() );
         reader.read(f, MatFileReader.MEMORY_MAPPED_FILE );
@@ -983,7 +1009,7 @@ public class MatIOTest
         //try to delete the file
         assertTrue("Test if file can be deleted", f.delete() );
         
-        writer.write(fileName, list);
+        writer.write(f, list);
         
         assertTrue("Test if file was created", f.exists() );
         reader.read(f, MatFileReader.DIRECT_BYTE_BUFFER );
@@ -997,7 +1023,7 @@ public class MatIOTest
         //try to delete the file
         assertTrue("Test if file can be deleted", f.delete() );
         
-        writer.write(fileName, list);
+        writer.write(f, list);
         
         assertTrue("Test if file was created", f.exists() );
         reader.read(f, MatFileReader.HEAP_BYTE_BUFFER );
@@ -1034,6 +1060,8 @@ public class MatIOTest
         
         Float[] expected = new Float[] { 1.1f, 2.2f, 3.3f };
         String  name = "arr";
+        File outFile = temp.newFile( "singletmp.mat" );
+        
         
         //create MLSingle type
         MLSingle single = new MLSingle( name, expected, 1);
@@ -1043,11 +1071,11 @@ public class MatIOTest
         
         //Test writing the MLSingle
         MatFileWriter writer = new MatFileWriter();
-        writer.write( "singletmp.mat", Arrays.asList( (MLArray)single) );
+        writer.write( outFile, Arrays.asList( (MLArray)single) );
         
         //Test reading the MLSingle
         MatFileReader reader = new MatFileReader();
-        MLSingle readSingle = (MLSingle) reader.read( new File("singletmp.mat") ).get( "arr" );
+        MLSingle readSingle = (MLSingle) reader.read( outFile ).get( "arr" );
         
         assertEquals( single, readSingle );
         
