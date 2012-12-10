@@ -34,10 +34,15 @@ public class MLOpaque extends MLArray {
 
     public MLOpaque(String name, String classType, String className, boolean global) {
         super(name, new int[]{1}, global);
+        this.type = MatLevel5DataTypes.mxOPAQUE_CLASS;
 
         this.name = name;
         this.className = className;
         this.classType = classType;
+    }
+    
+    public MLOpaque(String name, String classType, String className) {
+        this(name, classType, className, false);
     }
 
     public void set(ByteBuffer data) {

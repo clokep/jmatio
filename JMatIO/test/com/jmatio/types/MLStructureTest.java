@@ -14,7 +14,7 @@ import junit.framework.JUnit4TestAdapter;
 
 import org.junit.Test;
 
-import com.jmatio.io.MatFileReader;
+import com.jmatio.io.MatFileLevel5Reader;
 import com.jmatio.io.MatFileWriter;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.MLChar;
@@ -58,7 +58,7 @@ public class MLStructureTest {
         new MatFileWriter( fileName, list );
 
         //read array form file
-        MatFileReader mfr = new MatFileReader( fileName );
+        MatFileLevel5Reader mfr = new MatFileLevel5Reader( fileName );
         MLStructure mlArrayRetrived = (MLStructure)mfr.getMLArray( "str" );
 
         assertEquals(mlDouble, mlArrayRetrived.getField("f1") );
@@ -94,14 +94,14 @@ public class MLStructureTest {
     public void testStructureFromMatlabCreatedFile() throws IOException {
         //array name
         File file = new File("test/simplestruct.mat");
-        MatFileReader reader = new MatFileReader(file);
+        MatFileLevel5Reader reader = new MatFileLevel5Reader(file);
         MLArray mlArray = reader.getMLArray("structure");
 
         List<MLArray> towrite =  Arrays.asList(mlArray);
 
         new MatFileWriter("simplestructtmp.mat", towrite);
 
-        reader = new MatFileReader("simplestructtmp.mat");
+        reader = new MatFileLevel5Reader("simplestructtmp.mat");
         MLArray mlArrayRetrieved = reader.getMLArray("structure");
 
         assertEquals(mlArray, mlArrayRetrieved);
@@ -111,14 +111,14 @@ public class MLStructureTest {
     public void testCellFromMatlabCreatedFile() throws IOException {
         //array name
         File file = new File("test/complexstruct.mat");
-        MatFileReader reader = new MatFileReader(file);
+        MatFileLevel5Reader reader = new MatFileLevel5Reader(file);
         MLArray mlArray = reader.getMLArray("cel");
 
         List<MLArray> towrite =  Arrays.asList(mlArray);
 
         MatFileWriter  writer = new MatFileWriter("complexstructtmp.mat", towrite);
 
-        reader = new MatFileReader("complexstructtmp.mat");
+        reader = new MatFileLevel5Reader("complexstructtmp.mat");
         MLArray mlArrayRetrieved = reader.getMLArray("cel");
 
         // XXX Enable this.

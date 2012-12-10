@@ -13,7 +13,7 @@ import junit.framework.JUnit4TestAdapter;
 
 import org.junit.Test;
 
-import com.jmatio.io.MatFileReader;
+import com.jmatio.io.MatFileLevel5Reader;
 import com.jmatio.io.MatFileWriter;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.MLSparse;
@@ -41,7 +41,7 @@ public class MLSparseTest {
                                                         {2.0, 0.0},
                                                         {0.0, 6.0}};
 
-        MLSparse src = new MLSparse(name, new int[] {3, 2}, MLArray.mtFLAG_COMPLEX, 5);
+        MLSparse src = new MLSparse(name, new int[] {3, 2}, 5, true, false);
         src.setReal(1.3, 0, 0);
         src.setReal(4.0, 0, 1);
         src.setReal(2.0, 1, 0);
@@ -52,7 +52,7 @@ public class MLSparseTest {
         new MatFileWriter(fileName, Arrays.asList((MLArray)src));
 
         // Read array from file.
-        MatFileReader mfr = new MatFileReader(fileName);
+        MatFileLevel5Reader mfr = new MatFileLevel5Reader(fileName);
         MLSparse ret = (MLSparse)mfr.getMLArray(name);
 
         // Test if MLArray objects are equal.
@@ -74,13 +74,13 @@ public class MLSparseTest {
         // Array name
         File file = new File("test/sparse.mat");
         String name = "spa";
-        MatFileReader reader = new MatFileReader(file);
+        MatFileLevel5Reader reader = new MatFileLevel5Reader(file);
         MLArray src = reader.getMLArray(name);
 
         String filename = "sparse-tmp.mat";
         new MatFileWriter(filename, Arrays.asList((MLArray)src));
 
-        reader = new MatFileReader(filename);
+        reader = new MatFileLevel5Reader(filename);
         MLArray ret = reader.getMLArray(name);
 
         assertEquals(src, ret);
@@ -99,10 +99,10 @@ public class MLSparseTest {
     public void testBigSparseFile() throws Exception {
         final File file = new File("test/sparse-big.mat");
         // Read array form file.
-        MatFileReader mfr = new MatFileReader();
+        MatFileLevel5Reader mfr = new MatFileLevel5Reader();
 
         // Reader crashes on reading this file bug caused by sparse array
         // allocation.
-        mfr.read(file, MatFileReader.DIRECT_BYTE_BUFFER);
+        mfr.read(file, MatFileLevel5Reader.DIRECT_BYTE_BUFFER);
     }
 }

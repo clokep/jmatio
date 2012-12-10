@@ -50,7 +50,7 @@ public abstract class MatTag {
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        String s = "[tag: " + MatLevel5DataTypes.matrixTypeToString(type) + " size: " + size + "]";
+        String s = "[tag: " + MatLevel5DataTypes.dataTypeToString(type) + " size: " + size + "]";
         return s;
     }
 

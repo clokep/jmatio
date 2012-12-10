@@ -283,6 +283,7 @@ public class MatFileLevel5Reader extends MatFileReader {
     protected void readData(ByteBuffer buf) throws IOException {
         // Read data.
         ISMatTag tag = new ISMatTag(buf);
+
         switch (tag.type) {
             case MatLevel5DataTypes.miCOMPRESSED:
                 // Inflate and recurse.
@@ -340,7 +341,7 @@ public class MatFileLevel5Reader extends MatFileReader {
         // Read flags.
         int[] flags = this.readFlags(buf);
         int attributes = (flags.length != 0) ? flags[0] : 0;
-        boolean global = MatLevel5DataTypes.global(attributes);
+        boolean global = MatLevel5DataTypes.isGlobal(attributes);
         int nzmax = (flags.length != 0) ? flags[1] : 0;
         int type = attributes & 0xff;
 
@@ -420,7 +421,7 @@ public class MatFileLevel5Reader extends MatFileReader {
             // Read the characters.
             tag = new ISMatTag(buf);
             char[] ac = tag.readToCharArray();
-            for ( int i = 0; i < ac.length; i++ )
+            for (int i = 0; i < ac.length; ++i)
                 mlchar.setChar(ac[i], i);
             mlArray = mlchar;
         } else if (type == MatLevel5DataTypes.mxOPAQUE_CLASS) {
@@ -448,7 +449,6 @@ public class MatFileLevel5Reader extends MatFileReader {
             System.out.println("Size: " + tag.size + " Type: " + tag.type);
             if (tag.size > 0) {
                 opaquematrix = this.readMatrix(buf, false);
-                //System.out.println(MatLevel5DataTypes.matrixTypeToString(opaquematrix.getType()));
                 opaque.set(((MLNumericArray<?>)opaquematrix).getRealByteBuffer());
             } else
                 opaque.set(ByteBuffer.allocate(0));
@@ -527,28 +527,29 @@ public class MatFileLevel5Reader extends MatFileReader {
         //
         //    mlArray = null;
         } else {
-            boolean complex = MatLevel5DataTypes.complex(attributes);
-            boolean logical = MatLevel5DataTypes.logical(attributes);
+            boolean complex = MatLevel5DataTypes.isComplex(attributes);
+            boolean logical = MatLevel5DataTypes.isLogical(attributes);
             
             if (type == MatLevel5DataTypes.mxSPARSE_CLASS) {
-                MLSparse sparse = new MLSparse(name, dims, nzmax, complex, global, logical);
+                MLSparse sparse = new MLSparse(name, dims, nzmax, complex, global);
                 // Read ir (row indices).
                 tag = new ISMatTag(buf);
                 int[] ir = tag.readToIntArray();
                 // Read jc (column count).
                 tag = new ISMatTag(buf);
                 int[] jc = tag.readToIntArray();
-    
+
                 // Read pr (real part).
                 tag = new ISMatTag(buf);
                 double[] ad1 = tag.readToDoubleArray();
                 int count = 0;
                 for (int column = 0; column < sparse.getN(); column++) {
-                    while(count < jc[column + 1]) {
+                    while (count < jc[column + 1]) {
                         sparse.setReal(ad1[count], ir[count], column);
                         ++count;
                     }
                 }
+                System.out.println(count);
     
                 // Read pi (imaginary part)
                 if (sparse.isComplex()) {
@@ -557,12 +558,13 @@ public class MatFileLevel5Reader extends MatFileReader {
     
                     count = 0;
                     for (int column = 0; column < sparse.getN(); column++) {
-                        while(count < jc[column+1]) {
+                        while (count < jc[column+1]) {
                             sparse.setImaginary(ad2[count], ir[count], column);
                             ++count;
                         }
                     }
                 }
+                System.out.println(count);
                 mlArray = sparse;
             } else {
                 // At this point we should have a numeric class.
@@ -598,7 +600,7 @@ public class MatFileLevel5Reader extends MatFileReader {
                         mlArray = new MLUInt64(name, dims, complex, global, logical);
                         break;
                     default:
-                        throw new MatlabIOException("Unsupported matlab array class: " + MatLevel5DataTypes.matrixTypeToString(type));
+                        throw new MatlabIOException("Unsupported matlab array class: " + MatLevel5DataTypes.matrixTypeToString(type) + " (" + type + ").");
                 }
     
                 // Read real.
@@ -610,7 +612,8 @@ public class MatFileLevel5Reader extends MatFileReader {
                     tag = new ISMatTag(buf);
                     tag.readToByteBuffer(((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
                                          (MLNumericArray<?>) mlArray);
-                } else if (mlArray.isLogical()) {
+                }
+                if (mlArray.isLogical()) {
                     // If it's not complex and is logical, convert it to a logical
                     // array.
                     mlArray = new MLLogical((MLNumericArray<?>)mlArray);
@@ -632,7 +635,8 @@ public class MatFileLevel5Reader extends MatFileReader {
      */
     private int[] readFlags(ByteBuffer buf) throws IOException {
         ISMatTag tag = new ISMatTag(buf);
-        return tag.readToIntArray();
+        int[] x = tag.readToIntArray();
+        return x;
     }
 
     /**
@@ -662,6 +666,7 @@ public class MatFileLevel5Reader extends MatFileReader {
         ISMatTag tag = new ISMatTag(buf);
         return tag.readToString();
     }
+
     /**
      * Reads MAT-file header.
      *
@@ -674,10 +679,6 @@ public class MatFileLevel5Reader extends MatFileReader {
      *             MAT-file
      */
     protected void readHeader(ByteBuffer buf) throws IOException {
-        // Header values.
-        int version;
-        byte[] endianIndicator = new byte[2];
-
         // If any of the first four bytes are a 0, consider it a Level 4
         // matfile.
         if (buf.get(0) == 0 || buf.get(1) == 0 || buf.get(2) == 0 ||
@@ -697,11 +698,13 @@ public class MatFileLevel5Reader extends MatFileReader {
         // Subsyst data offset 8 bytes.
         buf.position(buf.position() + 8);
 
-        byte[] bversion = new byte[2];
         // Version 2 bytes.
+        int version;
+        byte[] bversion = new byte[2];
         buf.get(bversion);
 
         // Endian indicator 2 bytes.
+        byte[] endianIndicator = new byte[2];
         buf.get(endianIndicator);
 
         // Program reading the MAT-file must perform byte swapping to interpret

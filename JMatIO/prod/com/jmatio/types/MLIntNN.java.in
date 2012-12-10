@@ -8,8 +8,6 @@ import com.jmatio.common.MatLevel5DataTypes;
  * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
 public class ML@matlabClassCamelCase@ extends MLU@matlabClassCamelCase@ {
-    protected int matDataType = MatLevel5DataTypes.mi@matlabArrayType@;
-
     /**
      * Normally this constructor is used only by MatFileReader.
      *
@@ -21,6 +19,8 @@ public class ML@matlabClassCamelCase@ extends MLU@matlabClassCamelCase@ {
      */
     public ML@matlabClassCamelCase@(String name, int[] dims, boolean complex, boolean global, boolean logical) {
         super(name, dims, complex, global, logical);
+        this.matDataType = MatLevel5DataTypes.mi@matlabArrayType@;
+        this.type = MatLevel5DataTypes.mx@matlabArrayType@_CLASS;
     }
 
     /**
@@ -31,7 +31,7 @@ public class ML@matlabClassCamelCase@ extends MLU@matlabClassCamelCase@ {
      * @param dims array dimensions
      */
     public ML@matlabClassCamelCase@(String name, int[] dims) {
-        super(name, dims);
+        this(name, dims, false, false, false);
     }
     /**
      * <a href="http://math.nist.gov/javanumerics/jama/">Jama</a> [math.nist.gov] style:
@@ -43,8 +43,8 @@ public class ML@matlabClassCamelCase@ extends MLU@matlabClassCamelCase@ {
      */
     public ML@matlabClassCamelCase@(String name, @NumberClass@[] vals, int m) {
         super(name, vals, m);
-        //this.type = MatLevel5DataTypes.mx@matlabArrayType@_CLASS;
-        // XXX
+        this.matDataType = MatLevel5DataTypes.mi@matlabArrayType@;
+        this.type = MatLevel5DataTypes.mx@matlabArrayType@_CLASS;
     }
 
     /**

@@ -10,7 +10,7 @@ import junit.framework.JUnit4TestAdapter;
 
 import org.junit.Test;
 
-import com.jmatio.io.MatFileReader;
+import com.jmatio.io.MatFileLevel5Reader;
 import com.jmatio.io.MatFileWriter;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.MLDouble;
@@ -38,7 +38,7 @@ public class MLDoubleExtraTest {
         MLDouble src = new MLDouble(name, data, 3);
 
         // Read array from file.
-        MatFileReader mfr = new MatFileReader( fileName );
+        MatFileLevel5Reader mfr = new MatFileLevel5Reader( fileName );
         MLArray ret = mfr.getMLArray( name );
 
         // Test if MLArray objects are equal.
@@ -68,7 +68,7 @@ public class MLDoubleExtraTest {
         MLDouble src = new MLDouble(name, data, 3);
 
         // Read array from file.
-        MatFileReader mfr = new MatFileReader(fileName);
+        MatFileLevel5Reader mfr = new MatFileLevel5Reader(fileName);
         MLArray ret = mfr.getMLArray(name);
 
         // Test if MLArray objects are equal.
@@ -89,7 +89,7 @@ public class MLDoubleExtraTest {
         final String fileName = "test/double-nan.mat";
 
         // Read array from file
-        MatFileReader mfr = new MatFileReader(fileName);
+        MatFileLevel5Reader mfr = new MatFileLevel5Reader(fileName);
         MLDouble x = (MLDouble)mfr.getMLArray("x");
 
         assertEquals("Test if value read from file equals NaN.",

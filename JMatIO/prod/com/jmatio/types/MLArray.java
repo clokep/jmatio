@@ -21,7 +21,7 @@ public abstract class MLArray {
     /** The array name. */
     public String name;
     /** The array type. */
-    protected String type = "unknown";
+    protected int type = MatLevel5DataTypes.mxUNKNOWN_CLASS;
 
     /** This is true for sub-elements of structs & cells where name does not matter. */
     public boolean isChild = false;
@@ -133,7 +133,7 @@ public abstract class MLArray {
         return this.getM() * this.getN();
     }
 
-    public String getType() {
+    public int getType() {
         return this.type;
     }
 
@@ -289,9 +289,11 @@ public abstract class MLArray {
      */
     protected void writeFlags(OutputStream os) throws IOException {
         ByteBuffer buffer = ByteBuffer.allocate(4 * 2);
-        int flags = (this.isComplex() ? MatLevel5DataTypes.mtFLAG_COMPLEX : 0) |
-                    (this.isGlobal() ? MatLevel5DataTypes.mtFLAG_GLOBAL : 0) |
-                    (this.isLogical() ? MatLevel5DataTypes.mtFLAG_LOGICAL : 0);
+        int flags = ((this.isComplex() ? MatLevel5DataTypes.mtFLAG_COMPLEX : 0) |
+                     (this.isGlobal() ? MatLevel5DataTypes.mtFLAG_GLOBAL : 0) |
+                     (this.isLogical() ? MatLevel5DataTypes.mtFLAG_LOGICAL : 0) & 0x0000f700) |
+                    (this.type & 0xff);
+        System.out.println(flags + " " + this.type + " " + MatLevel5DataTypes.matrixTypeToString(this.type));
         buffer.putInt(flags);
 
         if (this.isSparse())

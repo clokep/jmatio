@@ -44,6 +44,7 @@ public class MLStructure extends MLArray {
 
     public MLStructure(String name, int[] dims, boolean global) {
         super(name, dims, global);
+        this.type = MatLevel5DataTypes.mxSTRUCT_CLASS;
 
         mlStructArray = new ArrayList<Map<String, MLArray>>(this.getSize());
         keys = new LinkedHashSet<String>();

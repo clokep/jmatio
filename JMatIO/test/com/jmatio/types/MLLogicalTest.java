@@ -10,7 +10,7 @@ import junit.framework.JUnit4TestAdapter;
 
 import org.junit.Test;
 
-import com.jmatio.io.MatFileReader;
+import com.jmatio.io.MatFileLevel5Reader;
 import com.jmatio.io.MatFileWriter;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.MLInt16;
@@ -28,13 +28,13 @@ public class MLLogicalTest {
         // which contains the minimum and maximum values for logical.
         String fileName = "test/logical.mat";
         String arrName = "arr";
-        MatFileReader mfr;
+        MatFileLevel5Reader mfr;
 
         Boolean min = false;
         Boolean max = true;
 
         // Read array from file.
-        mfr = new MatFileReader(fileName);
+        mfr = new MatFileLevel5Reader(fileName);
         MLLogical src = (MLLogical)mfr.getMLArray(arrName);
         assertEquals("Test min. value from file: " + fileName + " array: " + arrName + ".",
                      min, src.get(0, 0));
@@ -46,7 +46,7 @@ public class MLLogicalTest {
         new MatFileWriter(fileName, Arrays.asList((MLArray)src));
 
         // Read the array in again.
-        mfr = new MatFileReader(fileName);
+        mfr = new MatFileLevel5Reader(fileName);
         MLLogical dst = (MLLogical)mfr.getMLArray(arrName);
         assertEquals("Test min. value from file: " + fileName + " array: " + arrName + ".",
                      min, dst.get(0, 0));
@@ -62,7 +62,7 @@ public class MLLogicalTest {
      */
     @Test
     public void testReadingAndWritingNonUInt8() throws Exception {
-        MLInt16 array = new MLInt16("arr", new int[]{1, 5}, MLArray.mxINT16_CLASS, MLArray.mtFLAG_LOGICAL);
+        MLInt16 array = new MLInt16("arr", new int[]{1, 5});
         array.set(new short[]{-32768, -1, 0, 1, 32767});
         MLLogical logical = new MLLogical(array);
 
@@ -72,7 +72,7 @@ public class MLLogicalTest {
         writer.write(fileName, Arrays.asList((MLArray)logical));
 
         // Test reading the MLLogical.
-        MatFileReader reader = new MatFileReader();
+        MatFileLevel5Reader reader = new MatFileLevel5Reader();
         MLLogical readLogical = (MLLogical)reader.read(new File(fileName)).get("arr");
 
         assertEquals(logical, readLogical);

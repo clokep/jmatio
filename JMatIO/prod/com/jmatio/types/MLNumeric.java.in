@@ -10,8 +10,6 @@ import com.jmatio.common.MatLevel5DataTypes;
  * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
 public class ML@matlabClassCamelCase@ extends MLNumericArray<@NumberClass@> {
-    protected int matDataType = MatLevel5DataTypes.mi@matlabArrayType@;
-    
     /**
      * The full constructor.
      *
@@ -23,6 +21,8 @@ public class ML@matlabClassCamelCase@ extends MLNumericArray<@NumberClass@> {
      */
     public ML@matlabClassCamelCase@(String name, int[] dims, boolean complex, boolean global, boolean logical) {
         super(name, dims, complex, global, logical);
+        this.matDataType = MatLevel5DataTypes.mi@matlabArrayType@;
+        this.type = MatLevel5DataTypes.mx@matlabArrayType@_CLASS;
     }
 
     /**
@@ -33,7 +33,7 @@ public class ML@matlabClassCamelCase@ extends MLNumericArray<@NumberClass@> {
      * @param dims array dimensions
      */
     public ML@matlabClassCamelCase@(String name, int[] dims) {
-        super(name, dims);
+        this(name, dims, false, false, false);
     }
 
     /**
@@ -46,6 +46,8 @@ public class ML@matlabClassCamelCase@ extends MLNumericArray<@NumberClass@> {
      */
     public ML@matlabClassCamelCase@(String name, @NumberClass@[] vals, int m) {
         super(name, vals, m);
+        this.matDataType = MatLevel5DataTypes.mi@matlabArrayType@;
+        this.type = MatLevel5DataTypes.mx@matlabArrayType@_CLASS;
     }
 
     /**

@@ -187,7 +187,7 @@
         <mkdir dir="${build.bin}"/>
         <javac srcdir="${dev.src}"
                destdir="${build.bin}"
-               debug="no"
+               debug="yes"
                includeantruntime="no"
                target="1.5" />
     </target>
@@ -197,7 +197,7 @@
 
         <javac srcdir="${dev.test}"
                destdir="${build.test.bin}"
-               debug="no"
+               debug="yes"
                includeantruntime="no"
                target="1.5" >
             <classpath>

@@ -21,6 +21,7 @@ public class MLChar extends MLArray implements GenericArrayCreator<Character> {
     public MLChar(String name, String value) {
         this(name, new int[]{1, value.length()}, false);
         this.set(value);
+        this.type = MatLevel5DataTypes.mxCHAR_CLASS;
     }
 
     /**
@@ -30,7 +31,7 @@ public class MLChar extends MLArray implements GenericArrayCreator<Character> {
      * @param values the array of {@link String}s
      */
     public MLChar(String name, String[] values) {
-        this(name, new int[] {values.length, values.length > 0 ? MLChar.getMaxLength(values) : 0} , false);
+        this(name, new int[] {values.length, values.length > 0 ? MLChar.getMaxLength(values) : 0});
 
         for (int i = 0; i < values.length; ++i)
             this.set(values[i], i);
@@ -73,6 +74,7 @@ public class MLChar extends MLArray implements GenericArrayCreator<Character> {
     
     public MLChar(String name, int[] dims, boolean global) {
         super(name, dims, global);
+        this.type = MatLevel5DataTypes.mxCHAR_CLASS;
         this.chars = this.createArray(this.getM(), this.getN());
     }
 

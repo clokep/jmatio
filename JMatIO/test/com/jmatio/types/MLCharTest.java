@@ -12,7 +12,7 @@ import junit.framework.JUnit4TestAdapter;
 
 import org.junit.Test;
 
-import com.jmatio.io.MatFileReader;
+import com.jmatio.io.MatFileLevel5Reader;
 import com.jmatio.io.MatFileWriter;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.MLChar;
@@ -48,7 +48,7 @@ public class MLCharTest {
         new MatFileWriter(fileName, Arrays.asList((MLArray)src));
 
         //read array form file
-        MatFileReader mfr = new MatFileReader(fileName);
+        MatFileLevel5Reader mfr = new MatFileLevel5Reader(fileName);
         MLArray ret = mfr.getMLArray(name);
 
         assertEquals("Test if value read from file equals value stored.", src, ret);

@@ -14,7 +14,7 @@ import junit.framework.JUnit4TestAdapter;
 
 import org.junit.Test;
 
-import com.jmatio.io.MatFileReader;
+import com.jmatio.io.MatFileLevel5Reader;
 import com.jmatio.io.MatFileWriter;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.MLOpaque;
@@ -25,12 +25,12 @@ import com.jmatio.types.MLJavaObject;
  */
 public class MLOpaqueTest {
     @Test
-    public void testInt8() throws Exception {
+    public void testOpaqueContainersMap() throws Exception {
         // Test reading the MLArray generated natively by Matlab.
         //String fileName = "test/containers.Map2.mat";
         String fileName = "test/opaque-containers.Map.mat";
         //String fileName = "../opaque-mixed.mat";
-        MatFileReader reader = new MatFileReader(fileName);
+        MatFileLevel5Reader reader = new MatFileLevel5Reader(fileName);
         MLArray src = reader.getContent().get("arr");
         MLOpaque x = (MLOpaque)src;
 
@@ -44,7 +44,7 @@ public class MLOpaqueTest {
         // Read the MATLAB created array.
         String fileName = "test/opaque-java.lang.Integer.mat";
         String arrName = "arr";
-        MatFileReader reader = new MatFileReader(fileName);
+        MatFileLevel5Reader reader = new MatFileLevel5Reader(fileName);
         MLJavaObject src = (MLJavaObject)reader.getContent().get(arrName);
 
         // Check the contents are what is expected.
@@ -56,7 +56,7 @@ public class MLOpaqueTest {
         new MatFileWriter(fileName, Arrays.asList((MLArray)src));
 
         // Read the array in again.
-        reader = new MatFileReader(fileName);
+        reader = new MatFileLevel5Reader(fileName);
         MLJavaObject dst = (MLJavaObject)reader.getMLArray(arrName);
         assertEquals("Test if array contents retrieved from " + fileName + " equals source array contents.",
                      src.getObject(), dst.getObject());
@@ -66,7 +66,7 @@ public class MLOpaqueTest {
 
     @Test
     public void testOpaqueIntegerArray() throws Exception {
-        MatFileReader reader = new MatFileReader("test/opaque-java.lang.Integer-array.mat");
+        MatFileLevel5Reader reader = new MatFileLevel5Reader("test/opaque-java.lang.Integer-array.mat");
         MLJavaObject src = (MLJavaObject)reader.getContent().get("arr");
 
         Integer[] ret = (Integer[])src.getObject();

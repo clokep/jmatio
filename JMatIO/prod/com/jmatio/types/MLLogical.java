@@ -15,7 +15,6 @@ import com.jmatio.io.OSMatTag;
  */
 public class MLLogical extends MLArray {
     Boolean[] bools;
-    protected boolean logical = true;
 
     /**
      * The full constructor.
@@ -27,6 +26,8 @@ public class MLLogical extends MLArray {
     public MLLogical(String name, int[] dims, boolean global) {
         // MLLogicals can't be complex and are logical.
         super(name, dims, global);
+        this.logical = true;
+        this.type = MatLevel5DataTypes.mxUINT8_CLASS;
         this.allocate();
     }
     /**
@@ -73,7 +74,7 @@ public class MLLogical extends MLArray {
     }
 
     /**
-     * Normally this constructor is used only by MatFileReader and MatFileWriter
+     * Normally this constructor is used only by MatFileReader and MatFileWriter.
      *
      * @param array A numeric array that is actually logical.
      */

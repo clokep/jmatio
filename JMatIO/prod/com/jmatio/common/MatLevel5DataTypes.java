@@ -241,15 +241,15 @@ public class MatLevel5DataTypes {
         return s;
     }
     
-    public static boolean complex(int flags) {
+    public static boolean isComplex(int flags) {
         return (flags & MatLevel5DataTypes.mtFLAG_COMPLEX) != 0;
     }
 
-    public static boolean global(int flags) {
+    public static boolean isGlobal(int flags) {
         return (flags & MatLevel5DataTypes.mtFLAG_GLOBAL) != 0;
     }
 
-    public static boolean logical(int flags) {
+    public static boolean isLogical(int flags) {
         return (flags & MatLevel5DataTypes.mtFLAG_LOGICAL) != 0;
     }
 

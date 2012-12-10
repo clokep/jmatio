@@ -13,7 +13,7 @@ import junit.framework.JUnit4TestAdapter;
 import org.junit.Test;
 
 import com.jmatio.io.MatFileFilter;
-import com.jmatio.io.MatFileReader;
+import com.jmatio.io.MatFileLevel5Reader;
 import com.jmatio.io.MatFileWriter;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.MLChar;
@@ -51,7 +51,7 @@ public class MatFileFilterTest {
         filter.addArrayName(name);
 
         // Read array from file.
-        MatFileReader mfr = new MatFileReader(fileName, filter);
+        MatFileLevel5Reader mfr = new MatFileLevel5Reader(fileName, filter);
 
         // Check size of content.
         Map<String, MLArray> content = mfr.getContent();

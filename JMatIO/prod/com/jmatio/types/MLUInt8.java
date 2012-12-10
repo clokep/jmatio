@@ -21,6 +21,8 @@ public class MLUInt8 extends MLNumericArray<Byte> {
      */
     public MLUInt8(String name, int[] dims, boolean complex, boolean global, boolean logical) {
         super(name, dims, complex, global, logical);
+        this.matDataType = MatLevel5DataTypes.miUINT8;
+        this.type = MatLevel5DataTypes.mxUINT8_CLASS;
     }
 
     /**
@@ -31,7 +33,7 @@ public class MLUInt8 extends MLNumericArray<Byte> {
      * @param dims array dimensions
      */
     public MLUInt8(String name, int[] dims) {
-        super(name, dims);
+        this(name, dims, false, false, false);
     }
 
     /**
@@ -44,6 +46,8 @@ public class MLUInt8 extends MLNumericArray<Byte> {
      */
     public MLUInt8(String name, Byte[] vals, int m) {
         super(name, vals, m);
+        this.matDataType = MatLevel5DataTypes.miUINT8;
+        this.type = MatLevel5DataTypes.mxUINT8_CLASS;
     }
 
     /**

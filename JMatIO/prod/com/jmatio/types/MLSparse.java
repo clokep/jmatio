@@ -26,8 +26,9 @@ public class MLSparse extends MLNumericArray<Double> {
      * @param dims
      * @param nzmax
      */
-    public MLSparse(String name, int[] dims, int nzmax, boolean complex, boolean global, boolean logical) {
-        super(name, dims, complex, global, logical);
+    public MLSparse(String name, int[] dims, int nzmax, boolean complex, boolean global) {
+        super(name, dims, complex, global, false);
+        this.type = MatLevel5DataTypes.mxSPARSE_CLASS;
         this.nzmax = nzmax;
     }
 
@@ -37,7 +38,7 @@ public class MLSparse extends MLNumericArray<Double> {
      * @param nzmax
      */
     public MLSparse(String name, int[] dims, int nzmax) {
-        this(name, dims, nzmax, false, false, false);
+        this(name, dims, nzmax, false, false);
     }
 
     protected void allocate() {

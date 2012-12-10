@@ -11,7 +11,7 @@ import junit.framework.JUnit4TestAdapter;
 import org.junit.Test;
 
 import com.jmatio.io.MatFileIncrementalWriter;
-import com.jmatio.io.MatFileReader;
+import com.jmatio.io.MatFileLevel5Reader;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.MLDouble;
 
@@ -52,7 +52,7 @@ public class MatFileIncrementalWriterTest {
         writer.close();
 
         //read array from file
-        MatFileReader mfr = new MatFileReader(fileName);
+        MatFileLevel5Reader mfr = new MatFileLevel5Reader(fileName);
 
         // Test if MLArray objects are equal.
         assertEquals("Test if value read from file equals value stored.", m1, mfr.getMLArray("m1"));

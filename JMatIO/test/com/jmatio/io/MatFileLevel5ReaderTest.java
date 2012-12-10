@@ -11,17 +11,17 @@ import junit.framework.JUnit4TestAdapter;
 
 import org.junit.Test;
 
-import com.jmatio.io.MatFileReader;
+import com.jmatio.io.MatFileLevel5Reader;
 import com.jmatio.io.MatFileWriter;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.MLDouble;
 
 /**
- * The test suite for MatFileReader.
+ * The test suite for MatFileLevel5Reader.
  *
  * @author Wojciech Gradkowski <wgradkowski@gmail.com>
  */
-public class MatFileReaderTest {
+public class MatFileLevel5ReaderTest {
     @Test
     public void testReadingMethods() throws Exception {
         final String fileName = "nwrite.mat";
@@ -45,8 +45,8 @@ public class MatFileReaderTest {
         MLArray array = null;
 
         // Try to read it.
-        MatFileReader reader = new MatFileReader();
-        reader.read(f, MatFileReader.MEMORY_MAPPED_FILE);
+        MatFileLevel5Reader reader = new MatFileLevel5Reader();
+        reader.read(f, MatFileLevel5Reader.MEMORY_MAPPED_FILE);
         array = reader.getMLArray("m1");
         assertEquals("Test if is correct file", array, m1);
 
@@ -57,11 +57,11 @@ public class MatFileReaderTest {
         writer.write(fileName, list);
 
         assertTrue("Test if file was created", f.exists());
-        reader.read(f, MatFileReader.MEMORY_MAPPED_FILE);
+        reader.read(f, MatFileLevel5Reader.MEMORY_MAPPED_FILE);
         assertEquals("Test if is correct file", reader.getMLArray("m1"), m1);
 
         // Try the same with direct buffer allocation.
-        reader.read(f, MatFileReader.DIRECT_BYTE_BUFFER);
+        reader.read(f, MatFileLevel5Reader.DIRECT_BYTE_BUFFER);
         array = reader.getMLArray("m1");
         assertEquals("Test if is correct file", array, m1);
 
@@ -71,11 +71,11 @@ public class MatFileReaderTest {
         writer.write(fileName, list);
 
         assertTrue("Test if file was created", f.exists());
-        reader.read(f, MatFileReader.DIRECT_BYTE_BUFFER);
+        reader.read(f, MatFileLevel5Reader.DIRECT_BYTE_BUFFER);
         assertEquals("Test if is correct file", reader.getMLArray("m1"), m1);
 
         // Try the same with heap buffer allocation.
-        reader.read(f, MatFileReader.HEAP_BYTE_BUFFER);
+        reader.read(f, MatFileLevel5Reader.HEAP_BYTE_BUFFER);
         array = reader.getMLArray("m1");
         assertEquals("Test if is correct file", array, m1);
 
@@ -85,7 +85,7 @@ public class MatFileReaderTest {
         writer.write(fileName, list);
 
         assertTrue("Test if file was created", f.exists());
-        reader.read(f, MatFileReader.HEAP_BYTE_BUFFER);
+        reader.read(f, MatFileLevel5Reader.HEAP_BYTE_BUFFER);
         assertEquals("Test if is correct file", reader.getMLArray("m1"), m1);
     }
 }

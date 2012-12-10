@@ -13,7 +13,7 @@ import junit.framework.JUnit4TestAdapter;
 
 import org.junit.Test;
 
-import com.jmatio.io.MatFileReader;
+import com.jmatio.io.MatFileLevel5Reader;
 import com.jmatio.io.MatFileWriter;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.MLCell;
@@ -55,7 +55,7 @@ public class MLCellTest {
         new MatFileWriter(fileName, Arrays.asList((MLArray)mlCell));
 
         // Read array from file.
-        MatFileReader mfr = new MatFileReader(fileName);
+        MatFileLevel5Reader mfr = new MatFileLevel5Reader(fileName);
         MLCell mlArrayRetrived = (MLCell)mfr.getMLArray(name);
 
         assertEquals(mlDouble, mlArrayRetrived.get(1));

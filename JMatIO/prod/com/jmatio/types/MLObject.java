@@ -25,6 +25,7 @@ public class MLObject extends MLStructure {
 
     public MLObject(String name, int[] dims, boolean global) {
         super(name, dims, global);
+        this.type = MatLevel5DataTypes.mxOBJECT_CLASS;
     }
 
     public String getClassName() {

@@ -17,6 +17,7 @@ public class MLCell extends MLArray {
 
     public MLCell(String name, int[] dims, boolean global) {
         super(name, dims, global);
+        this.type = MatLevel5DataTypes.mxCELL_CLASS;
 
         int length = this.getSize();
         cells = new ArrayList<MLArray>(length);

@@ -14,12 +14,10 @@ import junit.framework.JUnit4TestAdapter;
 
 import org.junit.Test;
 
-import com.jmatio.io.MatFileReader;
+import com.jmatio.io.MatFileLevel5Reader;
 import com.jmatio.io.MatFileWriter;
 import com.jmatio.types.MLArray;
-import com.jmatio.types.MLChar;
-import com.jmatio.types.MLDouble;
-import com.jmatio.types.MLStructure;
+import com.jmatio.types.MLObject;
 
 /**
  * @author Patrick Cloke <pcloke@mitre.org>
@@ -29,14 +27,14 @@ public class MLObjectTest {
     public void testObjectFromMatlabCreatedFile() throws IOException {
         //array name
         File file = new File("test/inline.mat");
-        MatFileReader reader = new MatFileReader(file);
+        MatFileLevel5Reader reader = new MatFileLevel5Reader(file);
         MLArray mlArray = reader.getMLArray("arr");
 
         List<MLArray> towrite =  Arrays.asList(mlArray);
 
         new MatFileWriter("inlinetmp.mat", towrite);
 
-        reader = new MatFileReader("inlinetmp.mat");
+        reader = new MatFileLevel5Reader("inlinetmp.mat");
         MLArray mlArrayRetrieved = reader.getMLArray("arr");
 
         assertEquals(mlArray, mlArrayRetrieved);

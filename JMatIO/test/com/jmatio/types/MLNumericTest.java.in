@@ -10,7 +10,7 @@ import junit.framework.JUnit4TestAdapter;
 
 import org.junit.Test;
 
-import com.jmatio.io.MatFileReader;
+import com.jmatio.io.MatFileLevel5Reader;
 import com.jmatio.io.MatFileWriter;
 import com.jmatio.types.MLArray;
 import com.jmatio.types.ML@matlabClassCamelCase@;
@@ -27,13 +27,13 @@ public class ML@matlabClassCamelCase@Test {
         // which contains the minimum and maximum values for @matlabClass@.
         String fileName = "test/@matlabClass@.mat";
         String arrName = "arr";
-        MatFileReader mfr;
+        MatFileLevel5Reader mfr;
 
         @NumberClass@ min = @minValue@;
         @NumberClass@ max = @maxValue@;
 
         // Read array from file.
-        mfr = new MatFileReader(fileName);
+        mfr = new MatFileLevel5Reader(fileName);
         ML@matlabClassCamelCase@ src = (ML@matlabClassCamelCase@)mfr.getMLArray(arrName);
         assertEquals("Test min. value from file: " + fileName + " array: " + arrName + ".",
                      min, src.get(0, 0));
@@ -45,7 +45,7 @@ public class ML@matlabClassCamelCase@Test {
         new MatFileWriter(fileName, Arrays.asList((MLArray)src));
 
         // Read the array in again.
-        mfr = new MatFileReader(fileName);
+        mfr = new MatFileLevel5Reader(fileName);
         ML@matlabClassCamelCase@ ret = (ML@matlabClassCamelCase@)mfr.getMLArray(arrName);
         assertEquals("Test min. value from file: " + fileName + " array: " + arrName + ".",
                      min, ret.get(0, 0));
@@ -85,7 +85,7 @@ public class ML@matlabClassCamelCase@Test {
         new MatFileWriter(fileName, Arrays.asList((MLArray)array1D));
 
         // Read array from file.
-        MatFileReader mfr = new MatFileReader(fileName);
+        MatFileLevel5Reader mfr = new MatFileLevel5Reader(fileName);
         ML@matlabClassCamelCase@ ret = (ML@matlabClassCamelCase@)mfr.getMLArray(name);
 
         // Test if MLArray objects are equal
@@ -108,7 +108,7 @@ public class ML@matlabClassCamelCase@Test {
         new MatFileWriter(fileName, Arrays.asList((MLArray)src));
 
         //read array form file
-        MatFileReader mfr = new MatFileReader(fileName);
+        MatFileLevel5Reader mfr = new MatFileLevel5Reader(fileName);
         ML@matlabClassCamelCase@ ret = (ML@matlabClassCamelCase@)mfr.getMLArray(name);
 
         final long start = System.nanoTime();
