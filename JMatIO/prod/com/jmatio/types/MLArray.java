@@ -216,7 +216,7 @@ public class MLArray
 
     public boolean isComplex()
     {
-        return (attributes & mtFLAG_COMPLEX) != 0;
+        return (attributes & mtFLAG_COMPLEX) == mtFLAG_COMPLEX;
     }
 
     public boolean isSparse()
@@ -291,7 +291,7 @@ public class MLArray
 
     public boolean isLogical()
     {
-        return (attributes & mtFLAG_LOGICAL) != 0;
+        return (attributes & mtFLAG_LOGICAL) == mtFLAG_LOGICAL;
     }
 
     public boolean isFunctionObject()
@@ -332,6 +332,10 @@ public class MLArray
             }
             sb.append("  ");
             sb.append(typeToString(type));
+            if ( isLogical() )
+            {
+                sb.append( " (logical)");
+            }
             sb.append(" array");
             if (isSparse())
             {

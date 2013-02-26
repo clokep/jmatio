@@ -70,13 +70,6 @@ public class MLDouble extends MLNumericArray<Double>
     {
         this(name, castToDouble( vals ), m );
     }
-    /* (non-Javadoc)
-     * @see com.jmatio.types.GenericArrayCreator#createArray(int, int)
-     */
-    public Double[] createArray(int m, int n)
-    {
-        return new Double[m*n];
-    }
     /**
      * Gets two-dimensional real array.
      * 

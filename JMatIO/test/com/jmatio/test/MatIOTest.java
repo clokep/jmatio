@@ -1142,4 +1142,16 @@ public class MatIOTest
         //test if MLArray objects are equal
         assertEquals("Test if value red from file equals value stored", mlDouble, mlArrayRetrived);
     }
+    @Test
+    public void testLogical() throws IOException
+    {
+        String name = "bool";
+        String fileName = "test/logical.mat";
+        
+        MatFileReader reader = new MatFileReader( fileName );
+        
+        MLUInt8 mlArray = (MLUInt8) reader.getMLArray( name );
+        assertEquals( 1, (int) mlArray.get(0) );
+        assertEquals( 0, (int) mlArray.get(1) );
+    }
 }

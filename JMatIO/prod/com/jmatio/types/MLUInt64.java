@@ -70,13 +70,7 @@ public class MLUInt64 extends MLNumericArray<Long>
     {
         this(name, castToLong( vals ), m );
     }
-    /* (non-Javadoc)
-     * @see com.jmatio.types.GenericArrayCreator#createArray(int, int)
-     */
-    public Long[] createArray(int m, int n)
-    {
-        return new Long[m*n];
-    }
+
     /**
      * Gets two-dimensional real array.
      * 

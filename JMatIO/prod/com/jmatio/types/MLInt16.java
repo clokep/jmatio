@@ -73,15 +73,6 @@ public class MLInt16 extends MLNumericArray<Short>
     {
         this(name, castToShort( vals ), m );
     }
-    
-    /* (non-Javadoc)
-     * @see com.jmatio.types.GenericArrayCreator#createArray(int, int)
-     */
-    public Short[] createArray(int m, int n)
-    {
-        return new Short[m*n];
-    }
-    
     /**
      * Gets two-dimensional real array.
      * 

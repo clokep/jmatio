@@ -687,7 +687,6 @@ public class MatFileReader
                     tag.readToByteBuffer( ((MLNumericArray<?>) mlArray).getImaginaryByteBuffer(),
                             (MLNumericArray<?>) mlArray );
                 }
-//System.out.println(  new String( buf.array() ) );   
                 break;
             case MLArray.mxINT8_CLASS:
                 mlArray = new MLInt8(name, dims, type, attributes);

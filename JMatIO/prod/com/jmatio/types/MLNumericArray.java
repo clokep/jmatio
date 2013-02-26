@@ -16,8 +16,7 @@ import java.util.Arrays;
  * @param <T>
  */
 public abstract class MLNumericArray<T extends Number> extends MLArray 
-                                                       implements GenericArrayCreator<T>,
-                                                                  ByteStorageSupport<T>
+                                                       implements ByteStorageSupport<T>
 {
     private ByteBuffer real;
     private ByteBuffer imaginary;
@@ -86,7 +85,7 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
      */
     public T getReal( int index )
     {
-        return _get(real, index);
+        return get(real, index);
     }
     
     /**
@@ -108,7 +107,7 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
      */
     public void setReal(T value, int index)
     {
-        _set( real, value, index );
+        set( real, value, index );
     }
     /**
      * Sets real part of matrix
@@ -144,7 +143,7 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
     {
         if ( isComplex() )
         {
-            _set(imaginary, value, index);
+            set(imaginary, value, index);
         }
     }
     /**
@@ -164,7 +163,7 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
      */
     public T getImaginary( int index )
     {
-        return _get( imaginary, index );
+        return get( imaginary, index );
     }
     
     /**
@@ -239,7 +238,7 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
         {
             throw new IllegalStateException("Cannot use this method for Complex matrices");
         }
-        return _get( real, index );
+        return get( real, index );
     }
     /**
      * @param vector
@@ -257,14 +256,14 @@ public abstract class MLNumericArray<T extends Number> extends MLArray
         return index*getBytesAllocated();
     }
     
-    protected T _get( ByteBuffer buffer, int index )
+    protected T get( ByteBuffer buffer, int index )
     {
         buffer.position( getByteOffset(index) );
         buffer.get( bytes, 0, bytes.length );
         return buldFromBytes( bytes );
     }
     
-    protected void _set( ByteBuffer buffer, T value, int index )
+    protected void set( ByteBuffer buffer, T value, int index )
     {
         buffer.position( getByteOffset(index) );
         buffer.put( getByteArray( value ) );

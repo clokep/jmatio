@@ -87,13 +87,6 @@ public class MLSparse extends MLNumericArray<Double>
     }
     
     /* (non-Javadoc)
-     * @see com.paradigmdesigner.matlab.types.GenericArrayCreator#createArray(int, int)
-     */
-    public Double[] createArray(int m, int n)
-    {
-        return null;
-    }
-    /* (non-Javadoc)
      * @see com.paradigmdesigner.matlab.types.MLNumericArray#getReal(int, int)
      */
     public Double getReal(int m, int n)
