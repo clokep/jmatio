@@ -134,7 +134,7 @@ public class MatIOTest
     public void testCellFromMatlabCreatedFile() throws IOException
     {
         //array name
-        File file = new File("test/cell.mat");
+        File file = new File("src/test/resources/cell.mat");
         MatFileReader reader = new MatFileReader( file );
         MLArray mlArray = reader.getMLArray( "cel" );
         
@@ -583,7 +583,7 @@ public class MatIOTest
         //array name
         String name = "arr";
         //file name in which array will be stored
-        String fileName = "test/matnativedouble.mat";
+        String fileName = "src/test/resources/matnativedouble.mat";
 
         //test column-packed vector
         double[] src = new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
@@ -614,7 +614,7 @@ public class MatIOTest
         //array name
         String name = "arr";
         //file name in which array will be stored
-        String fileName = "test/matnativedouble2.mat";
+        String fileName = "src/test/resources/matnativedouble2.mat";
 
         //test column-packed vector
         double[] src = new double[] { 1.1, 2.2, 3.3, 4.4, 5.5, 6.6 };
@@ -632,7 +632,7 @@ public class MatIOTest
     public void testSparseFromMatlabCreatedFile() throws IOException
     {
         //array name
-        File file = new File("test/sparse.mat");
+        File file = new File("src/test/resources/sparse.mat");
         File outFile = temp.newFile( "sparsecopy.mat" );
         
         MatFileReader reader = new MatFileReader( file );
@@ -653,7 +653,7 @@ public class MatIOTest
     public void testStructureFromMatlabCreatedFile() throws IOException
     {
         //array name
-        File file = new File("test/simplestruct.mat");
+        File file = new File("src/test/resources/simplestruct.mat");
         File outFile = temp.newFile( "simplestructcopy.mat" );
         MatFileReader reader = new MatFileReader( file );
         MLArray mlArray = reader.getMLArray( "structure" );
@@ -765,7 +765,7 @@ public class MatIOTest
     @Test 
     public void testReadingNaN() throws IOException
     {
-        final String fileName = "test/nan.mat";
+        final String fileName = "src/test/resources/nan.mat";
         
         //read array form file
         MatFileReader mfr = new MatFileReader( fileName );
@@ -779,7 +779,7 @@ public class MatIOTest
     @Test 
     public void testUInt8() throws Exception
     {
-        String fileName = "test/uint8.mat";
+        String fileName = "src/test/resources/uint8.mat";
         File outFile = temp.newFile( "uint8out.mat" );
         String arrName = "arr";
         MatFileReader mfr;
@@ -821,7 +821,7 @@ public class MatIOTest
     @Test 
     public void testInt8() throws Exception
     {
-        String fileName = "test/int8.mat";
+        String fileName = "src/test/resources/int8.mat";
         String arrName = "arr";
         File outFile = temp.newFile( "int8out.mat" );
         MatFileReader mfr;
@@ -867,7 +867,7 @@ public class MatIOTest
     @Test 
     public void testInt64() throws Exception
     {
-        String fileName = "test/int64.mat";
+        String fileName = "src/test/resources/int64.mat";
         String arrName = "arr";
         File outFile = temp.newFile( "int64out.mat" );
         MatFileReader mfr;
@@ -913,7 +913,7 @@ public class MatIOTest
     @Test 
     public void testUInt64() throws Exception
     {
-        String fileName = "test/uint64.mat";
+        String fileName = "src/test/resources/uint64.mat";
         File   outFile  = temp.newFile( "uint64out.mat" );
         String arrName = "arr";
         MatFileReader mfr;
@@ -1047,7 +1047,7 @@ public class MatIOTest
         MatFileReader mfr = new MatFileReader();
         //reader crashes on reading this file
         //bug caused by sparse array allocation
-        mfr.read( new File("test/bigsparse.mat"), MatFileReader.DIRECT_BYTE_BUFFER );
+        mfr.read( new File("src/test/resources/bigsparse.mat"), MatFileReader.DIRECT_BYTE_BUFFER );
         
     }    
     /**
@@ -1080,7 +1080,7 @@ public class MatIOTest
         assertEquals( single, readSingle );
         
         //Test reading the MLSingle generated natively by Matlab
-        MLSingle readSingleMatlabGenerated = (MLSingle) reader.read( new File("test/single.mat") ).get( "arr" );
+        MLSingle readSingleMatlabGenerated = (MLSingle) reader.read( new File("src/test/resources/single.mat") ).get( "arr" );
         
         assertEquals( single, readSingleMatlabGenerated );
         
@@ -1103,7 +1103,7 @@ public class MatIOTest
     public void testJavaObject() throws Exception
     {
         MatFileReader mfr = new MatFileReader();
-        Map<String, MLArray> content = mfr.read( new File("test/java.mat") );
+        Map<String, MLArray> content = mfr.read( new File("src/test/resources/java.mat") );
         
         MLJavaObject mlJavaObject = (MLJavaObject) content.get( "f" );
         
@@ -1114,7 +1114,7 @@ public class MatIOTest
     public void testObject() throws Exception
     {
         MatFileReader mfr = new MatFileReader();
-        Map<String, MLArray> content = mfr.read( new File("test/object.mat") );
+        Map<String, MLArray> content = mfr.read( new File("src/test/resources/object.mat") );
         
         MLObject mlObject = (MLObject) content.get( "X" );
         
@@ -1129,7 +1129,7 @@ public class MatIOTest
         //array name
         String name = "a";
         //file name in which array will be stored
-        String fileName = "test/int32.mat";
+        String fileName = "src/test/resources/int32.mat";
 
         //test column-packed vector
         int[] src = new int[] { 1, 2, 3, 4 };
@@ -1146,7 +1146,7 @@ public class MatIOTest
     public void testLogical() throws IOException
     {
         String name = "bool";
-        String fileName = "test/logical.mat";
+        String fileName = "src/test/resources/logical.mat";
         
         MatFileReader reader = new MatFileReader( fileName );
         

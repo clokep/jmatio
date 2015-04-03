@@ -23,12 +23,12 @@
 		
 		
 		<property name="dev.dir" location="${basedir}"/>
-		<property name="dev.src" location="${dev.dir}\src\main"/>
+		<property name="dev.src" location="${dev.dir}\prod"/>
 		<property name="dev.extern" location="${dev.dir}\extern"/>
 		<property name="dev.native" location="${dev.dir}\native"/>
-		<property name="dev.test" location="${dev.dir}\src\test"/>
+		<property name="dev.test" location="${dev.dir}\test"/>
 
-		<property name="build.dir" location="${basedir}\build\"/>
+		<property name="build.dir" location="${basedir}\build\JMatIO"/>
 		<property name="build.src" location="${build.dir}\src"/>
 		<property name="build.bin" location="${build.dir}\bin"/>
 		<property name="build.extern" location="${build.dir}\extern"/>
